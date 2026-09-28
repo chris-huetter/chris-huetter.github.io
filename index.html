@@ -48,9 +48,23 @@
 @font-face{font-family:"Newsreader";src:url("fonts/newsreader-opsz.woff2") format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
 @font-face{font-family:"Newsreader";src:url("fonts/newsreader-opsz-italic.woff2") format("woff2");font-weight:200 800;font-style:italic;font-display:swap}
 @font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-style:normal;font-display:swap}
+/* ---- accent colour: the whole site takes its highlight colour from this block. To try another palette, replace the two lines below with one of the alternatives ---- */
+:root{
+  --accent:#4A68FF; --accent-rgb:74,104,255; --accent-ink:#FFFFFF; --sel-ink:#2336D9; --sel-tint:#EEF0FF; --sel-dot:#3D5CFF;   /* neon Klein blue: fills (with --accent-ink text on them), underlines, the network, selected cards */
+  --sel-ink-dark:#9AA8FF; --sel-tint-dark:#161A33;                                                         /* selected cards in dark mode */
+}
+/* the palettes below use dark text on fills: add --accent-ink:#0B0C10; when switching to one of them
+   neon orange: --accent:#FF7A1F; --accent-rgb:255,122,31; --sel-ink:#A94700; --sel-tint:#FFF1E6; --sel-dot:#FF7A1F; --sel-ink-dark:#FFA366; --sel-tint-dark:#2B1A0E;
+   vermilion:  --accent:#F0643C; --accent-rgb:240,100,60; --sel-ink:#B8431F; --sel-tint:#FCEEE8; --sel-dot:#F0643C; --sel-ink-dark:#FF9A7A; --sel-tint-dark:#2A1712;
+   neon beige: --accent:#FFDFAE; --accent-rgb:255,223,174; --sel-ink:#8A5A12; --sel-tint:#FBF3E6; --sel-dot:#F5C77E; --sel-ink-dark:#FFE4BA; --sel-tint-dark:#2A2317;
+   neon aqua:  --accent:#5EF2DE; --accent-rgb:94,242,222; --sel-ink:#0A7D70; --sel-tint:#E3FAF6; --sel-dot:#2EE6CF; --sel-ink-dark:#7FF5E4; --sel-tint-dark:#0F2626;
+   soft aqua:  --accent:#8FD6D0; --accent-rgb:143,214,208; --sel-ink:#1D7A73; --sel-tint:#E8F6F5; --sel-dot:#5FC2BA; --sel-ink-dark:#A8E3DE; --sel-tint-dark:#15242A;
+   periwinkle: --accent:#AEB6F5; --accent-rgb:174,182,245; --sel-ink:#4B55C4; --sel-tint:#EEF0FD; --sel-dot:#8C95EE; --sel-ink-dark:#C3C9FA; --sel-tint-dark:#1A1D2E;
+   apricot:    --accent:#F4B58E; --accent-rgb:244,181,142; --sel-ink:#A9531E; --sel-tint:#FDF1E9; --sel-dot:#EE9A68; --sel-ink-dark:#F7C8A8; --sel-tint-dark:#2A1E17;
+   lime (old): --accent:#BCDF8C; --accent-rgb:188,223,140; --sel-ink:#4F9A1A; --sel-tint:#EEF6E2; --sel-dot:#8FCB4A; --sel-ink-dark:#A9DB72; --sel-tint-dark:#1B2216; */
 :root{
   --bg:#ECEEF1; --paper:#F6F7F9; --ink:#14161B; --muted:#5E6474; --line:#C9CDD6; --hatch:rgba(20,22,27,.07);
-  --accent:#BCDF8C; --accent-ink:#0B0C10; --focus:#14161B;  /* neon lime: used as a fill or highlighter, with dark text on it */
+  --focus:#14161B;
   --display:"Archivo","Helvetica Neue",Arial,sans-serif;
   --body:"Newsreader",Georgia,"Times New Roman",serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -58,12 +72,12 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#0E1015; --paper:#151821; --ink:#E5E7EE; --muted:#9097A8; --line:#2A2F3B; --hatch:rgba(229,231,238,.06);
-    --accent:#BCDF8C; --accent-ink:#0B0C10; --focus:#BCDF8C; color-scheme:dark;
+    --focus:var(--accent); --sel-ink:var(--sel-ink-dark); --sel-tint:var(--sel-tint-dark); color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E1015; --paper:#151821; --ink:#E5E7EE; --muted:#9097A8; --line:#2A2F3B; --hatch:rgba(229,231,238,.06);
-  --accent:#BCDF8C; --accent-ink:#0B0C10; --focus:#BCDF8C; color-scheme:dark;
+  --focus:var(--accent); --sel-ink:var(--sel-ink-dark); --sel-tint:var(--sel-tint-dark); color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -155,7 +169,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 /* three fixed lines that never wrap, so the changing words cannot push the layout around */
 .hero h1 .ln{display:block;white-space:nowrap}
 .hero h1 em{font-family:var(--body);font-style:italic;font-weight:400}
-.typed{color:var(--hero-accent);text-shadow:0 0 18px rgba(188,223,140,.22);font-variation-settings:"wdth" 125;font-weight:300}
+.typed{color:var(--hero-accent);text-shadow:0 0 4px rgba(var(--accent-rgb),.35),0 0 20px rgba(var(--accent-rgb),.22);font-variation-settings:"wdth" 125;font-weight:300}
 .caret{display:inline-block;width:.06em;height:.8em;background:var(--hero-accent);margin-left:.04em;vertical-align:-.04em;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 #typed2{display:inline-block;transition:opacity .6s,filter .6s}
@@ -168,7 +182,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .btn:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .hero .btn{border-color:#F3F4F8;color:#F3F4F8}
 .hero .btn.solid{background:#F3F4F8;color:#0B0C10}
-.hero .btn:hover{background:var(--hero-accent);border-color:var(--hero-accent);color:#0B0C10}
+.hero .btn:hover{background:var(--hero-accent);border-color:var(--hero-accent);color:var(--accent-ink)}
 .hero-cap{display:grid;gap:8px;justify-items:start;font-family:var(--mono);font-size:12px;color:rgba(243,244,248,.8);border-top:1px solid rgba(243,244,248,.35);padding-top:12px}
 
 .workhead{padding-block:clamp(40px,7vh,72px) 24px;display:grid;gap:12px;scroll-margin-top:70px}
@@ -211,7 +225,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .cb-b{display:flex;flex-wrap:wrap;gap:6px}
 .cb-b button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;background:transparent;color:#F3F4F8;border:1px solid rgba(243,244,248,.35);border-radius:999px;padding:4px 11px;cursor:pointer}
 .cb-b button:hover{border-color:var(--accent)}
-.cb-b button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.cb-b button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
 .net-hint{margin:0;font-family:var(--mono);font-size:11px;line-height:1.5;color:rgba(243,244,248,.62)}
 .tip{position:absolute;z-index:3;max-width:260px;background:rgba(18,20,27,.95);border:1px solid var(--accent);padding:10px 12px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
 .tip.on{opacity:1;transform:none}
@@ -223,18 +237,15 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .project{scroll-margin-top:80px}
 /* selected from the network: strong outline and tinted text area; the rest steps back */
 .project{transition:opacity .3s,box-shadow .3s}
-.project{--sel-ink:#4F9A1A;--sel-tint:#EEF6E2}     /* lime green text, dark enough to read on the light cards; pastel lime tint behind it */
-.project.sel{box-shadow:0 0 22px 4px rgba(188,223,140,.8),0 0 46px 10px rgba(188,223,140,.35)}   /* soft pastel-lime glow in the accent colour, like the network clusters */
+.project.sel{box-shadow:0 0 22px 4px rgba(var(--accent-rgb),.8),0 0 46px 10px rgba(var(--accent-rgb),.35)}   /* soft glow in the accent colour, like the network clusters; text in --sel-ink on a --sel-tint background */
 .project.sel .label{background:var(--sel-tint)}
-@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .project{--sel-ink:#A9DB72;--sel-tint:#1B2216} }   /* dark mode: light lime text on a deep green tint */
-:root[data-theme="dark"] .project{--sel-ink:#A9DB72;--sel-tint:#1B2216}
 .project.sel .label h3,.project.sel .label .yr,.project.sel .label .meta,.project.sel .label .meta b,.project.sel .label .kind{color:var(--sel-ink)}   /* headings only; the serif description stays black */
 .project.sel .label h3::before{content:"●";font-size:.7em;margin-right:8px;vertical-align:.15em}
 .projects.has-sel .project:not(.sel){opacity:.42}
 .projects.has-sel .project:not(.sel):hover{opacity:1}
-.selbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:var(--mono);font-size:12.5px;padding:8px 2px;color:#4F9A1A;justify-self:start}
+.selbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:var(--mono);font-size:12.5px;padding:8px 2px;color:var(--sel-ink);justify-self:start}
 .selbar b{font-weight:600}
-.sb-dot{width:9px;height:9px;border-radius:50%;background:#8FCB4A;box-shadow:0 0 8px 2px rgba(188,223,140,.9)}
+.sb-dot{width:9px;height:9px;border-radius:50%;background:var(--sel-dot);box-shadow:0 0 8px 2px rgba(var(--accent-rgb),.9)}
 .selbar button{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;background:transparent;border:1px solid var(--ink);color:var(--ink);padding:4px 10px;cursor:pointer;margin-left:4px}
 .selbar button:hover{background:var(--ink);color:var(--bg)}
 
@@ -321,7 +332,7 @@ footer.foot{border-top:1px solid var(--line)}
           <dt><svg viewBox="0 0 24 12" aria-hidden="true"><circle cx="12" cy="6" r="2.3" fill="#A0A8BA"/></svg></dt><dd>Concept: what mattered in a project</dd>
           <dt><svg viewBox="0 0 24 12" aria-hidden="true"><line x1="2" y1="6" x2="22" y2="6" stroke="#A0A8BA" stroke-width="1.2"/></svg></dt><dd>Project involves this concept</dd>
           <dt><svg viewBox="0 0 24 12" aria-hidden="true"><line x1="2" y1="6" x2="22" y2="6" stroke="#A0A8BA" stroke-width="1.2" stroke-dasharray="2 3"/></svg></dt><dd>Project happened at this institute</dd>
-          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><ellipse cx="12" cy="6" rx="11" ry="5.5" fill="rgba(188,223,140,.25)"/></svg></dt><dd>Group, set by “Cluster by”</dd>
+          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><ellipse cx="12" cy="6" rx="11" ry="5.5" style="fill:rgba(var(--accent-rgb),.25)"/></svg></dt><dd>Group, set by “Cluster by”</dd>
         </dl>
         <p class="net-hint">Projects that share a concept or an institute are related. Hover a node for details.</p>
         <button type="button" class="pause" id="pause" aria-pressed="false" aria-label="Pause animation"><span class="ico" aria-hidden="true"></span><span class="txt">Pause</span></button>
@@ -404,6 +415,7 @@ footer.foot{border-top:1px solid var(--line)}
 </main>
 
 <script>
+const ACCENT=getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim()||"74,104,255";   // accent as "r,g,b", from the CSS palette block
 const SCALES=[
   {name:"Molecules",short:"Mol",exp:-9,unit:"10⁻⁹ m · a DNA double helix is 2 nm wide",intro:"Where it started: designing matter one base pair at a time."},
   {name:"Bodies",short:"Body",exp:0,unit:"10⁰ m · arm's length",intro:"Objects and interfaces you can walk around, hold, or step into."},
@@ -709,8 +721,8 @@ const net=(()=>{
         for(const i of pts){tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r,0,6.283);tctx.fill()}tctx.filter="none"}
       else{for(const i of pts){const gr=tctx.createRadialGradient(S[i].x*sc,S[i].y*sc,0,S[i].x*sc,S[i].y*sc,r*1.4);gr.addColorStop(0,"rgba(255,255,255,.7)");gr.addColorStop(1,"rgba(255,255,255,0)");
         tctx.fillStyle=gr;tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r*1.4,0,6.283);tctx.fill()}}
-      /* tint: white for all groups, lime for the one in focus */
-      tctx.globalCompositeOperation="source-in";tctx.fillStyle=on?"rgb(188,223,140)":"rgb(243,244,248)";tctx.fillRect(0,0,tc.width,tc.height);tctx.globalCompositeOperation="source-over";
+      /* tint: white for all groups, the accent for the one in focus */
+      tctx.globalCompositeOperation="source-in";tctx.fillStyle=on?`rgb(${ACCENT})`:"rgb(243,244,248)";tctx.fillRect(0,0,tc.width,tc.height);tctx.globalCompositeOperation="source-over";
       bctx.globalAlpha=on?.26:.075;bctx.drawImage(tc,0,0);bctx.globalAlpha=1}
   }
   /* collision-free labels: every label claims a rectangle; later labels try other sides or stay hidden */
@@ -737,7 +749,7 @@ const net=(()=>{
         for(const [dx,dy] of [[0,0],[0,-15],[0,-30],[40,0],[-40,0],[0,15],[40,-15],[-40,-15],[80,0],[-80,0],[0,-45],[0,30]]){lx=Math.max(4,Math.min(x0+dx,W-tw-6));ly=y0+dy;if(free({x:lx,y:ly-11,w:tw,h:14})){ok=true;break}}
         if(!ok)continue;}
       claim({x:lx,y:ly-11,w:tw,h:14});
-      ctx.fillStyle=on?"rgb(188,223,140)":"rgba(188,223,140,.72)";ctx.fillText(txt,lx,ly);
+      ctx.fillStyle=on?`rgb(${ACCENT})`:`rgba(${ACCENT},.72)`;ctx.fillText(txt,lx,ly);
       groupLabels.push({g,x:lx,y:ly-11,w:tw,h:15,members:members.map(i=>N[i].pi)})}
     if(G.linear){const cw=box.w/keys.length;ctx.strokeStyle="rgba(243,244,248,.10)";ctx.setLineDash([2,5]);   // faint dividers between the columns
       for(let c=1;c<keys.length;c++){const x=box.x+c*cw;ctx.beginPath();ctx.moveTo(x,box.y-2);ctx.lineTo(x,box.y+box.h+4);ctx.stroke()}ctx.setLineDash([])}
@@ -750,7 +762,7 @@ const net=(()=>{
   const labelAt=(x,y)=>groupLabels.find(L=>x>=L.x-4&&x<=L.x+L.w+4&&y>=L.y-4&&y<=L.y+L.h+4);
 
   /* draw */
-  const LIME="188,223,140";
+  const LIME=ACCENT;
   function frame(t){
     const s=paused?0:t/1000,real=ptr.on&&t-ptr.last<3000;
     let hov=real?hit(ptr.x,ptr.y):-1;
@@ -767,12 +779,14 @@ const net=(()=>{
     const G=GROUPINGS[clusterBy];drawGroups(focusProj>=0&&G.groups?G.of(P[N[focusProj].pi]):null);
     for(const [a,b] of E){const A=S[a],B=S[b],g=Math.min(A.glow,B.glow),inst=N[a].type==="inst"||N[b].type==="inst";
       ctx.strokeStyle=g>.05?`rgba(${LIME},${.3+.7*g})`:inst?"rgba(160,168,186,.45)":"rgba(160,168,186,.38)";   // dashed institute links get more opacity: a dash carries less ink than a solid line
-      ctx.lineWidth=inst?1.25:1;if(inst&&g<.05)ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.setLineDash([])}
+      ctx.lineWidth=inst?1.25:1;if(inst&&g<.05)ctx.setLineDash([4,4]);ctx.shadowBlur=g>.05?4*g:0;ctx.shadowColor=`rgba(${LIME},.6)`;   // neon: highlighted links glow
+      ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.setLineDash([])}
+    ctx.shadowBlur=0;
     ctx.lineWidth=1;
     /* dots first, labels after, in order of importance */
     for(let i=0;i<N.length;i++){const n=N[i],p=S[i],g=p.glow,h=i===hov;
       if(n.type==="inst"){const r=h?6.5:5;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.strokeStyle=g>.1?`rgba(${LIME},${.5+.5*g})`:"rgba(160,168,186,.7)";ctx.lineWidth=1.5;ctx.strokeRect(-r,-r,r*2,r*2);ctx.restore()}
-      else if(n.type==="proj"){const r=4.5+g*2+(h?1.5:0);ctx.fillStyle=g>.1?`rgb(${LIME})`:"#F3F4F8";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();
+      else if(n.type==="proj"){const r=4.5+g*2+(h?1.5:0);ctx.fillStyle=g>.1?`rgb(${LIME})`:"#F3F4F8";ctx.shadowBlur=g>.1?6*g:0;ctx.shadowColor=`rgba(${LIME},.7)`;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();ctx.shadowBlur=0;
         if(g>.1){ctx.strokeStyle=`rgba(${LIME},${.35*g})`;ctx.beginPath();ctx.arc(p.x,p.y,r+5,0,6.283);ctx.stroke()}}
       else{const r=2.2+g*.8+(h?1.5:0);ctx.fillStyle=g>.1?`rgba(${LIME},${.6+.4*g})`:"rgba(160,168,186,.55)";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill()}}
     const want=[];

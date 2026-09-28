@@ -90,7 +90,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .inner{max-width:1180px;margin-inline:auto}
 
 /* top: name + nav + scale slider, one sticky block */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;padding-top:env(safe-area-inset-top,0px);z-index:100;background:var(--bg);border-bottom:1px solid var(--line)}   /* opaque, and reaches up behind the phone status bar, so nothing scrolls visibly under or above it */
 .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;flex-wrap:wrap}
 .name{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;text-decoration:none}
 .name span{font-weight:400;color:var(--muted)}
@@ -128,7 +128,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .fig .c1{top:8px;left:8px;border-width:1px 0 0 1px}.fig .c2{top:8px;right:8px;border-width:1px 1px 0 0}
 .fig .c3{bottom:8px;left:8px;border-width:0 0 1px 1px}.fig .c4{bottom:8px;right:8px;border-width:0 1px 1px 0}
 .label{padding:18px 20px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
-.label .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;position:static;background:none;border:0;backdrop-filter:none}
+.label .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;position:static;background:none;border:0;padding-top:0;z-index:auto}
 .label h3{font-family:var(--display);font-variation-settings:"wdth" 100;font-weight:600;font-size:19px;line-height:1.2;margin:0;text-wrap:balance}
 .label .yr{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .label .meta{font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--muted)}
@@ -839,7 +839,10 @@ function goTo(indices,label){
   const first=host.querySelector(".project.sel");   // scroll to the first (newest) highlighted card
   (first||document.getElementById("work")).scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
 }
-function clearSelection(){selected=null;render()}
+/* clear the highlighting in place (no re-render, so galleries and a clicked link keep working) */
+function clearSelection(){selected=null;host.classList.remove("has-sel");host.querySelectorAll(".project.sel").forEach(c=>c.classList.remove("sel"));document.getElementById("selbar").hidden=true}
+/* clicking any card that isn't part of the current highlight (image, text or link) ends the highlight */
+host.addEventListener("click",e=>{const c=e.target.closest(".project");if(selected&&c&&!c.classList.contains("sel"))clearSelection()});
 
 
 /* ---- headline word pairs ---- */

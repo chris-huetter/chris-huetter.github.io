@@ -487,13 +487,14 @@ function card(p){
 const CATS=["All","Research","Visualization","Art","Curation","Outreach","Teaching"];
 let active="All";
 try{const h=location.hash.slice(1);if(CATS.includes(h))active=h}catch(e){}
+/* one fixed order: newest start year first; same year keeps the order in P. Filters and network selections never move cards */
+const ORDER=[...P].sort((a,b)=>parseInt(b.y)-parseInt(a.y));
 let selected=null;                                       // selection from the network: {ids:Set of project indices, label}
 const chips=document.getElementById("chips"),host=document.getElementById("projects");
 function render(){
   chips.innerHTML=CATS.map(c=>{const n=c==="All"?P.length:P.filter(p=>p.cat.includes(c)).length;
     return `<button type="button" id="chip-${c}" aria-pressed="${c===active}" data-c="${c}">${c}<span class="n">${n}</span></button>`}).join("");
-  const isSel=p=>selected&&selected.ids.has(P.indexOf(p));
-  const items=P.filter(p=>active==="All"||p.cat.includes(active)).sort((a,b)=>(isSel(b)-isSel(a))||b.y.localeCompare(a.y));   // selected first, then newest first
+  const items=ORDER.filter(p=>active==="All"||p.cat.includes(active));
   const bar=document.getElementById("selbar");
   if(selected){const n=selected.ids.size;bar.hidden=false;
     bar.innerHTML=`<span class="sb-dot" aria-hidden="true"></span><span>${n} project${n>1?"s":""} linked to <b>${esc(selected.label)}</b></span><button type="button" id="selClear">Show all</button>`;
@@ -755,13 +756,14 @@ const net=(()=>{
   draw();box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;net.setCluster(b.dataset.k);draw()})})();
 
 /* jump from the network to project cards: show all filters, scroll, light the cards up */
-/* selection from the network: matching cards move to the top and stay highlighted until something else is chosen */
+/* selection from the network: matching cards stay in place and stay highlighted until something else is chosen */
 function goTo(indices,label){
   if(!indices.length)return;
   selected={ids:new Set(indices),label:label||""};
   if(active!=="All"&&indices.some(i=>!P[i].cat.includes(active)))active="All";
   render();
-  document.getElementById("work").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
+  const first=host.querySelector(".project.sel");   // scroll to the first (newest) highlighted card
+  (first||document.getElementById("work")).scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
 }
 function clearSelection(){selected=null;render()}
 

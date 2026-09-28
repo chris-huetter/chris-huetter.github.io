@@ -103,9 +103,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .project{display:flex;flex-direction:column;border:1px solid var(--line);background:var(--paper)}
 .fig{margin:0;position:relative;aspect-ratio:3/2;max-width:100%;border-bottom:1px solid var(--line);overflow:hidden;background:
   repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 9px),var(--bg)}
-.fig img{width:100%;height:100%;object-fit:cover;display:block}
+.fig .sl{width:100%;height:100%;object-fit:cover;display:block}
 .fig.contain{background:#fff}
-.fig.contain img{object-fit:contain;padding:12px}   /* figures, covers and screenshots are shown whole */
+.fig.contain .sl{object-fit:contain;padding:12px}   /* figures, covers and screenshots are shown whole */
 .fig .ph{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:14px 16px}
 .fig .ph .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .fig .ph .what{font-family:var(--body);font-style:italic;font-size:17px;line-height:1.35;color:var(--muted);max-width:18em}
@@ -179,12 +179,13 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .fig .credit{position:absolute;right:8px;bottom:8px;font-family:var(--mono);font-size:10px;color:#fff;background:rgba(0,0,0,.5);padding:2px 6px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fig.has{background:var(--paper)}
 /* gallery: images stacked on top of each other, the current one fades in */
-.fig.gal img{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
-.fig.gal img.on{opacity:1}
+.fig.gal .sl{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+.fig.gal .sl.on{opacity:1}
+.fig .dots i.bad{display:none}
 .fig .dots{position:absolute;left:10px;bottom:10px;display:flex;gap:5px}
 .fig .dots i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.45;box-shadow:0 0 2px rgba(0,0,0,.5);transition:opacity .3s}
 .fig .dots i.on{opacity:1}
-@media (prefers-reduced-motion:reduce){ .fig.gal img{transition:none} }
+@media (prefers-reduced-motion:reduce){ .fig.gal .sl{transition:none} }
 .bio{display:grid;grid-template-columns:112px minmax(0,1fr);gap:28px;align-items:start}
 .portrait{position:relative;margin:0;width:112px;aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:1px solid var(--ink);background:repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 7px),var(--paper)}
 .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
@@ -406,7 +407,7 @@ const SCALES=[
 ];
 
 /* net: how the project appears in the header network (n: short node label, f: main category, one of the filter categories (Research, Visualization, Art, Curation, Outreach, Teaching), c: concepts, i: institute keys from INST).
-   k: label shown in [brackets] next to the title (Publication, Exhibition, Artwork, Talk, …). img: photo path, or a list of paths for a gallery (["img/a.jpg","img/b.jpg"]); a list entry can also be {src,credit,pos}. ph: what the photo shows (alt text, or the placeholder label while no photo exists). */
+   k: label shown in [brackets] next to the title (Publication, Exhibition, Artwork, Talk, …). img: photo path, or a list of paths for a gallery (["img/a.jpg","img/b.mp4"]); .mp4/.webm/.mov files play as muted videos; a list entry can also be {src,credit,pos}. ph: what the photo shows (alt text, or the placeholder label while no photo exists). */
 const P=[
  {s:0,y:"2019",t:"ECHIDNA — designing 3D DNA nanostructures",
   img:"img/p-echidna.jpg",
@@ -441,12 +442,12 @@ const P=[
   links:[["R. F. Bliem at Interalia","https://www.interaliamag.org/author/rfbliem/"],["SciArt exhibitions","https://www.sciart.at/exhibitions/"]],
   ph:"Large drawing made together by an artist and a robot",src:""},
  {s:2,y:"2021-ongoing",t:"The Workshop",
-  img:["img/p-workshop.jpg", "img/p-workshop-2.mp4", "img/p-workshop-3.jpg"],
+  img:["img/p-workshop-1.jpg", "img/p-workshop-2.mp4", "img/p-workshop-3.jpg"],
   net:{n:"LBI Workshop",f:"Art",c:["electronics","3D printing","data made physical"],i:["lbi"]},k:"Lab",role:"Co-lead",where:"LBI-NetMed, Vienna",medium:"Electronics, 3D printing, laser cutting",cat:["Art","Research"],
   d:"The institute's workshop, where we experiment artistically with design and technology: electronics, fabrication and prototypes that turn data and ideas into physical things.",
   ph:"Entrance to the institute workshop",src:""},
  {s:1,y:"2026",t:"Network Sculpture",
-  img:["img/p-network-sculpture-2026-1.jpg", "img/p-network-sculpture-2026-2.jpg", "img/p-network-sculpture-2026-3.jpg", "img/p-network-sculpture-2026-4.jpg"],
+  img:["img/p-network-sculpture-2026-1.jpg", "img/p-network-sculpture-2026-2.png", "img/p-network-sculpture-2026-3.jpeg", "img/p-network-sculpture-2026-4.jpeg"],
   net:{n:"Network Sculpture",f:"Art",c:["3D printing", "data made physical", "electronics"],i:["lbi"]},k:"Artwork",role:"Artist",where:"LBI-NetMed, Vienna",medium:"PLA, PVC, electronics",cat:["Art"],
   d:"A physical, electronically activated network for the institute.",
   ph:"Network sculpture suspended along the institute corridor",src:""},
@@ -496,7 +497,7 @@ const P=[
   net:{n:"XR vis theory",f:"Visualization",c:["extended reality", "vis theory"],i:["cns", "lbi"]},k:"Publication",role:"Co-author",where:"IEEE Computer Graphics and Applications 46(4)",medium:"Position paper",cat:["Research","Visualization"],
   links:[["Paper","https://doi.org/10.1109/MCG.2026.3685140"]],ph:"First page of the IEEE CG&A viewpoint on theory-grounded data visualization in XR",src:"IEEE CG&A"},
  {s:3,y:"2024",t:"The emotional echo of cultural intelligences",
-  img:["img/p-emotional-echo-1.jpg", "img/p-emotional-echo-2.jpg", "img/p-emotional-echo-3.jpg", "img/p-emotional-echo-4.jpg", "img/p-emotional-echo-5.jpg"],
+  img:["img/p-emotional-echo-1.jpg", "img/p-emotional-echo-2.png", "img/p-emotional-echo-3.png", "img/p-emotional-echo-4.png", "img/p-emotional-echo-5.png"],
   net:{n:"Emotional echo",f:"Art",c:["science map", "art + science"],i:["cns"]},k:"Artwork",role:"Artist, scientist",where:"Places & Spaces: Mapping Science · permanent collection",medium:"Science map",cat:["Visualization","Art"],badge:"Collection",
   d:"A data visualization acquired into the permanent collection, also presented as talk and panel at the CNS 24h event.",links:[["scimaps.org","https://scimaps.org"]],
   ph:"The emotional echo of cultural intelligences, shown as a large science map",src:"© Sophie Menegaldo | Ivory Rose Photography"},
@@ -517,8 +518,11 @@ const powHTML=e=>`10<sup>${e<0?"−":""}${Math.abs(e)}</sup><small>m</small>`;
 function fig(p){
   const imgs=(Array.isArray(p.img)?p.img:p.img?[p.img]:[]).map(m=>typeof m==="string"?{src:m}:m);
   if(imgs.length){const gal=imgs.length>1;
-    const tags=imgs.map((m,i)=>{const pos=m.pos||p.pos,credit=m.credit||p.src||"";
-      return `<img src="${esc(m.src)}" alt="${esc(p.ph)}${gal?` (${i+1} of ${imgs.length})`:""}" loading="lazy"${i===0&&gal?' class="on"':""}${pos?` style="object-position:${esc(pos)}"`:""} data-credit="${esc(credit)}">`}).join("");
+    const still=matchMedia("(prefers-reduced-motion: reduce)").matches;      // no autoplaying video for reduced motion
+    const tags=imgs.map((m,i)=>{const pos=m.pos||p.pos,credit=m.credit||p.src||"",alt=esc(p.ph)+(gal?` (${i+1} of ${imgs.length})`:"");
+      const a=` class="sl${i===0?" on":""}"${pos?` style="object-position:${esc(pos)}"`:""} data-credit="${esc(credit)}" onerror="slideErr(this)"`;
+      return isVid(m.src)?`<video src="${esc(m.src)}" aria-label="${alt}" muted playsinline preload="metadata"${i===0&&!still?" autoplay":""}${gal?"":" loop"}${a}></video>`
+        :`<img src="${esc(m.src)}" alt="${alt}" loading="lazy"${a}>`}).join("");
     const credit=imgs[0].credit||p.src||"",anyCredit=imgs.some(m=>m.credit)||p.src;
     return `<figure class="fig has${p.fit==="contain"?" contain":""}${gal?" gal":""}">${tags}${gal?`<span class="dots" aria-hidden="true">${imgs.map((m,i)=>`<i${i?"":' class="on"'}></i>`).join("")}</span>`:""}${anyCredit?`<figcaption class="credit"${credit?"":" hidden"}>${esc(credit)}</figcaption>`:""}</figure>`}
   return `<figure class="fig" aria-label="Image placeholder"><i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
@@ -827,12 +831,26 @@ function nextPair(){pairI=(pairI+1)%PAIRS.length;const [a,b]=PAIRS[pairI];
   clearInterval(typing);if(RM){typed.textContent=a;return}
   let cur=typed.textContent,del=true;
   typing=setInterval(()=>{if(del){cur=cur.slice(0,-1);typed.textContent=cur;if(!cur)del=false}else{cur=a.slice(0,cur.length+1);typed.textContent=cur;if(cur===a)clearInterval(typing)}},55)}
-/* ---- project galleries: every 3 s the next image fades in; stops while paused, while the tab is hidden, or while the pointer is on the image ---- */
+/* ---- project galleries: every 3 s the next image fades in (a video plays to its end first); stops while paused, while the tab is hidden, or while the pointer is on the image.
+   Files that fail to load are dropped from the rotation. ---- */
+function isVid(src){return /\.(mp4|webm|mov)$/i.test(src)}
+function showSlide(f,nx){
+  const sl=[...f.querySelectorAll(".sl")];
+  sl.forEach((x,i)=>{x.classList.toggle("on",i===nx);if(x.tagName==="VIDEO"){if(i===nx){x.currentTime=0;x.play().catch(()=>{})}else x.pause()}});
+  f.querySelectorAll(".dots i").forEach((d,i)=>d.classList.toggle("on",i===nx));
+  const c=f.querySelector(".credit");if(c){c.textContent=sl[nx].dataset.credit;c.hidden=!sl[nx].dataset.credit}}
+function nextSlide(f){
+  const sl=[...f.querySelectorAll(".sl")],cur=sl.findIndex(x=>x.classList.contains("on"));
+  let nx=cur;do nx=(nx+1)%sl.length;while(nx!==cur&&sl[nx].classList.contains("bad"));
+  if(nx!==cur)showSlide(f,nx)}
+function slideErr(el){
+  const f=el.closest(".fig"),sl=[...f.querySelectorAll(".sl")],i=sl.indexOf(el);
+  el.classList.add("bad");const d=f.querySelectorAll(".dots i")[i];if(d)d.classList.add("bad");
+  if(el.classList.contains("on"))nextSlide(f)}
 setInterval(()=>{if(paused||document.hidden)return;
   document.querySelectorAll(".fig.gal").forEach(f=>{if(f.matches(":hover"))return;
-    const im=[...f.querySelectorAll("img")],dots=f.querySelectorAll(".dots i"),cur=im.findIndex(x=>x.classList.contains("on")),nx=(cur+1)%im.length;
-    im[cur].classList.remove("on");im[nx].classList.add("on");dots.forEach((d,i)=>d.classList.toggle("on",i===nx));
-    const c=f.querySelector(".credit");if(c){c.textContent=im[nx].dataset.credit;c.hidden=!im[nx].dataset.credit}})},3000);
+    const v=f.querySelector("video.sl.on");if(v&&!v.paused&&!v.ended)return;   // let a playing video finish
+    nextSlide(f)})},3000);
 function runPairs(){clearInterval(pairTimer);if(!paused&&!document.hidden)pairTimer=setInterval(nextPair,6500)}
 
 /* ---- pause: stops the automatic visitor, the drifting and the changing headline ---- */

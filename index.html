@@ -181,7 +181,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .portrait{position:relative;margin:0;width:112px;aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:1px solid var(--ink);background:repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 7px),var(--paper)}
 .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .portrait .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.cvcard{align-self:start;border:1px solid var(--line);background:var(--paper);padding:24px;display:grid;gap:12px;align-content:start;justify-items:start}
+.cvcard{scroll-margin-top:80px;align-self:start;border:1px solid var(--line);background:var(--paper);padding:24px;display:grid;gap:12px;align-content:start;justify-items:start}
 .cvcard p{margin:0}
 .cvlink{font-family:var(--mono);font-size:12px;border-bottom:2px solid var(--accent);text-decoration:none}
 .cvlink:hover{border-bottom-width:3px}
@@ -264,6 +264,7 @@ footer.foot{border-top:1px solid var(--line)}
   body{font-size:17px}
   .projects{grid-template-columns:1fr}
   .about{grid-template-columns:1fr}
+  .bar{padding-top:12px}
 }
 @media (max-width:480px){ .bar nav a.opt{display:none} .stops a{font-size:0} .stops a::after{content:attr(data-short);font-size:10px} }
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} .marker{transition:none} .caret{animation:none} }
@@ -276,7 +277,8 @@ footer.foot{border-top:1px solid var(--line)}
       <a class="name" href="#intro">Chris V. R. Hütter <span>MSc MArch</span></a>
       <nav aria-label="Sections">
         <a href="#work">Work</a>
-        <a href="#about">CV</a>
+        <a href="#about">About</a>
+        <a href="#cv">CV</a>
         <a href="#links" class="opt">Links</a>
         <a href="#contact" class="opt">Contact</a>
       </nav>
@@ -332,7 +334,7 @@ footer.foot{border-top:1px solid var(--line)}
           <p>She trained as an architect in Vienna and Glasgow, worked with Tomás Saraceno Studio and on hospital buildings, then moved into bioengineering and network science. Alongside research she co-leads the institute's workshop, curates, and teaches.</p>
           </div>
         </div>
-        <div class="cvcard">
+        <div class="cvcard" id="cv">
           <span class="eyebrow">Curriculum vitae · 2026 · PDF, 2 pages</span>
           <p>Education, positions, exhibitions, talks and publications.</p>
           <button type="button" class="btn solid" id="cvBtn">Download CV</button>
@@ -786,7 +788,8 @@ const CV="Huetter_CV_2026.pdf";
 const cvMsg=document.getElementById("cvMsg"),cvLink=document.getElementById("cvLink");
 let dl=null;
 async function getCV(){
-  if(!dl){cvLink.hidden=false;cvLink.click();return}  // no download capability (e.g. self-hosted): just open the PDF
+  if(!(window.claude&&claude.use)){const a=document.createElement("a");a.href=CV;a.download=CV;document.body.appendChild(a);a.click();a.remove();return}  // public website: save the PDF directly
+  if(!dl){cvLink.hidden=false;cvLink.click();return}  // no download capability: just open the PDF
   cvMsg.textContent="Preparing…";
   try{const r=await fetch(CV);if(!r.ok)throw new Error("fetch");const b=await r.blob();
     await dl.save({filename:CV,data:b});cvMsg.textContent="CV saved.";}
@@ -798,7 +801,7 @@ async function getCV(){
 document.getElementById("cvBtn").addEventListener("click",getCV);
 document.getElementById("cvBtn2").addEventListener("click",getCV);
 if(window.claude&&claude.use){claude.use("downloads").then(x=>{dl=x;if(!x)cvLink.hidden=false}).catch(()=>{cvLink.hidden=false})}
-else{cvLink.hidden=false;cvLink.setAttribute("download","Huetter_CV_2026.pdf")}   // on the public website the button downloads the PDF directly
+else cvLink.hidden=false   // public website: "Open CV" opens the PDF in the browser's viewer, the button downloads it
 
 document.getElementById("copyBtn").addEventListener("click",async e=>{
   const t=document.getElementById("mail").textContent,btn=e.currentTarget;

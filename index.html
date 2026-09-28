@@ -449,8 +449,8 @@ const P=[
  {s:1,y:"2026",t:"Network Sculpture",
   img:["img/p-network-sculpture-2026-1.jpg", "img/p-network-sculpture-2026-2.png", "img/p-network-sculpture-2026-3.jpeg", "img/p-network-sculpture-2026-4.jpeg"],
   net:{n:"Network Sculpture",f:"Art",c:["3D printing", "data made physical", "electronics"],i:["lbi"]},k:"Artwork",role:"Artist",where:"LBI-NetMed, Vienna",medium:"PLA, PVC, electronics",cat:["Art"],
-  d:"A physical, electronically activated network for the institute.",
-  ph:"Network sculpture suspended along the institute corridor",src:""},
+  d:"A physical, electronically activated network representing the structure and connections within the LBI institute. [work in progress]",
+  ph:"Network sculpture prototype suspended along the institute corridor",src:""},
  {s:0,y:"2020",t:"Network Sculpture — DNA Synthesome Complex",
   img:"img/p-synthesome.jpg",
   net:{n:"Synthesome sculpture",f:"Art",c:["3D printing", "data made physical", "protein complex"],i:["cemm"]},k:"Artwork",role:"Artist",where:"CeMM, Vienna",medium:"PLA, PMMA",cat:["Art"],
@@ -836,7 +836,7 @@ function nextPair(){pairI=(pairI+1)%PAIRS.length;const [a,b]=PAIRS[pairI];
 function isVid(src){return /\.(mp4|webm|mov)$/i.test(src)}
 function showSlide(f,nx){
   const sl=[...f.querySelectorAll(".sl")];
-  sl.forEach((x,i)=>{x.classList.toggle("on",i===nx);if(x.tagName==="VIDEO"){if(i===nx){x.currentTime=0;x.play().catch(()=>{})}else x.pause()}});
+  sl.forEach((x,i)=>{x.classList.toggle("on",i===nx);if(x.tagName==="VIDEO"){if(i===nx){x.currentTime=0;x.dataset.t0=Date.now();x.play().catch(()=>{})}else x.pause()}});
   f.querySelectorAll(".dots i").forEach((d,i)=>d.classList.toggle("on",i===nx));
   const c=f.querySelector(".credit");if(c){c.textContent=sl[nx].dataset.credit;c.hidden=!sl[nx].dataset.credit}}
 function nextSlide(f){
@@ -849,7 +849,9 @@ function slideErr(el){
   if(el.classList.contains("on"))nextSlide(f)}
 setInterval(()=>{if(paused||document.hidden)return;
   document.querySelectorAll(".fig.gal").forEach(f=>{if(f.matches(":hover"))return;
-    const v=f.querySelector("video.sl.on");if(v&&!v.paused&&!v.ended)return;   // let a playing video finish
+    const v=f.querySelector("video.sl.on");
+    if(v){v.dataset.t0||=Date.now();const max=(isFinite(v.duration)?v.duration:8)*1000+2000;   // let a playing video finish, but don't wait forever on one that stalls
+      if(!v.paused&&!v.ended&&Date.now()-v.dataset.t0<max)return}
     nextSlide(f)})},3000);
 function runPairs(){clearInterval(pairTimer);if(!paused&&!document.hidden)pairTimer=setInterval(nextPair,6500)}
 

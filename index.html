@@ -182,6 +182,8 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .fig.gal .sl{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
 .fig.gal .sl.on{opacity:1}
 .fig .dots i.bad{display:none}
+.fig.gal{cursor:pointer}
+.fig.gal:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .fig .dots{position:absolute;left:10px;bottom:10px;display:flex;gap:5px}
 .fig .dots i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.45;box-shadow:0 0 2px rgba(0,0,0,.5);transition:opacity .3s}
 .fig .dots i.on{opacity:1}
@@ -524,7 +526,7 @@ function fig(p){
       return isVid(m.src)?`<video src="${esc(m.src)}" aria-label="${alt}" muted playsinline preload="metadata"${i===0&&!still?" autoplay":""}${gal?"":" loop"}${a}></video>`
         :`<img src="${esc(m.src)}" alt="${alt}" loading="lazy"${a}>`}).join("");
     const credit=imgs[0].credit||p.src||"",anyCredit=imgs.some(m=>m.credit)||p.src;
-    return `<figure class="fig has${p.fit==="contain"?" contain":""}${gal?" gal":""}">${tags}${gal?`<span class="dots" aria-hidden="true">${imgs.map((m,i)=>`<i${i?"":' class="on"'}></i>`).join("")}</span>`:""}${anyCredit?`<figcaption class="credit"${credit?"":" hidden"}>${esc(credit)}</figcaption>`:""}</figure>`}
+    return `<figure class="fig has${p.fit==="contain"?" contain":""}${gal?" gal":""}"${gal?' tabindex="0" role="button" aria-label="Show next image"':""}>${tags}${gal?`<span class="dots" aria-hidden="true">${imgs.map((m,i)=>`<i${i?"":' class="on"'}></i>`).join("")}</span>`:""}${anyCredit?`<figcaption class="credit"${credit?"":" hidden"}>${esc(credit)}</figcaption>`:""}</figure>`}
   return `<figure class="fig" aria-label="Image placeholder"><i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
     <div class="ph"><span class="k">Image</span><span class="what">${esc(p.ph)}</span><span class="src">${esc(p.src||"")}</span></div></figure>`;
 }
@@ -847,8 +849,12 @@ function slideErr(el){
   const f=el.closest(".fig"),sl=[...f.querySelectorAll(".sl")],i=sl.indexOf(el);
   el.classList.add("bad");const d=f.querySelectorAll(".dots i")[i];if(d)d.classList.add("bad");
   if(el.classList.contains("on"))nextSlide(f)}
+/* click (or Enter / Space) on a gallery shows the next image; the automatic change then waits a full 3 s again */
+function stepGallery(f){nextSlide(f);f.dataset.t=Date.now()}
+host.addEventListener("click",e=>{const f=e.target.closest(".fig.gal");if(f)stepGallery(f)});
+host.addEventListener("keydown",e=>{const f=e.target.closest(".fig.gal");if(f&&(e.key==="Enter"||e.key===" ")){e.preventDefault();stepGallery(f)}});
 setInterval(()=>{if(paused||document.hidden)return;
-  document.querySelectorAll(".fig.gal").forEach(f=>{if(f.matches(":hover"))return;
+  document.querySelectorAll(".fig.gal").forEach(f=>{if(f.matches(":hover")||Date.now()-(+f.dataset.t||0)<2900)return;
     const v=f.querySelector("video.sl.on");
     if(v){v.dataset.t0||=Date.now();const max=(isFinite(v.duration)?v.duration:8)*1000+2000;   // let a playing video finish, but don't wait forever on one that stalls
       if(!v.paused&&!v.ended&&Date.now()-v.dataset.t0<max)return}

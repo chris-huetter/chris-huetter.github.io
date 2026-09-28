@@ -178,6 +178,13 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 
 .fig .credit{position:absolute;right:8px;bottom:8px;font-family:var(--mono);font-size:10px;color:#fff;background:rgba(0,0,0,.5);padding:2px 6px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fig.has{background:var(--paper)}
+/* gallery: images stacked on top of each other, the current one fades in */
+.fig.gal img{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+.fig.gal img.on{opacity:1}
+.fig .dots{position:absolute;left:10px;bottom:10px;display:flex;gap:5px}
+.fig .dots i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.45;box-shadow:0 0 2px rgba(0,0,0,.5);transition:opacity .3s}
+.fig .dots i.on{opacity:1}
+@media (prefers-reduced-motion:reduce){ .fig.gal img{transition:none} }
 .bio{display:grid;grid-template-columns:112px minmax(0,1fr);gap:28px;align-items:start}
 .portrait{position:relative;margin:0;width:112px;aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:1px solid var(--ink);background:repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 7px),var(--paper)}
 .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
@@ -399,67 +406,103 @@ const SCALES=[
 ];
 
 /* net: how the project appears in the header network (n: short node label, f: main category, one of the filter categories (Research, Visualization, Art, Curation, Outreach, Teaching), c: concepts, i: institute keys from INST).
-   k: label shown in [brackets] next to the title (Publication, Exhibition, Artwork, Talk, …). img: photo path. ph: what the photo shows (alt text, or the placeholder label while no photo exists). */
+   k: label shown in [brackets] next to the title (Publication, Exhibition, Artwork, Talk, …). img: photo path, or a list of paths for a gallery (["img/a.jpg","img/b.jpg"]); a list entry can also be {src,credit,pos}. ph: what the photo shows (alt text, or the placeholder label while no photo exists). */
 const P=[
- {s:0,y:"2019",t:"ECHIDNA — designing 3D DNA nanostructures",img:"img/p-echidna.jpg",net:{n:"ECHIDNA",f:"Research",c:["DNA nanotechnology", "caDNAno"],i:["ait", "fhc"]},k:"Thesis",role:"Researcher",where:"AIT Austrian Institute of Technology · FH Campus Wien",medium:"SAMSON, caDNAno, Python",cat:["Research"],
+ {s:0,y:"2019",t:"ECHIDNA — designing 3D DNA nanostructures",
+  img:"img/p-echidna.jpg",
+  net:{n:"ECHIDNA",f:"Research",c:["DNA nanotechnology", "caDNAno"],i:["ait", "fhc"]},k:"Thesis",role:"Researcher",where:"AIT Austrian Institute of Technology · FH Campus Wien",medium:"SAMSON, caDNAno, Python",cat:["Research"],
   d:"BSc thesis on computational design of DNA origami, developed during a research internship in molecular diagnostics.",
   ph:"ECHIDNA: a Python package to parse 3D data models for DNA origami design",src:""},
- {s:0,y:"2020",t:"A multicomponent DNA origami rotor",fit:"contain",img:"img/p-dna-rotor.jpg",net:{n:"DNA origami rotor",f:"Research",c:["DNA nanotechnology", "Brownian motion"],i:["ait"]},k:"Publication",role:"Co-author",where:"Small (2020)",medium:"DNA origami, molecular modelling",cat:["Research"],
+ {s:0,y:"2020",t:"A multicomponent DNA origami rotor",fit:"contain",
+  img:"img/p-dna-rotor.jpg",
+  net:{n:"DNA origami rotor",f:"Research",c:["DNA nanotechnology", "Brownian motion"],i:["ait"]},k:"Publication",role:"Co-author",where:"Small (2020)",medium:"DNA origami, molecular modelling",cat:["Research"],
   d:"Brownian and flow-driven rotational dynamics of a DNA nanomachine.",links:[["Paper","https://doi.org/10.1002/smll.202001855"]],
   ph:"3D model of the DNA origami rotor",src:""},
- {s:2,y:"2022",t:"Network Cartographs",img:"img/p-cartographs-cover.jpg",net:{n:"Network Cartographs",f:"Visualization",c:["network layouts", "cover art"],i:["cemm", "lbi"]},k:"Publication",role:"First author · cover artist",where:"Nature Computational Science 2, 84–89",medium:"Python, 2D/3D layouts",cat:["Research","Visualization"],badge:"Cover",
+ {s:2,y:"2022",t:"Network Cartographs",
+  img:"img/p-cartographs-cover.jpg",
+  net:{n:"Network Cartographs",f:"Visualization",c:["network layouts", "cover art"],i:["cemm", "lbi"]},k:"Publication",role:"First author · cover artist",where:"Nature Computational Science 2, 84–89",medium:"Python, 2D/3D layouts",cat:["Research","Visualization"],badge:"Cover",
   d:"Layouts that encode chosen structural or functional features directly into node position, so a network can be read like a map. Also the cover of issue 2.",
   links:[["Paper","https://doi.org/10.1038/s43588-022-00199-z"],["Research briefing","https://doi.org/10.1038/s43588-022-00203-6"]],
   ph:"Cover art for Nature Computational Science: a network layout rendered as a flowing landscape",src:"Cover art · Nature Computational Science"},
- {s:2,y:"2021",t:"VRNetzer",img:"img/p-vrnetzer.jpg",net:{n:"VRNetzer",f:"Visualization",c:["virtual reality", "network layouts", "collaboration"],i:["cemm"]},k:"Publication",role:"Co-author",where:"Nature Communications 12, 2432",medium:"Virtual reality, Unity, Python",cat:["Research","Visualization"],
+ {s:2,y:"2021",t:"VRNetzer",
+  img:"img/p-vrnetzer.jpg",
+  net:{n:"VRNetzer",f:"Visualization",c:["virtual reality", "network layouts", "collaboration"],i:["cemm"]},k:"Publication",role:"Co-author",where:"Nature Communications 12, 2432",medium:"Virtual reality, Unity, Python",cat:["Research","Visualization"],
   d:"A platform for exploring large biological networks in virtual reality, alone or together.",links:[["Paper","https://doi.org/10.1038/s41467-021-22570-w"]],
   ph:"A researcher explores a network in virtual reality with VRNetzer",src:""},
- {s:3,y:"2023",t:"AutoCore",fit:"contain",img:"img/p-autocore.jpg",net:{n:"AutoCore",f:"Research",c:["network medicine", "autoimmunity"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Science Advances 9, eadg6375",medium:"Network analysis",cat:["Research"],
+ {s:3,y:"2023",t:"AutoCore",fit:"contain",
+  img:"img/p-autocore.jpg",
+  net:{n:"AutoCore",f:"Research",c:["network medicine", "autoimmunity"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Science Advances 9, eadg6375",medium:"Network analysis",cat:["Research"],
   d:"A network-based definition of the core module of human autoimmunity and autoinflammation.",links:[["Paper","https://doi.org/10.1126/sciadv.adg6375"]],
   ph:"Figure: the AutoCore disease module and its functional groups",src:"Figure: Science Advances"},
- {s:1,y:"2024-2025",t:"Co-creators",img:"img/p-co-creators.jpg",net:{n:"Co-creators",f:"Art",c:["robotics","human–machine collaboration","art + science"],i:["lbi"]},k:"Artwork",role:"",where:"Artist: Rudolf Friedrich Bliem · Robot: S. Pirch",medium:"Painting, robotics",cat:["Art"],
+ {s:1,y:"2024-2025",t:"Co-creators",
+  img:["img/p-co-creators-1.jpg","img/p-co-creators-2.jpg", "img/p-co-creators-3.jpg"],
+  net:{n:"Co-creators",f:"Art",c:["robotics","human–machine collaboration","art + science"],i:["lbi"]},k:"Artwork",role:"",where:"Artist: Rudolf Friedrich Bliem · Robot: S. Pirch",medium:"Painting, robotics",cat:["Art"],
   d:"An artist and a robot make work together, sharing the gestures, decisions and authorship of each piece.",
   links:[["R. F. Bliem at Interalia","https://www.interaliamag.org/author/rfbliem/"],["SciArt exhibitions","https://www.sciart.at/exhibitions/"]],
   ph:"Large drawing made together by an artist and a robot",src:""},
- {s:2,y:"2021-ongoing",t:"The Workshop",img:"img/p-workshop.jpg",net:{n:"The Workshop",f:"Art",c:["electronics","3D printing","data made physical"],i:["lbi"]},k:"Lab",role:"Co-lead",where:"LBI-NetMed, Vienna",medium:"Electronics, 3D printing, laser cutting",cat:["Art","Research"],
+ {s:2,y:"2021-ongoing",t:"The Workshop",
+  img:["img/p-workshop.jpg", "img/p-workshop-2.mp4", "img/p-workshop-3.jpg"],
+  net:{n:"The Workshop",f:"Art",c:["electronics","3D printing","data made physical"],i:["lbi"]},k:"Lab",role:"Co-lead",where:"LBI-NetMed, Vienna",medium:"Electronics, 3D printing, laser cutting",cat:["Art","Research"],
   d:"The institute's workshop, where we experiment artistically with design and technology: electronics, fabrication and prototypes that turn data and ideas into physical things.",
   ph:"Entrance to the institute workshop",src:""},
- {s:1,y:"2026",t:"Network Sculpture",img:"img/p-network-sculpture-2026.jpg",net:{n:"Network Sculpture",f:"Art",c:["3D printing", "data made physical", "electronics"],i:["lbi"]},k:"Artwork",role:"Artist",where:"LBI-NetMed, Vienna",medium:"PLA, PVC, electronics",cat:["Art"],
+ {s:1,y:"2026",t:"Network Sculpture",
+  img:"img/p-network-sculpture-2026.jpg",
+  net:{n:"Network Sculpture",f:"Art",c:["3D printing", "data made physical", "electronics"],i:["lbi"]},k:"Artwork",role:"Artist",where:"LBI-NetMed, Vienna",medium:"PLA, PVC, electronics",cat:["Art"],
   d:"A physical, electronically activated network for the institute.",
   ph:"Network sculpture suspended along the institute corridor",src:""},
- {s:0,y:"2020",t:"Network Sculpture — DNA Synthesome Complex",img:"img/p-synthesome.jpg",net:{n:"Synthesome sculpture",f:"Art",c:["3D printing", "data made physical", "protein complex"],i:["cemm"]},k:"Artwork",role:"Artist",where:"CeMM, Vienna",medium:"PLA, PMMA",cat:["Art"],
+ {s:0,y:"2020",t:"Network Sculpture — DNA Synthesome Complex",
+  img:"img/p-synthesome.jpg",
+  net:{n:"Synthesome sculpture",f:"Art",c:["3D printing", "data made physical", "protein complex"],i:["cemm"]},k:"Artwork",role:"Artist",where:"CeMM, Vienna",medium:"PLA, PMMA",cat:["Art"],
   d:"A protein complex network printed and assembled as an object you can walk around.",
   ph:"Detail of the DNA Synthesome Complex network sculpture",src:""},
- {s:1,y:"2025",t:"The Datascope",img:"img/p-datascope.jpg",net:{n:"The Datascope",f:"Visualization",c:["high-dimensional data", "Best Lightning Talk award"],i:["lbi"]},k:"Talk",role:"Speaker",where:"BioMed Data Science conference, Budapest",medium:"Lightning talk",cat:["Research","Visualization"],badge:"Best lightning talk",
+ {s:1,y:"2025",t:"The Datascope",
+  img:"img/p-datascope.jpg",
+  net:{n:"The Datascope",f:"Visualization",c:["high-dimensional data", "Best Lightning Talk award"],i:["lbi"]},k:"Talk",role:"Speaker",where:"BioMed Data Science conference, Budapest",medium:"Lightning talk",cat:["Research","Visualization"],badge:"Best lightning talk",
   d:"A lightning talk on an instrument for looking into high-dimensional data.",
   ph:"Lightning talk on the Datascope at the BioMed Data Science conference",src:"© Sara Chitgaran"},
- {s:1,y:"2025–26",t:"XR stations for the public",img:"img/p-xr-stations.jpg",net:{n:"XR stations",f:"Outreach",c:["virtual reality", "public outreach"],i:["lbi", "nhm", "vis"]},k:"Installation",role:"Designer, host",where:"Long Night of Research 2026 · Natural History Museum Vienna 2025 · IEEE VIS 2025",medium:"Virtual and extended reality",cat:["Outreach","Visualization"],
+ {s:1,y:"2025–26",t:"XR stations for the public",
+  img:["img/p-xr-stations-1.jpg", "img/p-xr-stations-2.jpg", "img/p-xr-stations-3.jpg"],
+  net:{n:"XR stations",f:"Outreach",c:["virtual reality", "public outreach"],i:["lbi", "nhm", "vis"]},k:"Installation",role:"Designer, host",where:"Long Night of Research 2026 · Natural History Museum Vienna 2025 · IEEE VIS 2025",medium:"Virtual and extended reality",cat:["Outreach","Visualization"],
   d:"Visitors walk through biological networks and cell structures in XR. At the Long Night of Research on Maria-Theresien-Platz the station was visited by the Federal Minister for Science.",
   links:[["Long Night of Research","https://netmed.lbg.ac.at/society/"]],
   ph:"Visitors exploring biological networks in VR at the XR station",src:"© Annette Tesarek"},
- {s:1,y:"2023",t:"Multiscale Human — Why 3D?",fit:"contain",img:"img/p-why-3d.jpg",net:{n:"Multiscale Human",f:"Visualization",c:["3D perception", "high-dimensional data"],i:["cns"]},k:"Talk",role:"Invited talk, panellist",where:"CNS 24h event",medium:"Talk",cat:["Research","Visualization"],
+ {s:1,y:"2023",t:"Multiscale Human — Why 3D?",fit:"contain",
+  img:"img/p-why-3d.jpg", 
+  net:{n:"Multiscale Human",f:"Visualization",c:["3D perception", "high-dimensional data"],i:["cns"]},k:"Talk",role:"Invited talk, panellist",where:"CNS 24h event",medium:"Talk",cat:["Research","Visualization"],
   links:[["Event","https://humanatlas.io/events/2024-24h/"]],ph:"Programme of the “Why 3D?” session at the CNS 24h event",src:"CNS · Indiana University"},
- {s:2,y:"2025",t:"X FRAMES PER SPACE — different logics, shared questions",img:"img/p-x-frames.jpg",net:{n:"X Frames per Space",f:"Curation",c:["curation", "art + science", "1,200 m²"],i:["lbi", "vcas"]},k:"Exhibition",role:"Co-curator, artist",where:"alte WU, Vienna · with Vienna Contemporary Art Space",medium:"1,200 m², digital art, robotics, painting, sculpture",cat:["Curation","Art"],
+ {s:2,y:"2025",t:"X FRAMES PER SPACE — different logics, shared questions",
+  img:"img/p-x-frames.jpg",
+  net:{n:"X Frames per Space",f:"Curation",c:["curation", "art + science", "1,200 m²"],i:["lbi", "vcas"]},k:"Exhibition",role:"Co-curator, artist",where:"alte WU, Vienna · with Vienna Contemporary Art Space",medium:"1,200 m², digital art, robotics, painting, sculpture",cat:["Curation","Art"],
   d:"A large exhibition built as a mycelial network between biology, medicine and artistic production. Covered by PARNASS art magazine.",
   links:[["PARNASS feature","https://www.parnass.at/news/x-frames-per-space"],["Digital gallery","https://whatevr.xyz/"]],
   ph:"Exhibition poster for X Frames per Space, 8–14 Nov 2025",src:""},
- {s:2,y:"2022",t:"The Shape of Things to Come",img:"img/p-shape-of-things.jpg",net:{n:"Shape of Things to Come",f:"Curation",c:["curation", "mixed reality", "virtual reality"],i:["ars", "vbc"]},k:"Exhibition",role:"Curator, artist",where:"Ars Electronica Festival, Kepler's Garden, Linz (5 days) · Vienna BioCenter campus (3 days)",medium:"Mixed reality exhibition: sound, video, VR performance, AR",cat:["Curation","Art"],
- d:"Scenarios by artists and scientists on how we imagine, assess and influence our future environment, shown at Ars Electronica in Linz and on the Vienna BioCenter campus.",
+ {s:2,y:"2022",t:"The Shape of Things to Come",
+  img:"img/p-shape-of-things.jpg",  
+  net:{n:"Shape of Things to Come",f:"Curation",c:["curation", "mixed reality", "virtual reality"],i:["ars", "vbc"]},k:"Exhibition",role:"Curator, artist",where:"Ars Electronica Festival, Kepler's Garden, Linz (5 days) · Vienna BioCenter campus (3 days)",medium:"Mixed reality exhibition: sound, video, VR performance, AR",cat:["Curation","Art"],
+  d:"Scenarios by artists and scientists on how we imagine, assess and influence our future environment, shown at Ars Electronica in Linz and on the Vienna BioCenter campus.",
   links:[["Ars Electronica","https://ars.electronica.art/planetb/en/the-shape-of-things/"],["Vienna BioCenter exhibition","https://whatevr.xyz/exhibition2022/"]],
   ph:"Title visual of The Shape of Things to Come",src:""},
- {s:2,y:"2021–23",t:"Deep Space 8K trilogy: Entangled · The Nature of Systems · Connected",img:"img/p-deep-space.jpg",net:{n:"Deep Space 8K",f:"Art",c:["art + science", "live performance", "complex systems"],i:["ars"]},k:"Artwork",role:"Artist",where:"Ars Electronica Center, Linz",medium:"3D projection, live performance",cat:["Art","Visualization"],
+ {s:2,y:"2021–23",t:"Deep Space 8K trilogy: Entangled · The Nature of Systems · Connected",
+  img: ["img/p-deep-space-1.jpg", "img/p-deep-space-2.jpg", "img/p-deep-space-3.jpg", "img/p-deep-space-4.jpg", "img/p-deep-space-5.jpg", "img/p-deep-space-6.jpg", "img/p-deep-space-7.jpg"],
+  net:{n:"Deep Space 8K",f:"Art",c:["art + science", "live performance", "complex systems"],i:["ars"]},k:"Artwork",role:"Artist",where:"Ars Electronica Center, Linz",medium:"3D projection, live performance",cat:["Art","Visualization"],
   d:"Three works for a 16 × 9 m stereoscopic projection space, on the emergence and breakdown of complex systems from cells to the planet.",
   links:[["Entangled Realities","https://ars.electronica.art/newdigitaldeal/en/entangled-realities/"],["The Nature of Systems","https://ars.electronica.art/planetb/en/nature-of-systems/"]],
   ph:"“Connected: How the World is More than the Sum of its Parts” in Deep Space 8K",src:"Ars Electronica Center"},
  {s:3,y:"2026",t:"A network map of the chemical exposome",fit:"contain",img:"img/p-exposome.jpg",net:{n:"Exposome map",f:"Research",c:["network medicine", "public health"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Nature Communications 17, 5754",medium:"Network medicine",cat:["Research"],
   d:"Connects molecular interactions of environmental chemicals to public health outcomes.",links:[["Paper","https://doi.org/10.1038/s41467-026-72402-y"]],
   ph:"Figure: network map connecting chemical exposures to disease",src:"Figure: Nature Communications"},
- {s:3,y:"2026",t:"Theory-grounded data visualization in extended reality",fit:"contain",img:"img/p-xr-vis-theory.jpg",net:{n:"XR vis theory",f:"Visualization",c:["extended reality", "vis theory"],i:["cns", "lbi"]},k:"Publication",role:"Co-author",where:"IEEE Computer Graphics and Applications 46(4)",medium:"Position paper",cat:["Research","Visualization"],
+ {s:3,y:"2026",t:"Theory-grounded data visualization in extended reality",fit:"contain",
+  img:"img/p-xr-vis-theory.jpg",
+  net:{n:"XR vis theory",f:"Visualization",c:["extended reality", "vis theory"],i:["cns", "lbi"]},k:"Publication",role:"Co-author",where:"IEEE Computer Graphics and Applications 46(4)",medium:"Position paper",cat:["Research","Visualization"],
   links:[["Paper","https://doi.org/10.1109/MCG.2026.3685140"]],ph:"First page of the IEEE CG&A viewpoint on theory-grounded data visualization in XR",src:"IEEE CG&A"},
- {s:3,y:"2024",t:"The emotional echo of cultural intelligences",img:"img/p-emotional-echo.jpg",net:{n:"Emotional echo",f:"Art",c:["science map", "art + science"],i:["cns"]},k:"Artwork",role:"Artist, scientist",where:"Places & Spaces: Mapping Science · permanent collection",medium:"Science map",cat:["Visualization","Art"],badge:"Collection",
+ {s:3,y:"2024",t:"The emotional echo of cultural intelligences",
+  img:["img/p-emotional-echo-1.jpg", "img/p-emotional-echo-2.jpg", "img/p-emotional-echo-3.jpg", "img/p-emotional-echo-4.jpg", "img/p-emotional-echo-5.jpg"],
+  net:{n:"Emotional echo",f:"Art",c:["science map", "art + science"],i:["cns"]},k:"Artwork",role:"Artist, scientist",where:"Places & Spaces: Mapping Science · permanent collection",medium:"Science map",cat:["Visualization","Art"],badge:"Collection",
   d:"A data visualization acquired into the permanent collection, also presented as talk and panel at the CNS 24h event.",links:[["scimaps.org","https://scimaps.org"]],
   ph:"The emotional echo of cultural intelligences, shown as a large science map",src:"© Sophie Menegaldo | Ivory Rose Photography"},
- {s:3,y:"2025",t:"TALK TRY TELL — panel",img:"img/p-talk-try-tell.jpg",net:{n:"TALK TRY TELL",f:"Visualization",c:["extended reality", "vis theory"],i:["vis"]},k:"Panel",role:"Co-organiser",where:"IEEE VIS 2025, Vienna",medium:"Panel",cat:["Research","Visualization"],
+ {s:3,y:"2025",t:"TALK TRY TELL — panel",
+  img:"img/p-talk-try-tell.jpg",
+  net:{n:"TALK TRY TELL",f:"Visualization",c:["extended reality", "vis theory"],i:["vis"]},k:"Panel",role:"Co-organiser",where:"IEEE VIS 2025, Vienna",medium:"Panel",cat:["Research","Visualization"],
   d:"Challenges and opportunities for theory-grounded data visualization in extended reality.",ph:"Panel discussion TALK TRY TELL at IEEE VIS 2025",src:""},
  {s:3,y:"2024",t:"On data visualization workshops",fit:"contain",img:"img/p-vis-workshops.jpg",net:{n:"Vis workshops",f:"Teaching",c:["teaching"],i:["cns"]},k:"Talk",role:"Invited talk, panellist",where:"CNS 24h event",medium:"Talk",cat:["Teaching","Visualization"],
   links:[["Event","https://cns-iu.github.io/workshops/2025-24h/"]],ph:"Panel on data visualization workshops at the CNS 24h event",src:"CNS · Indiana University"},
@@ -470,7 +513,12 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const powHTML=e=>`10<sup>${e<0?"−":""}${Math.abs(e)}</sup><small>m</small>`;
 
 function fig(p){
-  if(p.img) return `<figure class="fig has${p.fit==="contain"?" contain":""}"><img src="${esc(p.img)}" alt="${esc(p.ph)}" loading="lazy"${p.pos?` style="object-position:${esc(p.pos)}"`:""}>${p.src?`<figcaption class="credit">${esc(p.src)}</figcaption>`:""}</figure>`;
+  const imgs=(Array.isArray(p.img)?p.img:p.img?[p.img]:[]).map(m=>typeof m==="string"?{src:m}:m);
+  if(imgs.length){const gal=imgs.length>1;
+    const tags=imgs.map((m,i)=>{const pos=m.pos||p.pos,credit=m.credit||p.src||"";
+      return `<img src="${esc(m.src)}" alt="${esc(p.ph)}${gal?` (${i+1} of ${imgs.length})`:""}" loading="lazy"${i===0&&gal?' class="on"':""}${pos?` style="object-position:${esc(pos)}"`:""} data-credit="${esc(credit)}">`}).join("");
+    const credit=imgs[0].credit||p.src||"",anyCredit=imgs.some(m=>m.credit)||p.src;
+    return `<figure class="fig has${p.fit==="contain"?" contain":""}${gal?" gal":""}">${tags}${gal?`<span class="dots" aria-hidden="true">${imgs.map((m,i)=>`<i${i?"":' class="on"'}></i>`).join("")}</span>`:""}${anyCredit?`<figcaption class="credit"${credit?"":" hidden"}>${esc(credit)}</figcaption>`:""}</figure>`}
   return `<figure class="fig" aria-label="Image placeholder"><i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
     <div class="ph"><span class="k">Image</span><span class="what">${esc(p.ph)}</span><span class="src">${esc(p.src||"")}</span></div></figure>`;
 }
@@ -707,8 +755,9 @@ const net=(()=>{
     for(let i=0;i<N.length;i++){const r=N[i].type==="con"?3:6;placed.push({x:S[i].x-r,y:S[i].y-r,w:2*r,h:2*r,node:i})}   // dots are obstacles too
     const G=GROUPINGS[clusterBy];drawGroups(focusProj>=0&&G.groups?G.of(P[N[focusProj].pi]):null);
     for(const [a,b] of E){const A=S[a],B=S[b],g=Math.min(A.glow,B.glow),inst=N[a].type==="inst"||N[b].type==="inst";
-      ctx.strokeStyle=g>.05?`rgba(${LIME},${.15+.7*g})`:inst?"rgba(160,168,186,.12)":"rgba(160,168,186,.22)";
-      if(inst&&g<.05)ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.setLineDash([])}
+      ctx.strokeStyle=g>.05?`rgba(${LIME},${.3+.7*g})`:inst?"rgba(160,168,186,.45)":"rgba(160,168,186,.38)";   // dashed institute links get more opacity: a dash carries less ink than a solid line
+      ctx.lineWidth=inst?1.25:1;if(inst&&g<.05)ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.setLineDash([])}
+    ctx.lineWidth=1;
     /* dots first, labels after, in order of importance */
     for(let i=0;i<N.length;i++){const n=N[i],p=S[i],g=p.glow,h=i===hov;
       if(n.type==="inst"){const r=h?6.5:5;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.strokeStyle=g>.1?`rgba(${LIME},${.5+.5*g})`:"rgba(160,168,186,.7)";ctx.lineWidth=1.5;ctx.strokeRect(-r,-r,r*2,r*2);ctx.restore()}
@@ -776,6 +825,12 @@ function nextPair(){pairI=(pairI+1)%PAIRS.length;const [a,b]=PAIRS[pairI];
   clearInterval(typing);if(RM){typed.textContent=a;return}
   let cur=typed.textContent,del=true;
   typing=setInterval(()=>{if(del){cur=cur.slice(0,-1);typed.textContent=cur;if(!cur)del=false}else{cur=a.slice(0,cur.length+1);typed.textContent=cur;if(cur===a)clearInterval(typing)}},55)}
+/* ---- project galleries: every 3 s the next image fades in; stops while paused, while the tab is hidden, or while the pointer is on the image ---- */
+setInterval(()=>{if(paused||document.hidden)return;
+  document.querySelectorAll(".fig.gal").forEach(f=>{if(f.matches(":hover"))return;
+    const im=[...f.querySelectorAll("img")],dots=f.querySelectorAll(".dots i"),cur=im.findIndex(x=>x.classList.contains("on")),nx=(cur+1)%im.length;
+    im[cur].classList.remove("on");im[nx].classList.add("on");dots.forEach((d,i)=>d.classList.toggle("on",i===nx));
+    const c=f.querySelector(".credit");if(c){c.textContent=im[nx].dataset.credit;c.hidden=!im[nx].dataset.credit}})},3000);
 function runPairs(){clearInterval(pairTimer);if(!paused&&!document.hidden)pairTimer=setInterval(nextPair,6500)}
 
 /* ---- pause: stops the automatic visitor, the drifting and the changing headline ---- */

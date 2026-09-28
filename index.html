@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chris V. R. Hütter · Data visualization &amp; embodied interaction</title>
+<meta name="description" content="Portfolio of Chris V. R. Hütter, PhD candidate at the LBI-NetMed in Vienna: network visualization, virtual reality, sculpture and exhibitions, from molecules to systems.">
+<meta name="author" content="Christiane V. R. Hütter">
+<meta name="theme-color" content="#0B0C10">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="fonts/archivo-wdth.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="canonical" href="https://www.christianehuetter.xyz/">
+<!-- Share preview (LinkedIn, Slack, email) -->
+<meta property="og:url" content="https://www.christianehuetter.xyz/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Chris V. R. Hütter">
+<meta property="og:description" content="Data visualization, embodied interaction and exhibitions, from molecules to systems. PhD candidate, LBI-NetMed, Vienna.">
+<meta property="og:image" content="https://www.christianehuetter.xyz/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Chris V. R. Hütter over an installation view of X Frames per Space">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="me" href="https://orcid.org/0000-0001-7039-658X">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Christiane V. R. Hütter","url":"https://www.christianehuetter.xyz/","alternateName":"Chris Hütter",
+ "jobTitle":"PhD candidate","affiliation":{"@type":"Organization","name":"Ludwig Boltzmann Institute for Network Medicine","url":"https://netmed.lbg.ac.at/"},
+ "identifier":"https://orcid.org/0000-0001-7039-658X",
+ "sameAs":["https://orcid.org/0000-0001-7039-658X","https://github.com/chris-huetter","https://www.linkedin.com/in/christianehuetter/","https://www.researchgate.net/profile/Christiane-Huetter"]}
+</script>
+<style>
+/* self-hosted fonts (SIL Open Font License, see fonts/) */
+@font-face{font-family:"Archivo";src:url("fonts/archivo-wdth.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("fonts/newsreader-opsz.woff2") format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("fonts/newsreader-opsz-italic.woff2") format("woff2");font-weight:200 800;font-style:italic;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-style:normal;font-display:swap}
+:root{
+  --bg:#ECEEF1; --paper:#F6F7F9; --ink:#14161B; --muted:#5E6474; --line:#C9CDD6; --hatch:rgba(20,22,27,.07);
+  --accent:#BCDF8C; --accent-ink:#0B0C10; --focus:#14161B;  /* neon lime: used as a fill or highlighter, with dark text on it */
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1015; --paper:#151821; --ink:#E5E7EE; --muted:#9097A8; --line:#2A2F3B; --hatch:rgba(229,231,238,.06);
+    --accent:#BCDF8C; --accent-ink:#0B0C10; --focus:#BCDF8C; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1015; --paper:#151821; --ink:#E5E7EE; --muted:#9097A8; --line:#2A2F3B; --hatch:rgba(229,231,238,.06);
+  --accent:#BCDF8C; --accent-ink:#0B0C10; --focus:#BCDF8C; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.55;margin:0}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.wrap{padding-inline:clamp(16px,4vw,56px)}
+.inner{max-width:1180px;margin-inline:auto}
+
+/* top: name + nav + scale slider, one sticky block */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;flex-wrap:wrap}
+.name{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;text-decoration:none}
+.name span{font-weight:400;color:var(--muted)}
+.bar nav{display:flex;gap:clamp(12px,2.5vw,28px);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.bar nav a{text-decoration:none;color:var(--muted)}
+.bar nav a{padding-block:2px;border-bottom:2px solid transparent}
+.bar nav a:hover{color:var(--ink);border-bottom-color:var(--accent)}
+
+
+/* shared text styles + filter chips */
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lede{max-width:36em;font-size:clamp(18px,1.5vw,21px);margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.chips button:hover{border-color:var(--accent)}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips button .n{color:var(--muted);margin-left:5px}
+.chips button[aria-pressed="true"] .n{color:inherit;opacity:.6}
+
+/* scale sections */
+.unit{font-family:var(--mono);font-size:12px;color:var(--muted);grid-column:1}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted);grid-column:2;grid-row:1/4;align-self:end}
+
+.projects{list-style:none;margin:0 0 clamp(56px,10vh,100px);padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+.project{display:flex;flex-direction:column;border:1px solid var(--line);background:var(--paper)}
+.fig{margin:0;position:relative;aspect-ratio:3/2;max-width:100%;border-bottom:1px solid var(--line);overflow:hidden;background:
+  repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 9px),var(--bg)}
+.fig img{width:100%;height:100%;object-fit:cover;display:block}
+.fig.contain{background:#fff}
+.fig.contain img{object-fit:contain;padding:12px}   /* figures, covers and screenshots are shown whole */
+.fig .ph{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:14px 16px}
+.fig .ph .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fig .ph .what{font-family:var(--body);font-style:italic;font-size:17px;line-height:1.35;color:var(--muted);max-width:18em}
+.fig .ph .src{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fig .corner{position:absolute;width:14px;height:14px;border-color:var(--muted);border-style:solid;opacity:.6}
+.fig .c1{top:8px;left:8px;border-width:1px 0 0 1px}.fig .c2{top:8px;right:8px;border-width:1px 1px 0 0}
+.fig .c3{bottom:8px;left:8px;border-width:0 0 1px 1px}.fig .c4{bottom:8px;right:8px;border-width:0 1px 1px 0}
+.label{padding:18px 20px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.label .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline;position:static;background:none;border:0;backdrop-filter:none}
+.label h3{font-family:var(--display);font-variation-settings:"wdth" 100;font-weight:600;font-size:19px;line-height:1.2;margin:0;text-wrap:balance}
+.label .yr{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.label .meta{font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--muted)}
+.label .meta b{font-weight:500;color:var(--ink)}
+.label p{margin:0;font-size:16.5px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.tags span{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:999px;padding:1px 9px;color:var(--muted)}
+.links{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--mono);font-size:12px}
+.links a{text-decoration:none;border-bottom:2px solid var(--accent)}
+.links a:hover{border-bottom-width:3px}
+.kind{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--muted);margin-left:8px;letter-spacing:.02em;white-space:nowrap;vertical-align:2px}
+.badge{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--accent);color:var(--accent-ink);padding:1px 7px;margin-left:8px;letter-spacing:.04em;vertical-align:3px}
+.empty{grid-column:1/-1;font-family:var(--mono);font-size:12px;color:var(--muted);margin:0}
+
+/* about, CV card, contact, footer */
+section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100px)}
+.block h2{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:clamp(26px,3vw,40px);margin:0 0 28px}
+.about{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(32px,6vw,80px)}
+.about p{max-width:34em;margin:0 0 1em}
+
+.contact{display:flex;flex-wrap:wrap;gap:24px 60px;align-items:end;justify-content:space-between}
+.contact .big{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:600;font-size:clamp(24px,3.4vw,44px);line-height:1.1;margin:0;overflow-wrap:anywhere;user-select:all}
+.copy{font-family:var(--mono);font-size:12px;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer;text-transform:uppercase;letter-spacing:.08em}
+.copy:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.foot{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 28px;padding-block:28px;border-top:1px solid var(--line)}
+
+
+/* hero: photo crossfade with blur morph */
+.hero{--hero-accent:var(--accent);position:relative;overflow:hidden;background:#0B0C10;color:#F3F4F8}
+/* the network band sits on top; text (left) and legend (right) sit below it */
+.net-band{position:relative;height:clamp(360px,56vh,600px);border-bottom:1px solid rgba(243,244,248,.10)}
+.shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,9,13,.92) 0%,rgba(8,9,13,.55) 42%,rgba(8,9,13,.12) 78%),linear-gradient(to right,rgba(8,9,13,.55),rgba(8,9,13,0) 60%)}
+.hero-in{position:relative;width:100%;padding-block:clamp(28px,5vh,48px) clamp(36px,6vh,64px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:32px 56px;align-items:start}
+.hero-text{display:grid;gap:22px}
+.hero .eyebrow{color:rgba(243,244,248,.72)}
+.hero h1,.hero .probe{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:600;font-size:clamp(36px,5.6vw,80px);line-height:1.02;letter-spacing:-.02em;margin:0;color:#F3F4F8;max-width:none}
+/* three fixed lines that never wrap, so the changing words cannot push the layout around */
+.hero h1 .ln{display:block;white-space:nowrap}
+.hero h1 em{font-family:var(--body);font-style:italic;font-weight:400}
+.typed{color:var(--hero-accent);text-shadow:0 0 18px rgba(188,223,140,.22);font-variation-settings:"wdth" 125;font-weight:300}
+.caret{display:inline-block;width:.06em;height:.8em;background:var(--hero-accent);margin-left:.04em;vertical-align:-.04em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#typed2{display:inline-block;transition:opacity .6s,filter .6s}
+#typed2.out{opacity:0;filter:blur(8px)}
+.hero .lede-sub{margin:-10px 0 0;max-width:36em;font-size:clamp(16px,1.2vw,18px);color:rgba(243,244,248,.7)}
+.hero .lede{max-width:32em;color:rgba(243,244,248,.86);margin:0;font-size:clamp(18px,1.5vw,21px)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:11px 16px;cursor:pointer;text-decoration:none;display:inline-block;line-height:1.2}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.hero .btn{border-color:#F3F4F8;color:#F3F4F8}
+.hero .btn.solid{background:#F3F4F8;color:#0B0C10}
+.hero .btn:hover{background:var(--hero-accent);border-color:var(--hero-accent);color:#0B0C10}
+.hero-cap{display:grid;gap:8px;justify-items:start;font-family:var(--mono);font-size:12px;color:rgba(243,244,248,.8);border-top:1px solid rgba(243,244,248,.35);padding-top:12px}
+
+.workhead{padding-block:clamp(40px,7vh,72px) 24px;display:grid;gap:12px;scroll-margin-top:70px}
+.workhead h2{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:clamp(26px,3vw,40px);margin:0}
+.workhead p{margin:0;color:var(--muted);max-width:36em}
+.workhead .chips{margin-top:8px}
+
+.fig .credit{position:absolute;right:8px;bottom:8px;font-family:var(--mono);font-size:10px;color:#fff;background:rgba(0,0,0,.5);padding:2px 6px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fig.has{background:var(--paper)}
+.bio{display:grid;grid-template-columns:112px minmax(0,1fr);gap:28px;align-items:start}
+.portrait{position:relative;margin:0;width:112px;aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:1px solid var(--ink);background:repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 7px),var(--paper)}
+.portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.portrait .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cvcard{align-self:start;border:1px solid var(--line);background:var(--paper);padding:24px;display:grid;gap:12px;align-content:start;justify-items:start}
+.cvcard p{margin:0}
+.cvlink{font-family:var(--mono);font-size:12px;border-bottom:2px solid var(--accent);text-decoration:none}
+.cvlink:hover{border-bottom-width:3px}
+.cvmsg{font-family:var(--mono);font-size:12px;color:var(--muted);min-height:1em}
+
+/* header network */
+.hero .net{position:absolute;inset:0;width:100%;height:100%;display:block}
+.net-cap{gap:10px}
+.legend{display:grid;grid-template-columns:24px 1fr;gap:5px 9px;margin:0;align-items:center;font-family:var(--mono);font-size:10.5px;line-height:1.35;color:rgba(243,244,248,.72)}
+.legend dt{margin:0;display:flex}.legend dt svg{width:24px;height:12px}
+.legend dd{margin:0}
+.hero .eyebrow .cur{color:rgba(243,244,248,.45)}
+.eyebrow.pos{display:grid;gap:3px}
+.clusterby{display:grid;gap:6px}
+.cb-l{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(243,244,248,.6)}
+.cb-b{display:flex;flex-wrap:wrap;gap:6px}
+.cb-b button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;background:transparent;color:#F3F4F8;border:1px solid rgba(243,244,248,.35);border-radius:999px;padding:4px 11px;cursor:pointer}
+.cb-b button:hover{border-color:var(--accent)}
+.cb-b button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.net-hint{margin:0;font-family:var(--mono);font-size:11px;line-height:1.5;color:rgba(243,244,248,.62)}
+.tip{position:absolute;z-index:3;max-width:260px;background:rgba(18,20,27,.95);border:1px solid var(--accent);padding:10px 12px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
+.tip.on{opacity:1;transform:none}
+.tip .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.tip .t{font-family:var(--display);font-weight:600;font-size:15px;line-height:1.25;margin:3px 0 4px;color:#F3F4F8}
+.tip .m{font-family:var(--mono);font-size:11px;line-height:1.5;color:#9097A8}
+.tip .go{display:block;margin-top:6px;font-family:var(--mono);font-size:10.5px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+/* a card lights up briefly when reached from the network */
+.project{scroll-margin-top:80px}
+/* selected from the network: strong outline and tinted text area; the rest steps back */
+.project{transition:opacity .3s,box-shadow .3s}
+.project{--sel-ink:#5C9A0A}                        /* lime green, dark enough to read on the light cards */
+.project.sel{box-shadow:0 0 22px 4px rgba(176,232,64,.55),0 0 46px 10px rgba(176,232,64,.22)}   /* soft lime glow, like the network clusters */
+.project.sel .label h3,.project.sel .label .yr,.project.sel .label .meta,.project.sel .label .meta b,.project.sel .label .kind{color:var(--sel-ink)}   /* headings only; the serif description stays black */
+.project.sel .label h3::before{content:"●";font-size:.7em;margin-right:8px;vertical-align:.15em}
+.projects.has-sel .project:not(.sel){opacity:.42}
+.projects.has-sel .project:not(.sel):hover{opacity:1}
+.selbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:var(--mono);font-size:12.5px;padding:8px 2px;color:#5C9A0A;justify-self:start}
+.selbar b{font-weight:600}
+.sb-dot{width:9px;height:9px;border-radius:50%;background:#7CC416;box-shadow:0 0 8px 2px rgba(176,232,64,.8)}
+.selbar button{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;background:transparent;border:1px solid var(--ink);color:var(--ink);padding:4px 10px;cursor:pointer;margin-left:4px}
+.selbar button:hover{background:var(--ink);color:var(--bg)}
+
+/* pause control */
+.controls{display:flex;align-items:center;gap:14px}
+.pause{justify-self:start;display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(243,244,248,.5);color:#F3F4F8;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:4px 9px;cursor:pointer}
+.pause:hover{border-color:#F3F4F8}
+.pause .ico{width:8px;height:9px;border-left:2px solid currentColor;border-right:2px solid currentColor;box-sizing:border-box}
+.pause[aria-pressed="true"] .ico{border:0;width:0;height:0;border-left:8px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent}
+
+/* links */
+.linklist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));column-gap:40px;border-top:1px solid var(--ink)}
+.linklist a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:16px 8px;border-bottom:1px solid var(--line);text-decoration:none;height:100%}
+.linklist .ln{border-bottom:2px solid transparent;justify-self:start}
+.linklist a:hover .ln{border-bottom-color:var(--accent)}
+.linklist a:hover .ar{color:var(--ink)}
+.linklist .ln{font-family:var(--display);font-weight:600;font-size:19px}
+.linklist .lh{font-family:var(--mono);font-size:12px;color:var(--muted);grid-column:1;overflow-wrap:anywhere}
+.linklist .ar{grid-column:2;grid-row:1/3;align-self:center;font-family:var(--mono);color:var(--muted)}
+
+/* legal */
+footer.foot{border-top:1px solid var(--line)}
+.foot a{text-decoration:none;border-bottom:2px solid transparent}.foot a:hover{color:var(--ink);border-bottom-color:var(--accent)}
+.legal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px clamp(32px,6vw,80px);padding-block:32px 56px;border-top:1px solid var(--line);font-size:14px;line-height:1.55;color:var(--muted);scroll-margin-top:80px}
+.legal h2{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin:0 0 4px;font-weight:500}
+.legal h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin:18px 0 4px;font-weight:500}
+.legal h3:first-child{margin-top:0}
+.legal p{margin:0;max-width:44em}
+.legal .lg-sub{font-size:12.5px;margin-bottom:14px}
+.legal dl{margin:0;display:grid;gap:2px}
+.legal dt{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-top:10px}
+.legal dd{margin:0;color:var(--ink)}
+
+@media (max-width:1040px){ .projects{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:760px){
+  .net-band{height:380px}
+    .bio{grid-template-columns:84px minmax(0,1fr);gap:18px}
+  .portrait{width:84px}
+  .legal{grid-template-columns:1fr}
+  .hero-grid{grid-template-columns:1fr}
+  body{font-size:17px}
+  .projects{grid-template-columns:1fr}
+  .about{grid-template-columns:1fr}
+}
+@media (max-width:480px){ .bar nav a.opt{display:none} .stops a{font-size:0} .stops a::after{content:attr(data-short);font-size:10px} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} .marker{transition:none} .caret{animation:none} }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="wrap"><div class="inner">
+    <div class="bar">
+      <a class="name" href="#intro">Chris V. R. Hütter <span>MSc MArch</span></a>
+      <nav aria-label="Sections">
+        <a href="#work">Work</a>
+        <a href="#about">CV</a>
+        <a href="#links" class="opt">Links</a>
+        <a href="#contact" class="opt">Contact</a>
+      </nav>
+    </div>
+  </div></div>
+</div>
+
+<main>
+  <section class="hero" id="intro" aria-label="Introduction">
+    <div class="net-band" id="band">
+      <canvas class="net" id="net" aria-hidden="true"></canvas>
+      <div class="tip" id="tip" aria-hidden="true"><div class="k" id="tipK"></div><div class="t" id="tipT"></div><div class="m" id="tipM"></div></div>
+    </div>
+    <div class="wrap hero-in"><div class="inner hero-grid">
+      <div class="hero-text">
+        <div class="eyebrow pos"><span><span class="cur">Current position ::</span> PhD candidate</span><span>LBI-NetMed · Vienna</span></div>
+        <h1 aria-label="Spaces for people, worlds for data, exhibitions for the future."><span class="ln"><span class="typed" id="typed">Spaces</span><span class="caret" aria-hidden="true"></span></span><span class="ln"><em>for</em> <span id="typed2">people</span>.</span></h1>
+        <p class="lede">Hello, I am Chris. I work between scientific discovery, engineering invention and the making of spaces. Trained as an architect and a bioengineer, I build human–data interfaces for network medicine: 3D network layouts, virtual reality, sculptures and exhibitions.</p>
+        <p class="lede-sub">My work doesn't fit one category. It moves between disciplines and borrows their methods, so a dataset can become a room, a sculpture can become a research question, and an exhibition can become an instrument for thinking.</p>
+        <div class="hero-cta"><a href="#work" class="btn solid">See the work</a><button type="button" class="btn" id="cvBtn2">Download CV</button></div>
+      </div>
+      <div class="hero-cap net-cap">
+        <div class="clusterby" role="group" aria-label="Cluster the network by"><span class="cb-l">Cluster by</span><span class="cb-b" id="clusterBtns"></span></div>
+        <dl class="legend">
+          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><circle cx="12" cy="6" r="4.5" fill="#F3F4F8"/></svg></dt><dd>Project · click to open</dd>
+          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><rect x="8" y="2" width="8" height="8" transform="rotate(45 12 6)" fill="none" stroke="#A0A8BA" stroke-width="1.5"/></svg></dt><dd>Institute or venue</dd>
+          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><circle cx="12" cy="6" r="2.3" fill="#A0A8BA"/></svg></dt><dd>Concept: what mattered in a project</dd>
+          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><line x1="2" y1="6" x2="22" y2="6" stroke="#A0A8BA" stroke-width="1.2"/></svg></dt><dd>Project involves this concept</dd>
+          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><line x1="2" y1="6" x2="22" y2="6" stroke="#A0A8BA" stroke-width="1.2" stroke-dasharray="2 3"/></svg></dt><dd>Project happened at this institute</dd>
+          <dt><svg viewBox="0 0 24 12" aria-hidden="true"><ellipse cx="12" cy="6" rx="11" ry="5.5" fill="rgba(188,223,140,.25)"/></svg></dt><dd>Group, set by “Cluster by”</dd>
+        </dl>
+        <p class="net-hint">Projects that share a concept or an institute are related. Hover a node for details.</p>
+        <button type="button" class="pause" id="pause" aria-pressed="false" aria-label="Pause animation"><span class="ico" aria-hidden="true"></span><span class="txt">Pause</span></button>
+      </div>
+    </div></div>
+  </section>
+
+  <div class="wrap"><div class="inner">
+    <section class="workhead" id="work" aria-label="Projects">
+      <div class="chips" id="chips" role="group" aria-label="Filter projects by kind of work"></div>
+      <div class="selbar" id="selbar" role="status" hidden></div>
+    </section>
+    <ul class="projects" id="projects"></ul>
+
+    <section class="block" id="about">
+      <h2>About</h2>
+      <div class="about">
+        <div class="bio">
+          <!-- Portrait: save a square photo as img/portrait.jpg (about 400 × 400 px). Until then a placeholder shows. -->
+          <figure class="portrait" id="portrait"><img src="img/portrait.jpg" alt="Portrait of Chris V. R. Hütter" width="400" height="400"><span class="ph" aria-hidden="true">Portrait</span></figure>
+          <div>
+          <p>Chris Hütter is a PhD candidate in Jörg Menche's group at the Ludwig Boltzmann Institute for Network Medicine at the University of Vienna. Her research asks how the space around us can help us think with high-dimensional data: layouts that encode meaning into position, and immersive environments where people explore networks with their bodies.</p>
+          <p>She trained as an architect in Vienna and Glasgow, worked with Tomás Saraceno Studio and on hospital buildings, then moved into bioengineering and network science. Alongside research she co-leads the institute's workshop, curates, and teaches.</p>
+          </div>
+        </div>
+        <div class="cvcard">
+          <span class="eyebrow">Curriculum vitae · 2026 · PDF, 2 pages</span>
+          <p>Education, positions, exhibitions, talks and publications.</p>
+          <button type="button" class="btn solid" id="cvBtn">Download CV</button>
+          <a class="cvlink" id="cvLink" href="Huetter_CV_2026.pdf" target="_blank" rel="noopener" hidden>Open CV (PDF) ↗</a>
+          <span class="cvmsg" id="cvMsg" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="links">
+      <h2>Links</h2>
+      <ul class="linklist" id="linklist"></ul>
+    </section>
+
+    <section class="block" id="contact">
+      <div class="contact">
+        <div>
+          <div class="eyebrow" style="margin-bottom:10px">Contact · collaborations, exhibitions, talks</div>
+          <p class="big" id="mail">christiane.huetter@univie.ac.at</p>
+        </div>
+        <button class="copy" id="copyBtn" type="button">Copy address</button>
+      </div>
+    </section>
+    <footer class="foot">
+      <span>© 2026 Chris V. R. Hütter · Vienna</span>
+      <a href="#impressum">Impressum</a>
+      <a href="#privacy">Privacy</a>
+    </footer>
+    <section class="legal" id="impressum" aria-labelledby="imp-h">
+      <div>
+        <h2 id="imp-h">Impressum</h2>
+        <p class="lg-sub">Offenlegung gemäß § 25 Mediengesetz</p>
+        <dl>
+          <dt>Medieninhaberin &amp; verantwortlich für den Inhalt</dt>
+          <dd>Christiane V. R. Hütter</dd>
+          <dt>Wohnort</dt>
+          <dd>Wien, Österreich</dd>
+          <dt>E-Mail</dt>
+          <dd>christiane.huetter@univie.ac.at</dd>
+          <dt>Grundlegende Richtung</dt>
+          <dd>Persönliche Website: Darstellung der wissenschaftlichen, künstlerischen und kuratorischen Arbeit der Medieninhaberin.</dd>
+        </dl>
+      </div>
+      <div id="privacy">
+        <h3>Media</h3>
+        <p>Images, illustrations and videos are by the author or by LBI-NetMed unless stated otherwise; photographers are credited on each image. Project descriptions refer to collaborative work carried out with the Menche Lab at LBI-NetMed and the partners named.</p>
+        <h3>Privacy</h3>
+        <p>This site sets no cookies, uses no analytics or tracking, and loads no third-party content: fonts and images are served from this site. Links to other websites open those sites, which have their own privacy policies. The hosting provider may keep technical access logs (such as IP address and time of access) as required to operate the server.</p>
+        <h3>Liability</h3>
+        <p>Content was prepared with care, but no guarantee is given for completeness or currency. The author is not responsible for the content of external links.</p>
+      </div>
+    </section>
+  </div></div>
+</main>
+
+<script>
+const SCALES=[
+  {name:"Molecules",short:"Mol",exp:-9,unit:"10⁻⁹ m · a DNA double helix is 2 nm wide",intro:"Where it started: designing matter one base pair at a time."},
+  {name:"Bodies",short:"Body",exp:0,unit:"10⁰ m · arm's length",intro:"Objects and interfaces you can walk around, hold, or step into."},
+  {name:"Spaces",short:"Space",exp:1,unit:"10¹ m · up to 1,200 m² of exhibition",intro:"Exhibitions, projections and buildings: data as a space shared by many people."},
+  {name:"Systems",short:"Sys",exp:7,unit:"10⁻⁶ → 10⁷ m · from one cell's interactome to public health",intro:"Networks as the common language across scales: biological systems laid out so that position means something, and work that links molecules to populations."}
+];
+
+/* net: how the project appears in the header network (n: short node label, f: main category, one of the filter categories (Research, Visualization, Art, Curation, Outreach, Teaching), c: concepts, i: institute keys from INST).
+   k: label shown in [brackets] next to the title (Publication, Exhibition, Artwork, Talk, …). img: photo path. ph: what the photo shows (alt text, or the placeholder label while no photo exists). */
+const P=[
+ {s:0,y:"2019",t:"ECHIDNA — designing 3D DNA nanostructures",img:"img/p-echidna.jpg",net:{n:"ECHIDNA",f:"Research",c:["DNA nanotechnology", "caDNAno"],i:["ait", "fhc"]},k:"Thesis",role:"Researcher",where:"AIT Austrian Institute of Technology · FH Campus Wien",medium:"SAMSON, caDNAno, Python",cat:["Research"],
+  d:"BSc thesis on computational design of DNA origami, developed during a research internship in molecular diagnostics.",
+  ph:"ECHIDNA: a Python package to parse 3D data models for DNA origami design",src:""},
+ {s:0,y:"2020",t:"A multicomponent DNA origami rotor",fit:"contain",img:"img/p-dna-rotor.jpg",net:{n:"DNA origami rotor",f:"Research",c:["DNA nanotechnology", "Brownian motion"],i:["ait"]},k:"Publication",role:"Co-author",where:"Small (2020)",medium:"DNA origami, molecular modelling",cat:["Research"],
+  d:"Brownian and flow-driven rotational dynamics of a DNA nanomachine.",links:[["Paper","https://doi.org/10.1002/smll.202001855"]],
+  ph:"3D model of the DNA origami rotor",src:""},
+ {s:2,y:"2022",t:"Network Cartographs",img:"img/p-cartographs-cover.jpg",net:{n:"Network Cartographs",f:"Visualization",c:["network layouts", "cover art"],i:["cemm", "lbi"]},k:"Publication",role:"First author · cover artist",where:"Nature Computational Science 2, 84–89",medium:"Python, 2D/3D layouts",cat:["Research","Visualization"],badge:"Cover",
+  d:"Layouts that encode chosen structural or functional features directly into node position, so a network can be read like a map. Also the cover of issue 2.",
+  links:[["Paper","https://doi.org/10.1038/s43588-022-00199-z"],["Research briefing","https://doi.org/10.1038/s43588-022-00203-6"]],
+  ph:"Cover art for Nature Computational Science: a network layout rendered as a flowing landscape",src:"Cover art · Nature Computational Science"},
+ {s:2,y:"2021",t:"VRNetzer",img:"img/p-vrnetzer.jpg",net:{n:"VRNetzer",f:"Visualization",c:["virtual reality", "network layouts", "collaboration"],i:["cemm"]},k:"Publication",role:"Co-author",where:"Nature Communications 12, 2432",medium:"Virtual reality, Unity, Python",cat:["Research","Visualization"],
+  d:"A platform for exploring large biological networks in virtual reality, alone or together.",links:[["Paper","https://doi.org/10.1038/s41467-021-22570-w"]],
+  ph:"A researcher explores a network in virtual reality with VRNetzer",src:""},
+ {s:3,y:"2023",t:"AutoCore",fit:"contain",img:"img/p-autocore.jpg",net:{n:"AutoCore",f:"Research",c:["network medicine", "autoimmunity"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Science Advances 9, eadg6375",medium:"Network analysis",cat:["Research"],
+  d:"A network-based definition of the core module of human autoimmunity and autoinflammation.",links:[["Paper","https://doi.org/10.1126/sciadv.adg6375"]],
+  ph:"Figure: the AutoCore disease module and its functional groups",src:"Figure: Science Advances"},
+ {s:1,y:"",t:"Co-creators",img:"img/p-co-creators.jpg",net:{n:"Co-creators",f:"Art",c:["robotics","human–machine collaboration","art + science"],i:["lbi"]},k:"Artwork",role:"",where:"Artist: Rudolf Friedrich Bliem · Robot: S. Pirch",medium:"Painting, robotics",cat:["Art"],
+  d:"An artist and a robot make work together, sharing the gestures, decisions and authorship of each piece.",
+  links:[["R. F. Bliem at Interalia","https://www.interaliamag.org/author/rfbliem/"],["SciArt exhibitions","https://www.sciart.at/exhibitions/"]],
+  ph:"Large drawing made together by an artist and a robot",src:""},
+ {s:2,y:"ongoing",t:"The Workshop",img:"img/p-workshop.jpg",net:{n:"The Workshop",f:"Art",c:["electronics","3D printing","data made physical"],i:["lbi"]},k:"Lab",role:"Co-lead",where:"LBI-NetMed, Vienna",medium:"Electronics, 3D printing, laser cutting",cat:["Art","Research"],
+  d:"The institute's workshop, where we experiment artistically with design and technology: electronics, fabrication and prototypes that turn data and ideas into physical things.",
+  ph:"Entrance to the institute workshop",src:""},
+ {s:1,y:"2026",t:"Network Sculpture",img:"img/p-network-sculpture-2026.jpg",net:{n:"Network Sculpture",f:"Art",c:["3D printing", "data made physical", "electronics"],i:["lbi"]},k:"Artwork",role:"Artist",where:"LBI-NetMed, Vienna",medium:"PLA, PVC, electronics",cat:["Art"],
+  d:"A physical, electronically activated network for the institute.",
+  ph:"Network sculpture suspended along the institute corridor",src:""},
+ {s:0,y:"2020",t:"Network Sculpture — DNA Synthesome Complex",img:"img/p-synthesome.jpg",net:{n:"Synthesome sculpture",f:"Art",c:["3D printing", "data made physical", "protein complex"],i:["cemm"]},k:"Artwork",role:"Artist",where:"CeMM, Vienna",medium:"PLA, PMMA",cat:["Art"],
+  d:"A protein complex network printed and assembled as an object you can walk around.",
+  ph:"Detail of the DNA Synthesome Complex network sculpture",src:""},
+ {s:1,y:"2025",t:"The Datascope",img:"img/p-datascope.jpg",net:{n:"The Datascope",f:"Visualization",c:["high-dimensional data", "Best Lightning Talk award"],i:["lbi"]},k:"Talk",role:"Speaker",where:"BioMed Data Science conference, Budapest",medium:"Lightning talk",cat:["Research","Visualization"],badge:"Best lightning talk",
+  d:"A lightning talk on an instrument for looking into high-dimensional data.",
+  ph:"Lightning talk on the Datascope at the BioMed Data Science conference",src:"© Sara Chitgaran"},
+ {s:1,y:"2025–26",t:"XR stations for the public",img:"img/p-xr-stations.jpg",net:{n:"XR stations",f:"Outreach",c:["virtual reality", "public outreach"],i:["lbi", "nhm", "vis"]},k:"Installation",role:"Designer, host",where:"Long Night of Research 2026 · Natural History Museum Vienna 2025 · IEEE VIS 2025",medium:"Virtual and extended reality",cat:["Outreach","Visualization"],
+  d:"Visitors walk through biological networks and cell structures in XR. At the Long Night of Research on Maria-Theresien-Platz the station was visited by the Federal Minister for Science.",
+  links:[["Long Night of Research","https://netmed.lbg.ac.at/society/"]],
+  ph:"Visitors exploring biological networks in VR at the XR station",src:"© Annette Tesarek"},
+ {s:1,y:"2023",t:"Multiscale Human — Why 3D?",fit:"contain",img:"img/p-why-3d.jpg",net:{n:"Multiscale Human",f:"Visualization",c:["3D perception", "high-dimensional data"],i:["cns"]},k:"Talk",role:"Invited talk, panellist",where:"CNS 24h event",medium:"Talk",cat:["Research","Visualization"],
+  links:[["Event","https://humanatlas.io/events/2024-24h/"]],ph:"Programme of the “Why 3D?” session at the CNS 24h event",src:"CNS · Indiana University"},
+ {s:2,y:"2025",t:"X FRAMES PER SPACE — different logics, shared questions",img:"img/p-x-frames.jpg",net:{n:"X Frames per Space",f:"Curation",c:["curation", "art + science", "1,200 m²"],i:["lbi", "vcas"]},k:"Exhibition",role:"Co-curator, artist",where:"alte WU, Vienna · with Vienna Contemporary Art Space",medium:"1,200 m², digital art, robotics, painting, sculpture",cat:["Curation","Art"],
+  d:"A large exhibition built as a mycelial network between biology, medicine and artistic production. Covered by PARNASS art magazine.",
+  links:[["PARNASS feature","https://www.parnass.at/news/x-frames-per-space"],["Digital gallery","https://whatevr.xyz/"]],
+  ph:"Exhibition poster for X Frames per Space, 8–14 Nov 2025",src:""},
+ {s:2,y:"2022",t:"The Shape of Things to Come",img:"img/p-shape-of-things.jpg",net:{n:"Shape of Things to Come",f:"Curation",c:["curation", "mixed reality", "virtual reality"],i:["ars", "vbc"]},k:"Exhibition",role:"Curator, artist",where:"Ars Electronica Festival, Kepler's Garden, Linz (5 days) · Vienna BioCenter campus (3 days)",medium:"Mixed reality exhibition: sound, video, VR performance, AR",cat:["Curation","Art"],
+ d:"Scenarios by artists and scientists on how we imagine, assess and influence our future environment, shown at Ars Electronica in Linz and on the Vienna BioCenter campus.",
+  links:[["Ars Electronica","https://ars.electronica.art/planetb/en/the-shape-of-things/"],["Vienna BioCenter exhibition","https://whatevr.xyz/exhibition2022/"]],
+  ph:"Title visual of The Shape of Things to Come",src:""},
+ {s:2,y:"2021–23",t:"Deep Space 8K trilogy: Entangled · The Nature of Systems · Connected",img:"img/p-deep-space.jpg",net:{n:"Deep Space 8K",f:"Art",c:["art + science", "live performance", "complex systems"],i:["ars"]},k:"Artwork",role:"Artist",where:"Ars Electronica Center, Linz",medium:"3D projection, live performance",cat:["Art","Visualization"],
+  d:"Three works for a 16 × 9 m stereoscopic projection space, on the emergence and breakdown of complex systems from cells to the planet.",
+  links:[["Entangled Realities","https://ars.electronica.art/newdigitaldeal/en/entangled-realities/"],["The Nature of Systems","https://ars.electronica.art/planetb/en/nature-of-systems/"]],
+  ph:"“Connected: How the World is More than the Sum of its Parts” in Deep Space 8K",src:"Ars Electronica Center"},
+ {s:3,y:"2026",t:"A network map of the chemical exposome",fit:"contain",img:"img/p-exposome.jpg",net:{n:"Exposome map",f:"Research",c:["network medicine", "public health"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Nature Communications 17, 5754",medium:"Network medicine",cat:["Research"],
+  d:"Connects molecular interactions of environmental chemicals to public health outcomes.",links:[["Paper","https://doi.org/10.1038/s41467-026-72402-y"]],
+  ph:"Figure: network map connecting chemical exposures to disease",src:"Figure: Nature Communications"},
+ {s:3,y:"2026",t:"Theory-grounded data visualization in extended reality",fit:"contain",img:"img/p-xr-vis-theory.jpg",net:{n:"XR vis theory",f:"Visualization",c:["extended reality", "vis theory"],i:["cns", "lbi"]},k:"Publication",role:"Co-author",where:"IEEE Computer Graphics and Applications 46(4)",medium:"Position paper",cat:["Research","Visualization"],
+  links:[["Paper","https://doi.org/10.1109/MCG.2026.3685140"]],ph:"First page of the IEEE CG&A viewpoint on theory-grounded data visualization in XR",src:"IEEE CG&A"},
+ {s:3,y:"2024",t:"The emotional echo of cultural intelligences",img:"img/p-emotional-echo.jpg",net:{n:"Emotional echo",f:"Art",c:["science map", "art + science"],i:["cns"]},k:"Artwork",role:"Artist, scientist",where:"Places & Spaces: Mapping Science · permanent collection",medium:"Science map",cat:["Visualization","Art"],badge:"Collection",
+  d:"A data visualization acquired into the permanent collection, also presented as talk and panel at the CNS 24h event.",links:[["scimaps.org","https://scimaps.org"]],
+  ph:"The emotional echo of cultural intelligences, shown as a large science map",src:"© Sophie Menegaldo | Ivory Rose Photography"},
+ {s:3,y:"2025",t:"TALK TRY TELL — panel",img:"img/p-talk-try-tell.jpg",net:{n:"TALK TRY TELL",f:"Visualization",c:["extended reality", "vis theory"],i:["vis"]},k:"Panel",role:"Co-organiser",where:"IEEE VIS 2025, Vienna",medium:"Panel",cat:["Research","Visualization"],
+  d:"Challenges and opportunities for theory-grounded data visualization in extended reality.",ph:"Panel discussion TALK TRY TELL at IEEE VIS 2025",src:""},
+ {s:3,y:"2024",t:"On data visualization workshops",fit:"contain",img:"img/p-vis-workshops.jpg",net:{n:"Vis workshops",f:"Teaching",c:["teaching"],i:["cns"]},k:"Talk",role:"Invited talk, panellist",where:"CNS 24h event",medium:"Talk",cat:["Teaching","Visualization"],
+  links:[["Event","https://cns-iu.github.io/workshops/2025-24h/"]],ph:"Panel on data visualization workshops at the CNS 24h event",src:"CNS · Indiana University"},
+ {s:3,y:"2023",t:"Women's Day talk",img:"img/p-womens-day.jpg",pos:"50% 84%",net:{n:"Women's Day talk",f:"Outreach",c:["public outreach"],i:["ars"]},k:"Talk",role:"Invited speaker",where:"Ars Electronica Center, Linz",medium:"Talk",cat:["Outreach"],ph:"Talking on stage in Deep Space 8K in front of a projected protein network",src:"© Martin Chiettini"}
+];
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const powHTML=e=>`10<sup>${e<0?"−":""}${Math.abs(e)}</sup><small>m</small>`;
+
+function fig(p){
+  if(p.img) return `<figure class="fig has${p.fit==="contain"?" contain":""}"><img src="${esc(p.img)}" alt="${esc(p.ph)}" loading="lazy"${p.pos?` style="object-position:${esc(p.pos)}"`:""}>${p.src?`<figcaption class="credit">${esc(p.src)}</figcaption>`:""}</figure>`;
+  return `<figure class="fig" aria-label="Image placeholder"><i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+    <div class="ph"><span class="k">Image</span><span class="what">${esc(p.ph)}</span><span class="src">${esc(p.src||"")}</span></div></figure>`;
+}
+function card(p){
+  return `<li class="project${selected&&selected.ids.has(P.indexOf(p))?" sel":""}" id="proj-${P.indexOf(p)}">${fig(p)}<div class="label">
+    <div class="top"><h3>${esc(p.t)}${p.k?`<span class="kind">[${esc(p.k)}]</span>`:""}${p.badge?`<span class="badge">${esc(p.badge)}</span>`:""}</h3><span class="yr">${esc(p.y)}</span></div>
+    <div class="meta">${p.role?`<b>${esc(p.role)}</b> · `:""}${esc(p.where)}<br>${esc(p.medium)}</div>
+    ${p.d?`<p>${esc(p.d)}</p>`:""}
+    ${p.links?`<div class="links">${p.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join("")}</div>`:""}
+    <div class="tags">${p.cat.map(c=>`<span>${esc(c)}</span>`).join("")}</div>
+  </div></li>`;
+}
+
+const CATS=["All","Research","Visualization","Art","Curation","Outreach","Teaching"];
+let active="All";
+try{const h=location.hash.slice(1);if(CATS.includes(h))active=h}catch(e){}
+let selected=null;                                       // selection from the network: {ids:Set of project indices, label}
+const chips=document.getElementById("chips"),host=document.getElementById("projects");
+function render(){
+  chips.innerHTML=CATS.map(c=>{const n=c==="All"?P.length:P.filter(p=>p.cat.includes(c)).length;
+    return `<button type="button" id="chip-${c}" aria-pressed="${c===active}" data-c="${c}">${c}<span class="n">${n}</span></button>`}).join("");
+  const isSel=p=>selected&&selected.ids.has(P.indexOf(p));
+  const items=P.filter(p=>active==="All"||p.cat.includes(active)).sort((a,b)=>(isSel(b)-isSel(a))||b.y.localeCompare(a.y));   // selected first, then newest first
+  const bar=document.getElementById("selbar");
+  if(selected){const n=selected.ids.size;bar.hidden=false;
+    bar.innerHTML=`<span class="sb-dot" aria-hidden="true"></span><span>${n} project${n>1?"s":""} linked to <b>${esc(selected.label)}</b></span><button type="button" id="selClear">Show all</button>`;
+    document.getElementById("selClear").addEventListener("click",clearSelection)}
+  else bar.hidden=true;
+  host.classList.toggle("has-sel",!!selected);
+  host.innerHTML=items.length?items.map(card).join(""):`<li class="empty">No ${esc(active.toLowerCase())} projects yet.</li>`;
+}
+chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;active=b.dataset.c;selected=null;render()});
+
+render();
+
+
+
+/* ---- portrait: drop the <img> if img/portrait.jpg doesn't exist yet, so the placeholder shows ---- */
+(()=>{const im=document.querySelector("#portrait img");if(!im)return;
+  const gone=()=>im.remove();im.addEventListener("error",gone);if(im.complete&&!im.naturalWidth)gone();})();
+
+/* ---- links ---- */
+const LINKS=[
+ ["ORCID","0000-0001-7039-658X","https://orcid.org/0000-0001-7039-658X"],
+ ["GitHub","github.com/chris-huetter","https://github.com/chris-huetter"],
+ ["LinkedIn","linkedin.com/in/christianehuetter","https://www.linkedin.com/in/christianehuetter/"],
+ ["ResearchGate","Christiane-Huetter","https://www.researchgate.net/profile/Christiane-Huetter"],
+ ["LBI-NetMed","netmed.lbg.ac.at","https://netmed.lbg.ac.at/"],
+ ["whatevr.xyz","Exhibitions and digital gallery","https://whatevr.xyz/"]
+];
+document.getElementById("linklist").innerHTML=LINKS.map(([n,h,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener me"><span class="ln">${esc(n)}</span><span class="lh">${esc(h)}</span><span class="ar" aria-hidden="true">↗</span></a></li>`).join("");
+
+/* ---- header network: projects, their concepts, and institutes (built from P) ---- */
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const INST={lbi:"LBI-NetMed",uni:"University of Vienna",cemm:"CeMM",ait:"AIT",fhc:"FH Campus Wien",ars:"Ars Electronica",vbc:"Vienna BioCenter",
+  cns:"CNS · Indiana University",vis:"IEEE VIS",nhm:"Natural History Museum",vcas:"Vienna Contemporary Art Space"};
+const INST_LINKS=[["lbi","uni"]];                      // institute-to-institute ties
+let paused=RM;                                          // visitors who prefer reduced motion start paused
+/* ways to cluster the header network: each maps a project to one group */
+const GROUPINGS={
+  category:{label:"Category",groups:{Research:"Research",Visualization:"Visualization",Art:"Art",Curation:"Curation",Outreach:"Outreach",Teaching:"Teaching"},of:p=>p.net.f},
+  type:{label:"Type",groups:{pub:"Publications",exh:"Exhibitions",art:"Artworks",talk:"Talks & panels",other:"Installation & thesis"},
+        of:p=>({Publication:"pub",Exhibition:"exh",Artwork:"art",Talk:"talk",Panel:"talk"})[p.k]||"other"},
+  scale:{label:"Scale",linear:["10⁻⁹ m","10⁷ m"],groups:{0:"Molecules",1:"Bodies",2:"Spaces",3:"Systems"},of:p=>String(p.s)},
+  time:{label:"Time",linear:["2019","2026"],groups:{a:"2019–2021",b:"2022–2023",c:"2024–2026"},of:p=>{const y=+p.y.slice(0,4);return y<=2021?"a":y<=2023?"b":"c"}},
+  links:{label:"Links",groups:null}        // no groups: only the shared concepts and institutes shape the layout
+  /* linear: groups sit side by side in order, along an axis with these end labels */
+};
+let clusterBy="category";
+const PAIRS=[["Spaces","people"],["Worlds","data"],["Projections","systems"],["Exhibitions","the future"],["Experiences","the public"],["Interfaces","bodies"],["Exploration","science"]];
+
+const net=(()=>{
+  const hero=document.getElementById("band"),cv=document.getElementById("net"),ctx=cv.getContext("2d");
+  const tip=document.getElementById("tip"),tipK=document.getElementById("tipK"),tipT=document.getElementById("tipT"),tipM=document.getElementById("tipM");
+  /* graph */
+  const N=[],E=[],byKey={};
+  const node=(key,type,label,extra)=>{if(byKey[key]!==undefined)return byKey[key];byKey[key]=N.length;N.push(Object.assign({type,label,x:0,y:0},extra||{}));return byKey[key]};
+  P.forEach((p,pi)=>{if(!p.net)return;const a=node("p:"+pi,"proj",p.net.n,{pi});
+    p.net.c.forEach(c=>E.push([a,node("c:"+c,"con",c)]));
+    p.net.i.forEach(k=>E.push([a,node("i:"+k,"inst",INST[k])]))});
+  INST_LINKS.forEach(([a,b])=>E.push([node("i:"+a,"inst",INST[a]),node("i:"+b,"inst",INST[b])]));
+  const nbr=N.map(()=>[]);E.forEach(([a,b])=>{nbr[a].push(b);nbr[b].push(a)});
+  /* projects reached from any node: itself, or the projects around a concept/institute */
+  const projectsOf=i=>N[i].type==="proj"?[N[i].pi]:nbr[i].filter(j=>N[j].type==="proj").map(j=>N[j].pi);
+
+  /* force layout (Fruchterman–Reingold), computed once per aspect ratio, deterministic */
+  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647,(seed-1)/2147483646);
+  const cache={};
+  function groupKeys(mode){const G=GROUPINGS[mode];return G.groups?Object.keys(G.groups):[]}
+  function groupOfNode(i,mode){const G=GROUPINGS[mode];return (G.groups&&N[i].type==="proj")?G.of(P[N[i].pi]):null}
+  /* force-directed pass over the nodes in `idx` (others stay fixed), inside rectangle [x0,x1]×[y0,y1] */
+  function fr(idx,x0,x1,y0,y1,IT,kScale,grav=.6){
+    const move=new Set(idx),k=kScale*Math.sqrt((x1-x0)*(y1-y0)/Math.max(1,idx.length)),w=n=>n.type==="inst"?1.8:n.type==="proj"?1.4:1;
+    const cx=(x0+x1)/2,cy=(y0+y1)/2;
+    for(let it=0;it<IT;it++){const T=.08*(x1-x0)*(1-it/IT)+.001,D=N.map(()=>[0,0]);
+      for(let a=0;a<N.length;a++)for(let b=a+1;b<N.length;b++){if(!move.has(a)&&!move.has(b))continue;
+        const dx=N[a].x-N[b].x,dy=N[a].y-N[b].y,d=Math.hypot(dx,dy)||1e-3,f=k*k/d*w(N[a])*w(N[b]);
+        D[a][0]+=dx/d*f;D[a][1]+=dy/d*f;D[b][0]-=dx/d*f;D[b][1]-=dy/d*f}
+      for(const [a,b] of E){if(!move.has(a)&&!move.has(b))continue;const dx=N[a].x-N[b].x,dy=N[a].y-N[b].y,d=Math.hypot(dx,dy)||1e-3,f=d*d/k;
+        D[a][0]-=dx/d*f;D[a][1]-=dy/d*f;D[b][0]+=dx/d*f;D[b][1]+=dy/d*f}
+      for(const i of idx){const n=N[i];D[i][0]+=(cx-n.x)*grav;D[i][1]+=(cy-n.y)*grav;const m=Math.hypot(D[i][0],D[i][1])||1,st=Math.min(m,T);
+        n.x=Math.min(x1,Math.max(x0,n.x+D[i][0]/m*st));n.y=Math.min(y1,Math.max(y0,n.y+D[i][1]/m*st))}}
+  }
+  function layout(AR,mode){
+    const key=mode+"|"+AR;if(cache[key]){cache[key].forEach(([x,y],i)=>{N[i].x=x;N[i].y=y});return}
+    seed=7;N.forEach(n=>{n.x=.1*AR+rnd()*.8*AR;n.y=.1+rnd()*.8});
+    const keys=groupKeys(mode),all=N.map((_,i)=>i);
+    if(!keys.length){fr(all,AR*.03,AR*.97,.04,.96,600,.4,.9)}
+    else{
+      /* 1. each group gets its own cell; its projects and the concepts only it uses are laid out there */
+      const lin=!!GROUPINGS[mode].linear,cols=lin?keys.length:Math.max(1,Math.round(Math.sqrt(keys.length*AR))),rows=Math.ceil(keys.length/cols),cw=AR/cols,ch=1/rows,mx=cw*(lin?.1:.2),my=ch*(lin?.08:.18);
+      const home=new Array(N.length).fill(null);
+      all.forEach(i=>{const g=groupOfNode(i,mode);if(g)home[i]=g});
+      all.forEach(i=>{if(N[i].type==="con"){const gs=[...new Set(nbr[i].map(j=>home[j]))];if(gs.length===1&&gs[0])home[i]=gs[0]}});
+      keys.forEach((g,j)=>{const r=Math.floor(j/cols),inRow=Math.min(cols,keys.length-r*cols),c=j-r*cols,rw=AR/inRow,rmx=rw*(lin?.1:.2);   // a short last row spreads out
+        const idx=all.filter(i=>home[i]===g),x0=c*rw+rmx,x1=(c+1)*rw-rmx,y0=r*ch+my*1.5,y1=(r+1)*ch-my;
+        idx.forEach(i=>{N[i].x=x0+rnd()*(x1-x0);N[i].y=y0+rnd()*(y1-y0)});fr(idx,x0,x1,y0,y1,350,.5,1.4)});
+      /* 2. shared concepts and institutes settle between the groups they connect */
+      const rest=all.filter(i=>!home[i]);
+      rest.forEach(i=>{const nb=nbr[i];if(nb.length){N[i].x=nb.reduce((a,j)=>a+N[j].x,0)/nb.length+(rnd()-.5)*.04;N[i].y=nb.reduce((a,j)=>a+N[j].y,0)/nb.length+(rnd()-.5)*.04}});
+      fr(rest,AR*.02,AR*.98,.03,.97,250,.25,.3);
+    }
+    cache[key]=N.map(n=>[n.x,n.y]);
+  }
+
+  /* sizing */
+  let W=0,H=0,box={x:0,y:0,w:1,h:1},AR=0,narrow=false;
+  const S=N.map(()=>({x:0,y:0,vx:0,vy:0,hx:0,hy:0,glow:0}));
+  function labelBox(i){const n=N[i],s=S[i];
+    if(n.type==="proj")return narrow?null:{x:s.hx+9,y:s.hy-8,w:n.label.length*6.6,h:16};
+    if(n.type==="inst")return narrow?null:{x:s.hx+11,y:s.hy-7,w:n.label.length*6.4,h:14};
+    return (!narrow&&nbr[i].length>1)?{x:s.hx+6,y:s.hy-7,w:n.label.length*6.3,h:14}:null}
+  function declutter(){const L=N.map((_,i)=>i).filter(i=>labelBox(i));       // nudge apart overlapping labels
+    for(let it=0;it<80;it++){let moved=false;
+      for(let a=0;a<L.length;a++)for(let b=a+1;b<L.length;b++){const A=labelBox(L[a]),B=labelBox(L[b]);
+        if(A.x<B.x+B.w&&B.x<A.x+A.w&&A.y<B.y+B.h&&B.y<A.y+A.h){moved=true;const up=(A.y+A.h/2)<(B.y+B.h/2)?L[a]:L[b],dn=up===L[a]?L[b]:L[a];
+          S[up].hy=Math.max(box.y-10,S[up].hy-2.5);S[dn].hy=Math.min(box.y+box.h+10,S[dn].hy+2.5)}}
+      if(!moved)break}}
+  function size(){const DPR=Math.min(2,devicePixelRatio||1),r=hero.getBoundingClientRect();W=r.width;H=r.height;
+    cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);narrow=W<760;
+    const side=narrow?W*.06:Math.max(W*.04,(W-1180)/2);   // line the network up with the page content
+    box={x:side,y:narrow?40:52,w:W-side*2-(narrow?W*.08:70),h:H-(narrow?40:52)-(narrow?44:52)};
+    textBlocks=[];
+    AR=+(box.w/box.h).toFixed(2);layout(AR,clusterBy);
+    N.forEach((n,i)=>{S[i].hx=box.x+n.x/AR*box.w;S[i].hy=box.y+n.y*box.h});declutter();
+    N.forEach((n,i)=>{if(!S[i].x){S[i].x=S[i].hx;S[i].y=S[i].hy}})}
+
+  /* pointer: hovering a node focuses it; with no pointer, the projects are highlighted one after another */
+  const ptr={x:0,y:0,on:false,last:-1e9};
+  const local=e=>{const r=hero.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]};
+  hero.addEventListener("pointermove",e=>{[ptr.x,ptr.y]=local(e);ptr.on=true;ptr.last=performance.now()});
+  hero.addEventListener("pointerleave",()=>{ptr.on=false;hero.style.cursor=""});
+  const tour=N.map((n,i)=>i).filter(i=>N[i].type==="proj").sort(()=>rnd()-.5);let ti=0,tStart=0;
+  /* the node under the pointer: its dot, or (for projects) its label */
+  function hit(x,y){let best=-1,bd=13;
+    N.forEach((n,i)=>{const d=Math.hypot(S[i].x-x,S[i].y-y);if(d<bd){bd=d;best=i}});
+    if(best<0)N.forEach((n,i)=>{const r=labelRect[i];if(n.type==="proj"&&r&&x>=r.x-2&&x<=r.x+r.w+2&&y>=r.y-2&&y<=r.y+r.h+2)best=i});
+    return best}
+  hero.addEventListener("click",e=>{if(e.target.closest("a,button"))return;const [x,y]=local(e),L=labelAt(x,y);if(L){goTo(L.members,GROUPINGS[clusterBy].groups[L.g]);return}
+    const i=hit(x,y);if(i<0)return;goTo(projectsOf(i),N[i].label)});
+  hero.addEventListener("pointermove",e=>{if(e.target.closest("a,button"))return;const [x,y]=local(e);hero.style.cursor=(labelAt(x,y)||hit(x,y)>=0)?"pointer":""});
+
+  /* group areas: soft, very transparent blobs behind each group's projects and the concepts only they use */
+  let groupLabels=[],blobTick=0;
+  const bc=document.createElement("canvas"),bctx=bc.getContext("2d"),tc=document.createElement("canvas"),tctx=tc.getContext("2d");
+  const canBlur="filter" in bctx;
+  function groupMembers(g){return N.map((n,i)=>i).filter(i=>groupOfNode(i,clusterBy)===g)}
+  function ownConcepts(g){return N.map((n,i)=>i).filter(i=>N[i].type==="con"&&nbr[i].every(j=>groupOfNode(j,clusterBy)===g))}
+  function paintBlobs(fg){                       // drawn at half resolution into an offscreen canvas, refreshed every few frames
+    const G=GROUPINGS[clusterBy],sc=.5;bc.width=tc.width=Math.ceil(W*sc);bc.height=tc.height=Math.ceil(H*sc);
+    if(!G.groups)return;
+    const r=(narrow?30:48)*sc;
+    for(const g of Object.keys(G.groups)){const pts=groupMembers(g).concat(ownConcepts(g));if(!pts.length)continue;const on=g===fg;
+      tctx.clearRect(0,0,tc.width,tc.height);
+      if(canBlur){tctx.filter=`blur(${(narrow?14:22)*sc}px)`;tctx.fillStyle="#fff";
+        for(const i of pts){tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r,0,6.283);tctx.fill()}tctx.filter="none"}
+      else{for(const i of pts){const gr=tctx.createRadialGradient(S[i].x*sc,S[i].y*sc,0,S[i].x*sc,S[i].y*sc,r*1.4);gr.addColorStop(0,"rgba(255,255,255,.7)");gr.addColorStop(1,"rgba(255,255,255,0)");
+        tctx.fillStyle=gr;tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r*1.4,0,6.283);tctx.fill()}}
+      /* tint: white for all groups, lime for the one in focus */
+      tctx.globalCompositeOperation="source-in";tctx.fillStyle=on?"rgb(188,223,140)":"rgb(243,244,248)";tctx.fillRect(0,0,tc.width,tc.height);tctx.globalCompositeOperation="source-over";
+      bctx.globalAlpha=on?.26:.075;bctx.drawImage(tc,0,0);bctx.globalAlpha=1}
+  }
+  /* collision-free labels: every label claims a rectangle; later labels try other sides or stay hidden */
+  let placed=[],labelRect=[],prevSide=[],textBlocks=[];
+  const PAD=2;
+  const free=(r)=>r.x>=4&&r.y>=2&&r.x+r.w<=W-4&&r.y+r.h<=H-2&&!placed.some(q=>r.x<q.x+q.w+PAD&&q.x<r.x+r.w+PAD&&r.y<q.y+q.h+PAD&&q.y<r.y+r.h+PAD);
+  function claim(r){placed.push(r);return r}
+  function placeLabel(i,txt,x,y,d,h,must){const w=ctx.measureText(txt).width;
+    const c=[[x+d,y-h/2],[x-d-w,y-h/2],[x-w/2,y-d-h],[x-w/2,y+d]];
+    if(must)for(const k of [2.2,3.5])c.push([x+d*k,y-h/2],[x-d*k-w,y-h/2],[x-w/2,y-d*k-h],[x-w/2,y+d*k]);
+    const order=prevSide[i]!=null?[prevSide[i],...c.keys()]:[...c.keys()];
+    for(const k of order){if(k>=c.length)continue;const r={x:c[k][0],y:c[k][1],w,h};if(free(r)){prevSide[i]=k;claim(r);return r}}
+    prevSide[i]=null;return null}
+  function drawGroups(fg){groupLabels=[];const G=GROUPINGS[clusterBy];
+    if(!G.groups)return;
+    if(blobTick++%4===0)paintBlobs(fg);ctx.drawImage(bc,0,0,W,H);
+    ctx.font="600 10.5px 'JetBrains Mono',monospace";ctx.textBaseline="alphabetic";
+    const keys=Object.keys(G.groups);
+    for(const g of keys){const members=groupMembers(g);if(!members.length)continue;const pts=members.concat(ownConcepts(g)).map(i=>S[i]);
+      const on=g===fg,txt=G.groups[g].toUpperCase()+"  "+members.length,tw=ctx.measureText(txt).width;
+      let lx=Math.max(8,Math.min(Math.min(...pts.map(p=>p.x))-10,W-tw-10)),ly=Math.max(14,Math.min(...pts.map(p=>p.y))-(narrow?20:30));
+      if(G.linear){const c=keys.indexOf(g),cw=box.w/keys.length;lx=box.x+c*cw+cw*.08;ly=box.y-6}     // linear: labels line up above the columns
+      {let ok=false;const y0=ly,x0=lx;                                   // try nearby spots until one is clear
+        for(const [dx,dy] of [[0,0],[0,-15],[0,-30],[40,0],[-40,0],[0,15],[40,-15],[-40,-15],[80,0],[-80,0],[0,-45],[0,30]]){lx=Math.max(4,Math.min(x0+dx,W-tw-6));ly=y0+dy;if(free({x:lx,y:ly-11,w:tw,h:14})){ok=true;break}}
+        if(!ok)continue;}
+      claim({x:lx,y:ly-11,w:tw,h:14});
+      ctx.fillStyle=on?"rgb(188,223,140)":"rgba(188,223,140,.72)";ctx.fillText(txt,lx,ly);
+      groupLabels.push({g,x:lx,y:ly-11,w:tw,h:15,members:members.map(i=>N[i].pi)})}
+    if(G.linear){const cw=box.w/keys.length;ctx.strokeStyle="rgba(243,244,248,.10)";ctx.setLineDash([2,5]);   // faint dividers between the columns
+      for(let c=1;c<keys.length;c++){const x=box.x+c*cw;ctx.beginPath();ctx.moveTo(x,box.y-2);ctx.lineTo(x,box.y+box.h+4);ctx.stroke()}ctx.setLineDash([])}
+    if(G.linear){const y=box.y+box.h+(narrow?10:18),x0=box.x,x1=box.x+box.w;             // the axis under a linear grouping
+      ctx.strokeStyle="rgba(243,244,248,.28)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.moveTo(x1-6,y-4);ctx.lineTo(x1,y);ctx.lineTo(x1-6,y+4);ctx.stroke();
+      ctx.font="10.5px 'JetBrains Mono',monospace";ctx.fillStyle="rgba(243,244,248,.55)";ctx.textBaseline="top";
+      ctx.fillText(G.linear[0],x0,y+6);ctx.textAlign="right";ctx.fillText(G.linear[1],x1,y+6);ctx.textAlign="left";
+      claim({x:x0,y:y+4,w:ctx.measureText(G.linear[0]).width,h:14});const w1=ctx.measureText(G.linear[1]).width;claim({x:x1-w1,y:y+4,w:w1,h:14})}
+  }
+  const labelAt=(x,y)=>groupLabels.find(L=>x>=L.x-4&&x<=L.x+L.w+4&&y>=L.y-4&&y<=L.y+L.h+4);
+
+  /* draw */
+  const LIME="188,223,140";
+  function frame(t){
+    const s=paused?0:t/1000,real=ptr.on&&t-ptr.last<3000;
+    let hov=real?hit(ptr.x,ptr.y):-1;
+    if(!real&&!paused&&t-tStart>3800){ti=(ti+1)%tour.length;tStart=t}
+    const focusProj=hov>=0?(N[hov].type==="proj"?hov:-1):(real?-1:tour[ti]);
+    const lit=new Set(),light=i=>{lit.add(i);nbr[i].forEach(j=>lit.add(j))};
+    if(hov>=0&&N[hov].type!=="proj"){light(hov);nbr[hov].forEach(j=>{if(N[j].type==="proj")lit.add(j)})}else if(focusProj>=0)light(focusProj);
+    for(let i=0;i<N.length;i++){const p=S[i];
+      const tx=p.hx+(paused?0:Math.sin(s*.35+i*1.7)*4),ty=p.hy+(paused?0:Math.cos(s*.29+i*2.3)*4);
+      const fx=(tx-p.x)*.03,fy=(ty-p.y)*.03;
+      p.glow+=((lit.has(i)?1:0)-p.glow)*.12;p.vx=(p.vx+fx)*.84;p.vy=(p.vy+fy)*.84;p.x+=p.vx;p.y+=p.vy}
+    ctx.clearRect(0,0,W,H);ctx.lineWidth=1;placed=textBlocks.slice();labelRect=[];      // page text is an obstacle for labels
+    for(let i=0;i<N.length;i++){const r=N[i].type==="con"?3:6;placed.push({x:S[i].x-r,y:S[i].y-r,w:2*r,h:2*r,node:i})}   // dots are obstacles too
+    const G=GROUPINGS[clusterBy];drawGroups(focusProj>=0&&G.groups?G.of(P[N[focusProj].pi]):null);
+    for(const [a,b] of E){const A=S[a],B=S[b],g=Math.min(A.glow,B.glow),inst=N[a].type==="inst"||N[b].type==="inst";
+      ctx.strokeStyle=g>.05?`rgba(${LIME},${.15+.7*g})`:inst?"rgba(160,168,186,.12)":"rgba(160,168,186,.22)";
+      if(inst&&g<.05)ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.setLineDash([])}
+    /* dots first, labels after, in order of importance */
+    for(let i=0;i<N.length;i++){const n=N[i],p=S[i],g=p.glow,h=i===hov;
+      if(n.type==="inst"){const r=h?6.5:5;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.strokeStyle=g>.1?`rgba(${LIME},${.5+.5*g})`:"rgba(160,168,186,.7)";ctx.lineWidth=1.5;ctx.strokeRect(-r,-r,r*2,r*2);ctx.restore()}
+      else if(n.type==="proj"){const r=4.5+g*2+(h?1.5:0);ctx.fillStyle=g>.1?`rgb(${LIME})`:"#F3F4F8";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();
+        if(g>.1){ctx.strokeStyle=`rgba(${LIME},${.35*g})`;ctx.beginPath();ctx.arc(p.x,p.y,r+5,0,6.283);ctx.stroke()}}
+      else{const r=2.2+g*.8+(h?1.5:0);ctx.fillStyle=g>.1?`rgba(${LIME},${.6+.4*g})`:"rgba(160,168,186,.55)";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill()}}
+    const want=[];
+    for(let i=0;i<N.length;i++){const n=N[i],g=S[i].glow,on=g>.1,h=i===hov;let pr=-1;
+      if(h)pr=0;else if(on&&n.type==="proj")pr=1;else if(on)pr=2;
+      else if(n.type==="proj"&&!narrow)pr=3;
+      else if(n.type==="inst"&&!narrow&&!G.linear)pr=4;
+      else if(n.type==="con"&&nbr[i].length>1&&!narrow&&!G.linear)pr=5;
+      if(pr>=0)want.push([pr,i])}
+    want.sort((a,b)=>a[0]-b[0]);
+    ctx.textBaseline="middle";
+    for(const [pr,i] of want){const n=N[i],p=S[i],g=p.glow,on=g>.1;
+      placed=placed.filter(q=>q.node!==i);              // a label may sit next to its own dot
+      let font,col,txt=n.label,d,h;
+      if(n.type==="proj"){font=`${on?600:500} ${narrow?11:12}px 'Archivo',sans-serif`;col=on?`rgb(${LIME})`:"rgba(243,244,248,.82)";d=9;h=15}
+      else if(n.type==="inst"){font="500 10px 'JetBrains Mono',monospace";col=on?`rgba(${LIME},${.6+.4*g})`:"rgba(142,148,164,.85)";txt=txt.toUpperCase();d=11;h=13}
+      else{font="10.5px 'JetBrains Mono',monospace";col=on?`rgba(${LIME},${.55+.45*g})`:"rgba(142,148,164,.75)";d=6;h=13}
+      ctx.font=font;const r=placeLabel(i,txt,p.x,p.y,d,h,pr<=2);
+      const own=n.type==="con"?3:6;placed.push({x:p.x-own,y:p.y-own,w:2*own,h:2*own,node:i});
+      if(!r)continue;labelRect[i]=r;ctx.fillStyle=col;ctx.fillText(txt,r.x,r.y+r.h/2)}
+    /* card next to the focused node */
+    const show=hov>=0?hov:focusProj;
+    if(show>=0){const n=N[show],q=S[show];
+      if(n.type==="proj"){const p=P[n.pi];tipK.textContent=`[${p.k}] · ${p.y}`;tipT.textContent=p.t;tipM.innerHTML=esc(p.net.i.map(k=>INST[k]).join(" · ")+" — "+p.net.c.join(", "))+(hov>=0?'<span class="go">Click to open ↓</span>':"")}
+      else{const ps=projectsOf(show);tipK.textContent=n.type==="inst"?"Institute / venue":"Concept";tipT.textContent=n.label;
+        tipM.innerHTML=esc(ps.map(pi=>P[pi].net.n).join(" · "))+'<span class="go">Click to see '+(ps.length>1?ps.length+" projects":"the project")+" ↓</span>"}
+      const tw=tip.offsetWidth,th=tip.offsetHeight,yMax=box.y+box.h+24;let x=q.x+16,y=q.y+16;if(x+tw>W-12)x=q.x-tw-16;if(y+th>yMax)y=q.y-th-16;   // the card stays inside the network area
+      tip.style.left=Math.max(8,x)+"px";tip.style.top=Math.max(8,y)+"px";tip.classList.add("on")}
+    else tip.classList.remove("on");
+    requestAnimationFrame(frame)}
+  addEventListener("resize",size);size();requestAnimationFrame(frame);
+  function setCluster(mode){clusterBy=mode;blobTick=0;size()}
+  const nodes=()=>N.map((n,i)=>({label:n.label,type:n.type,x:S[i].x,y:S[i].y}));
+  const debug=()=>({placed:placed.filter(q=>q.node===undefined&&!q.text),box});
+  return {size,setCluster,nodes,debug};
+})();
+
+/* "Cluster by" buttons */
+(()=>{const box=document.getElementById("clusterBtns");
+  const draw=()=>{box.innerHTML=Object.entries(GROUPINGS).map(([k,G])=>`<button type="button" id="cb-${k}" data-k="${k}" aria-pressed="${k===clusterBy}">${G.label}</button>`).join("")};
+  draw();box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;net.setCluster(b.dataset.k);draw()})})();
+
+/* jump from the network to project cards: show all filters, scroll, light the cards up */
+/* selection from the network: matching cards move to the top and stay highlighted until something else is chosen */
+function goTo(indices,label){
+  if(!indices.length)return;
+  selected={ids:new Set(indices),label:label||""};
+  if(active!=="All"&&indices.some(i=>!P[i].cat.includes(active)))active="All";
+  render();
+  document.getElementById("work").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
+}
+function clearSelection(){selected=null;render()}
+
+
+/* ---- headline word pairs ---- */
+const typed=document.getElementById("typed"),typed2=document.getElementById("typed2");
+let pairI=0,typing=null,pairTimer=null;
+function nextPair(){pairI=(pairI+1)%PAIRS.length;const [a,b]=PAIRS[pairI];
+  typed2.classList.add("out");setTimeout(()=>{typed2.textContent=b;typed2.classList.remove("out")},RM?0:550);
+  clearInterval(typing);if(RM){typed.textContent=a;return}
+  let cur=typed.textContent,del=true;
+  typing=setInterval(()=>{if(del){cur=cur.slice(0,-1);typed.textContent=cur;if(!cur)del=false}else{cur=a.slice(0,cur.length+1);typed.textContent=cur;if(cur===a)clearInterval(typing)}},55)}
+function runPairs(){clearInterval(pairTimer);if(!paused&&!document.hidden)pairTimer=setInterval(nextPair,6500)}
+
+/* ---- pause: stops the automatic visitor, the drifting and the changing headline ---- */
+const pauseBtn=document.getElementById("pause");
+function setPaused(p){paused=p;pauseBtn.setAttribute("aria-pressed",p);pauseBtn.setAttribute("aria-label",p?"Play animation":"Pause animation");pauseBtn.querySelector(".txt").textContent=p?"Play":"Pause";runPairs()}
+pauseBtn.addEventListener("click",()=>setPaused(!paused));
+document.addEventListener("visibilitychange",runPairs);
+setPaused(paused);
+
+/* ---- CV download ---- */
+const CV="Huetter_CV_2026.pdf";
+const cvMsg=document.getElementById("cvMsg"),cvLink=document.getElementById("cvLink");
+let dl=null;
+async function getCV(){
+  if(!dl){cvLink.hidden=false;cvLink.click();return}  // no download capability (e.g. self-hosted): just open the PDF
+  cvMsg.textContent="Preparing…";
+  try{const r=await fetch(CV);if(!r.ok)throw new Error("fetch");const b=await r.blob();
+    await dl.save({filename:CV,data:b});cvMsg.textContent="CV saved.";}
+  catch(e){const c=e&&e.code;
+    if(c==="declined")cvMsg.textContent="Download cancelled.";
+    else if(c==="rate_limited")cvMsg.textContent="A download prompt is already open.";
+    else{cvMsg.textContent="Download isn't available here. Open the PDF instead.";cvLink.hidden=false}}
+}
+document.getElementById("cvBtn").addEventListener("click",getCV);
+document.getElementById("cvBtn2").addEventListener("click",getCV);
+if(window.claude&&claude.use){claude.use("downloads").then(x=>{dl=x;if(!x)cvLink.hidden=false}).catch(()=>{cvLink.hidden=false})}
+else{cvLink.hidden=false;cvLink.setAttribute("download","Huetter_CV_2026.pdf")}   // on the public website the button downloads the PDF directly
+
+document.getElementById("copyBtn").addEventListener("click",async e=>{
+  const t=document.getElementById("mail").textContent,btn=e.currentTarget;
+  try{await navigator.clipboard.writeText(t);btn.textContent="Copied"}
+  catch{const r=document.createRange();r.selectNodeContents(document.getElementById("mail"));const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent="Selected, press ⌘C"}
+  setTimeout(()=>btn.textContent="Copy address",2200);
+});
+</script>
+</body>
+</html>

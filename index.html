@@ -291,7 +291,7 @@ footer.foot{border-top:1px solid var(--line)}
   .about{grid-template-columns:1fr}
   .bar{padding-top:12px}
 }
-@media (max-width:480px){ .bar nav a.opt{display:none} .stops a{font-size:0} .stops a::after{content:attr(data-short);font-size:10px} }
+@media (max-width:480px){ .bar nav{gap:14px;letter-spacing:.05em} .stops a{font-size:0} .stops a::after{content:attr(data-short);font-size:10px} }
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} .marker{transition:none} .caret{animation:none} }
 </style>
 </head>
@@ -303,8 +303,8 @@ footer.foot{border-top:1px solid var(--line)}
       <nav aria-label="Sections">
         <a href="#work">Work</a>
         <a href="#about">About</a>
-        <a href="#links" class="opt">Links</a>
-        <a href="#contact" class="opt">Contact</a>
+        <a href="#links">Links</a>
+        <a href="#contact">Contact</a>
       </nav>
     </div>
   </div></div>

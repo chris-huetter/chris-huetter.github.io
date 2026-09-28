@@ -103,7 +103,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .project{display:flex;flex-direction:column;border:1px solid var(--line);background:var(--paper)}
 .fig{margin:0;position:relative;aspect-ratio:3/2;max-width:100%;border-bottom:1px solid var(--line);overflow:hidden;background:
   repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 9px),var(--bg)}
-.fig .sl{width:100%;height:100%;object-fit:cover;display:block}
+.fig .sl{width:100%;height:100%;object-fit:contain;display:block;background:var(--paper);transition:background-color .4s}   /* every image is shown whole, never cropped or stretched; the free space is filled with a colour taken from the image edges (fitBg) */
 .fig.contain{background:#fff}
 .fig.contain .sl{object-fit:contain;padding:12px}   /* figures, covers and screenshots are shown whole */
 .fig .ph{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:14px 16px}
@@ -223,15 +223,18 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .project{scroll-margin-top:80px}
 /* selected from the network: strong outline and tinted text area; the rest steps back */
 .project{transition:opacity .3s,box-shadow .3s}
-.project{--sel-ink:#5C9A0A}                        /* lime green, dark enough to read on the light cards */
-.project.sel{box-shadow:0 0 22px 4px rgba(176,232,64,.55),0 0 46px 10px rgba(176,232,64,.22)}   /* soft lime glow, like the network clusters */
+.project{--sel-ink:#4F9A1A;--sel-tint:#EEF6E2}     /* lime green text, dark enough to read on the light cards; pastel lime tint behind it */
+.project.sel{box-shadow:0 0 22px 4px rgba(188,223,140,.8),0 0 46px 10px rgba(188,223,140,.35)}   /* soft pastel-lime glow in the accent colour, like the network clusters */
+.project.sel .label{background:var(--sel-tint)}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .project{--sel-ink:#A9DB72;--sel-tint:#1B2216} }   /* dark mode: light lime text on a deep green tint */
+:root[data-theme="dark"] .project{--sel-ink:#A9DB72;--sel-tint:#1B2216}
 .project.sel .label h3,.project.sel .label .yr,.project.sel .label .meta,.project.sel .label .meta b,.project.sel .label .kind{color:var(--sel-ink)}   /* headings only; the serif description stays black */
 .project.sel .label h3::before{content:"●";font-size:.7em;margin-right:8px;vertical-align:.15em}
 .projects.has-sel .project:not(.sel){opacity:.42}
 .projects.has-sel .project:not(.sel):hover{opacity:1}
-.selbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:var(--mono);font-size:12.5px;padding:8px 2px;color:#5C9A0A;justify-self:start}
+.selbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:var(--mono);font-size:12.5px;padding:8px 2px;color:#4F9A1A;justify-self:start}
 .selbar b{font-weight:600}
-.sb-dot{width:9px;height:9px;border-radius:50%;background:#7CC416;box-shadow:0 0 8px 2px rgba(176,232,64,.8)}
+.sb-dot{width:9px;height:9px;border-radius:50%;background:#8FCB4A;box-shadow:0 0 8px 2px rgba(188,223,140,.9)}
 .selbar button{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;background:transparent;border:1px solid var(--ink);color:var(--ink);padding:4px 10px;cursor:pointer;margin-left:4px}
 .selbar button:hover{background:var(--ink);color:var(--bg)}
 
@@ -522,7 +525,7 @@ function fig(p){
   if(imgs.length){const gal=imgs.length>1;
     const still=matchMedia("(prefers-reduced-motion: reduce)").matches;      // no autoplaying video for reduced motion
     const tags=imgs.map((m,i)=>{const pos=m.pos||p.pos,credit=m.credit||p.src||"",alt=esc(p.ph)+(gal?` (${i+1} of ${imgs.length})`:"");
-      const a=` class="sl${i===0?" on":""}"${pos?` style="object-position:${esc(pos)}"`:""} data-credit="${esc(credit)}" onerror="slideErr(this)"`;
+      const a=` class="sl${i===0?" on":""}"${pos?` style="object-position:${esc(pos)}"`:""} data-credit="${esc(credit)}" onerror="slideErr(this)" ${isVid(m.src)?"onloadeddata":"onload"}="fitBg(this)"`;
       return isVid(m.src)?`<video src="${esc(m.src)}" aria-label="${alt}" muted playsinline preload="metadata"${i===0&&!still?" autoplay":""}${gal?"":" loop"}${a}></video>`
         :`<img src="${esc(m.src)}" alt="${alt}" loading="lazy"${a}>`}).join("");
     const credit=imgs[0].credit||p.src||"",anyCredit=imgs.some(m=>m.credit)||p.src;
@@ -835,6 +838,18 @@ function nextPair(){pairI=(pairI+1)%PAIRS.length;const [a,b]=PAIRS[pairI];
   typing=setInterval(()=>{if(del){cur=cur.slice(0,-1);typed.textContent=cur;if(!cur)del=false}else{cur=a.slice(0,cur.length+1);typed.textContent=cur;if(cur===a)clearInterval(typing)}},55)}
 /* ---- project galleries: every 3 s the next image fades in (a video plays to its end first); stops while paused, while the tab is hidden, or while the pointer is on the image.
    Files that fail to load are dropped from the rotation. ---- */
+/* fill the empty band around a contained image with the average colour of the edges it touches (top/bottom for wide images, left/right for tall ones) */
+const bgCanvas=document.createElement("canvas");bgCanvas.width=bgCanvas.height=40;
+function fitBg(el){
+  try{const w=el.naturalWidth||el.videoWidth,h=el.naturalHeight||el.videoHeight;if(!w||!h)return;
+    const box=el.closest(".fig"),wide=w/h>box.clientWidth/box.clientHeight,N=40;
+    const c=bgCanvas.getContext("2d",{willReadFrequently:true});c.clearRect(0,0,N,N);c.drawImage(el,0,0,N,N);
+    const d=c.getImageData(0,0,N,N).data;let r=0,g=0,b=0,n=0;
+    const add=(x,y)=>{const i=(y*N+x)*4;if(d[i+3]<16)return;r+=d[i];g+=d[i+1];b+=d[i+2];n++};   // skip transparent pixels (PNGs)
+    for(let k=0;k<N;k++){if(wide){add(k,0);add(k,1);add(k,N-2);add(k,N-1)}else{add(0,k);add(1,k);add(N-2,k);add(N-1,k)}}
+    if(n)el.style.backgroundColor=`rgb(${r/n|0},${g/n|0},${b/n|0})`}
+  catch(e){}   // e.g. opened from disk, where the browser won't let the page read pixels: the neutral card colour stays
+}
 function isVid(src){return /\.(mp4|webm|mov)$/i.test(src)}
 function showSlide(f,nx){
   const sl=[...f.querySelectorAll(".sl")];

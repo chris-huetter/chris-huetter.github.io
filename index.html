@@ -50,10 +50,11 @@
 @font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-style:normal;font-display:swap}
 /* ---- accent colour: the whole site takes its highlight colour from this block. To try another palette, replace the two lines below with one of the alternatives ---- */
 :root{
-  --accent:#4A68FF; --accent-rgb:74,104,255; --accent-ink:#FFFFFF; --sel-ink:#2336D9; --sel-tint:#EEF0FF; --sel-dot:#3D5CFF;   /* neon Klein blue: fills (with --accent-ink text on them), underlines, the network, selected cards */
-  --sel-ink-dark:#9AA8FF; --sel-tint-dark:#161A33;                                                         /* selected cards in dark mode */
+  --accent:#FEF6D7; --accent-rgb:254,246,215; --glow-rgb:254,250,233; --accent-ink:#0B0C10; --sel-ink:#6C6A60; --sel-tint:#FFFEFB; --sel-dot:#FEF6D7;   /* cream: fills, underlines, the network, selected cards */
+  --sel-ink-dark:#FEF9E5; --sel-tint-dark:#303030;                                                                                                         /* selected cards in dark mode */
 }
-/* the palettes below use dark text on fills: add --accent-ink:#0B0C10; when switching to one of them
+/* neon Klein blue: --accent:#3D72FF; --accent-rgb:61,114,255; --glow-rgb:140,178,255; --accent-ink:#FFFFFF; --sel-ink:#1F4AD6; --sel-tint:#EDF2FF; --sel-dot:#3D72FF; --sel-ink-dark:#98B4FF; --sel-tint-dark:#141B33;
+   the palettes below use dark text on fills: add --accent-ink:#0B0C10; when switching to one of them
    neon orange: --accent:#FF7A1F; --accent-rgb:255,122,31; --sel-ink:#A94700; --sel-tint:#FFF1E6; --sel-dot:#FF7A1F; --sel-ink-dark:#FFA366; --sel-tint-dark:#2B1A0E;
    vermilion:  --accent:#F0643C; --accent-rgb:240,100,60; --sel-ink:#B8431F; --sel-tint:#FCEEE8; --sel-dot:#F0643C; --sel-ink-dark:#FF9A7A; --sel-tint-dark:#2A1712;
    neon beige: --accent:#FFDFAE; --accent-rgb:255,223,174; --sel-ink:#8A5A12; --sel-tint:#FBF3E6; --sel-dot:#F5C77E; --sel-ink-dark:#FFE4BA; --sel-tint-dark:#2A2317;
@@ -64,7 +65,7 @@
    lime (old): --accent:#BCDF8C; --accent-rgb:188,223,140; --sel-ink:#4F9A1A; --sel-tint:#EEF6E2; --sel-dot:#8FCB4A; --sel-ink-dark:#A9DB72; --sel-tint-dark:#1B2216; */
 :root{
   --bg:#ECEEF1; --paper:#F6F7F9; --ink:#14161B; --muted:#5E6474; --line:#C9CDD6; --hatch:rgba(20,22,27,.07);
-  --focus:#14161B;
+  --focus:#14161B; --accent-line:var(--sel-ink);   /* lines and underlines on light surfaces: the readable shade of the accent */
   --display:"Archivo","Helvetica Neue",Arial,sans-serif;
   --body:"Newsreader",Georgia,"Times New Roman",serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -72,12 +73,12 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#0E1015; --paper:#151821; --ink:#E5E7EE; --muted:#9097A8; --line:#2A2F3B; --hatch:rgba(229,231,238,.06);
-    --focus:var(--accent); --sel-ink:var(--sel-ink-dark); --sel-tint:var(--sel-tint-dark); color-scheme:dark;
+    --focus:var(--accent); --accent-line:var(--accent); --sel-ink:var(--sel-ink-dark); --sel-tint:var(--sel-tint-dark); color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E1015; --paper:#151821; --ink:#E5E7EE; --muted:#9097A8; --line:#2A2F3B; --hatch:rgba(229,231,238,.06);
-  --focus:var(--accent); --sel-ink:var(--sel-ink-dark); --sel-tint:var(--sel-tint-dark); color-scheme:dark;
+  --focus:var(--accent); --accent-line:var(--accent); --sel-ink:var(--sel-ink-dark); --sel-tint:var(--sel-tint-dark); color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -96,7 +97,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .name span{font-weight:400;color:var(--muted)}
 .bar nav{display:flex;gap:clamp(12px,2.5vw,28px);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
 .bar nav a{color:var(--muted);text-decoration:underline transparent}
-.bar nav a:hover{color:var(--ink);text-decoration-color:var(--accent)}
+.bar nav a:hover{color:var(--ink);text-decoration-color:var(--accent-line)}
 
 
 /* shared text styles + filter chips */
@@ -104,7 +105,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .lede{max-width:36em;font-size:clamp(18px,1.5vw,21px);margin:0}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips button{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
-.chips button:hover{border-color:var(--accent)}
+.chips button:hover{border-color:var(--accent-line)}
 .chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chips button .n{color:var(--muted);margin-left:5px}
 .chips button[aria-pressed="true"] .n{color:inherit;opacity:.6}
@@ -118,8 +119,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .fig{margin:0;position:relative;aspect-ratio:3/2;max-width:100%;border-bottom:1px solid var(--line);overflow:hidden;background:
   repeating-linear-gradient(135deg,var(--hatch) 0 1px,transparent 1px 9px),var(--bg)}
 .fig .sl{width:100%;height:100%;object-fit:contain;display:block;background:var(--paper);transition:background-color .4s}   /* every image is shown whole, never cropped or stretched; the free space is filled with a colour taken from the image edges (fitBg) */
-.fig.contain{background:#fff}
-.fig.contain .sl{object-fit:contain;padding:12px}   /* figures, covers and screenshots are shown whole */
 .fig .ph{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:14px 16px}
 .fig .ph .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .fig .ph .what{font-family:var(--body);font-style:italic;font-size:17px;line-height:1.35;color:var(--muted);max-width:18em}
@@ -137,10 +136,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
 .tags span{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:999px;padding:1px 9px;color:var(--muted)}
 .links{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--mono);font-size:12px}
-.links a{text-decoration:underline var(--accent)}
+.links a{text-decoration:underline var(--accent-line)}
 .links a:hover{text-decoration-thickness:3px}
 .kind{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--muted);margin-left:8px;letter-spacing:.02em;white-space:nowrap;vertical-align:2px}
-.badge{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--accent);color:var(--accent-ink);padding:1px 7px;margin-left:8px;letter-spacing:.04em;vertical-align:3px}
+.badge{display:inline-block;font-family:var(--mono);font-size:11px;background:#2B2C31;color:var(--accent);padding:1px 7px;margin-left:8px;letter-spacing:.04em;vertical-align:3px}
 .empty{grid-column:1/-1;font-family:var(--mono);font-size:12px;color:var(--muted);margin:0}
 
 /* about, CV card, contact, footer */
@@ -152,7 +151,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .contact{display:flex;flex-wrap:wrap;gap:24px 60px;align-items:end;justify-content:space-between}
 .contact .big{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:600;font-size:clamp(24px,3.4vw,44px);line-height:1.1;margin:0;overflow-wrap:anywhere;user-select:all}
 .copy{font-family:var(--mono);font-size:12px;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer;text-transform:uppercase;letter-spacing:.08em}
-.copy:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.copy:hover{background:var(--accent);border-color:var(--accent-line);color:var(--accent-ink)}
 .foot{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 28px;padding-block:28px;border-top:1px solid var(--line)}
 
 
@@ -169,7 +168,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 /* three fixed lines that never wrap, so the changing words cannot push the layout around */
 .hero h1 .ln{display:block;white-space:nowrap}
 .hero h1 em{font-family:var(--body);font-style:italic;font-weight:400}
-.typed{color:var(--hero-accent);text-shadow:0 0 4px rgba(var(--accent-rgb),.35),0 0 20px rgba(var(--accent-rgb),.22);font-variation-settings:"wdth" 125;font-weight:300}
+.typed{color:var(--hero-accent);text-shadow:0 0 2px rgba(var(--glow-rgb,var(--accent-rgb)),.75),0 0 8px rgba(var(--glow-rgb,var(--accent-rgb)),.5),0 0 26px rgba(var(--glow-rgb,var(--accent-rgb)),.3);   /* crisp letters with a halo in a lighter blue, so the word reads as glowing */font-variation-settings:"wdth" 125;font-weight:300}
 .caret{display:inline-block;width:.06em;height:.8em;background:var(--hero-accent);margin-left:.04em;vertical-align:-.04em;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 #typed2{display:inline-block;transition:opacity .6s,filter .6s}
@@ -179,7 +178,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .hero-cta{display:flex;flex-wrap:wrap;gap:10px}
 .btn{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:11px 16px;cursor:pointer;text-decoration:none;display:inline-block;line-height:1.2}
 .btn.solid{background:var(--ink);color:var(--bg)}
-.btn:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{background:var(--accent);border-color:var(--accent-line);color:var(--accent-ink)}
 .hero .btn{border-color:#F3F4F8;color:#F3F4F8}
 .hero .btn.solid{background:#F3F4F8;color:#0B0C10}
 .hero .btn:hover{background:var(--hero-accent);border-color:var(--hero-accent);color:var(--accent-ink)}
@@ -197,7 +196,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .fig.gal .sl.on{opacity:1}
 .fig .dots i.bad{display:none}
 .fig.gal{cursor:pointer}
-.fig.gal:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fig.gal:focus-visible{outline:2px solid var(--accent-line);outline-offset:2px}
 .fig .dots{position:absolute;left:10px;bottom:10px;display:flex;gap:5px}
 .fig .dots i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.45;box-shadow:0 0 2px rgba(0,0,0,.5);transition:opacity .3s}
 .fig .dots i.on{opacity:1}
@@ -208,7 +207,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .portrait .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .cvcard{scroll-margin-top:80px;align-self:start;border:1px solid var(--line);background:var(--paper);padding:24px;display:grid;gap:12px;align-content:start;justify-items:start}
 .cvcard p{margin:0}
-.cvlink{font-family:var(--mono);font-size:12px;text-decoration:underline var(--accent)}
+.cvlink{font-family:var(--mono);font-size:12px;text-decoration:underline var(--accent-line)}
 .cvlink:hover{text-decoration-thickness:3px}
 .cvmsg{font-family:var(--mono);font-size:12px;color:var(--muted);min-height:1em}
 
@@ -223,11 +222,11 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .clusterby{display:grid;gap:6px}
 .cb-l{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(243,244,248,.6)}
 .cb-b{display:flex;flex-wrap:wrap;gap:6px}
-.cb-b button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;background:transparent;color:#F3F4F8;border:1px solid rgba(243,244,248,.35);border-radius:999px;padding:4px 11px;cursor:pointer}
+.cb-b button{font-family:var(--mono);font-size:11px;letter-spacing:.02em;background:transparent;color:#F3F4F8;border:1px solid rgba(243,244,248,.35);border-radius:999px;padding:4px 9px;cursor:pointer}
 .cb-b button:hover{border-color:var(--accent)}
 .cb-b button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
 .net-hint{margin:0;font-family:var(--mono);font-size:11px;line-height:1.5;color:rgba(243,244,248,.62)}
-.tip{position:absolute;z-index:3;max-width:260px;background:rgba(18,20,27,.95);border:1px solid var(--accent);padding:10px 12px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
+.tip{position:absolute;z-index:3;max-width:260px;background:rgba(18,20,27,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);border:1px solid var(--accent);padding:10px 12px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
 .tip.on{opacity:1;transform:none}
 .tip .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .tip .t{font-family:var(--display);font-weight:600;font-size:15px;line-height:1.25;margin:3px 0 4px;color:#F3F4F8}
@@ -237,7 +236,10 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .project{scroll-margin-top:80px}
 /* selected from the network: strong outline and tinted text area; the rest steps back */
 .project{transition:opacity .3s,box-shadow .3s}
-.project.sel{box-shadow:0 0 22px 4px rgba(var(--accent-rgb),.8),0 0 46px 10px rgba(var(--accent-rgb),.35)}   /* soft glow in the accent colour, like the network clusters; text in --sel-ink on a --sel-tint background */
+.project{transition:transform .35s ease,box-shadow .35s ease,opacity .35s ease}
+.project.sel{border-color:transparent;transform:translateY(-2px);
+  box-shadow:0 0 24px 6px rgba(var(--accent-rgb),.75),0 0 52px 14px rgba(var(--accent-rgb),.3)}   /* highlighted: no outline, only a soft halo in the accent colour */
+@media (prefers-reduced-motion:reduce){ .project.sel{transform:none} }   /* soft glow in the accent colour, like the network clusters; text in --sel-ink on a --sel-tint background */
 .project.sel .label{background:var(--sel-tint)}
 .project.sel .label h3,.project.sel .label .yr,.project.sel .label .meta,.project.sel .label .meta b,.project.sel .label .kind{color:var(--sel-ink)}   /* headings only; the serif description stays black */
 .project.sel .label h3::before{content:"●";font-size:.7em;margin-right:8px;vertical-align:.15em}
@@ -245,7 +247,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .projects.has-sel .project:not(.sel):hover{opacity:1}
 .selbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:var(--mono);font-size:12.5px;padding:8px 2px;color:var(--sel-ink);justify-self:start}
 .selbar b{font-weight:600}
-.sb-dot{width:9px;height:9px;border-radius:50%;background:var(--sel-dot);box-shadow:0 0 8px 2px rgba(var(--accent-rgb),.9)}
+.sb-dot{width:9px;height:9px;border-radius:50%;background:var(--sel-dot);box-shadow:0 0 0 1px var(--accent-line),0 0 8px 2px rgba(var(--accent-rgb),.9)}
 .selbar button{font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;background:transparent;border:1px solid var(--ink);color:var(--ink);padding:4px 10px;cursor:pointer;margin-left:4px}
 .selbar button:hover{background:var(--ink);color:var(--bg)}
 
@@ -260,7 +262,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 .linklist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));column-gap:40px;border-top:1px solid var(--ink)}
 .linklist a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:16px 8px;border-bottom:1px solid var(--line);text-decoration:none;height:100%}
 .linklist .ln{text-decoration:underline transparent;justify-self:start}
-.linklist a:hover .ln{text-decoration-color:var(--accent)}
+.linklist a:hover .ln{text-decoration-color:var(--accent-line)}
 .linklist a:hover .ar{color:var(--ink)}
 .linklist .ln{font-family:var(--display);font-weight:600;font-size:19px}
 .linklist .lh{font-family:var(--mono);font-size:12px;color:var(--muted);grid-column:1;overflow-wrap:anywhere}
@@ -268,7 +270,7 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 
 /* legal */
 footer.foot{border-top:1px solid var(--line)}
-.foot a{text-decoration:underline transparent}.foot a:hover{color:var(--ink);text-decoration-color:var(--accent)}
+.foot a{text-decoration:underline transparent}.foot a:hover{color:var(--ink);text-decoration-color:var(--accent-line)}
 .legal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px clamp(32px,6vw,80px);padding-block:32px 56px;border-top:1px solid var(--line);font-size:14px;line-height:1.55;color:var(--muted);scroll-margin-top:80px}
 .legal h2{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin:0 0 4px;font-weight:500}
 .legal h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin:18px 0 4px;font-weight:500}
@@ -293,6 +295,30 @@ footer.foot{border-top:1px solid var(--line)}
 }
 @media (max-width:480px){ .bar nav{gap:14px;letter-spacing:.05em} .stops a{font-size:0} .stops a::after{content:attr(data-short);font-size:10px} }
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} .marker{transition:none} .caret{animation:none} }
+
+/* tune mode (#tune): framing controls on each project image */
+.fig.tuning{cursor:grab;touch-action:none}.fig.tuning.dragging{cursor:grabbing}
+.tunebar{position:absolute;left:6px;right:6px;top:6px;display:flex;flex-wrap:wrap;gap:3px;z-index:4;align-items:center}
+.tunebar button,.tunebar span{font-family:var(--mono);font-size:10.5px;line-height:1.3;background:rgba(11,12,16,.82);color:#F3F4F8;border:1px solid rgba(243,244,248,.3);padding:2px 6px;border-radius:3px}
+.tunebar button{cursor:pointer}.tunebar button:hover{border-color:var(--accent)}.tunebar button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tunebar input[type=color]{width:22px;height:20px;padding:0;border:1px solid rgba(243,244,248,.3);border-radius:3px;background:none;cursor:pointer}
+.tunecode{margin:0;padding:8px 58px 8px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.45;background:#0B0C10;color:#9097A8;white-space:pre-wrap;word-break:break-all;position:relative}
+.tunecode.changed{color:#F3F4F8;box-shadow:inset 3px 0 0 var(--accent)}
+.tunecode .tc,.tunepanel button{position:absolute;right:6px;top:6px;font-family:var(--mono);font-size:10.5px;background:transparent;color:#F3F4F8;border:1px solid rgba(243,244,248,.35);padding:2px 7px;cursor:pointer}
+.tunepanel{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:120;background:#0B0C10;color:#F3F4F8;font-family:var(--mono);font-size:12px;padding:10px 12px;border:1px solid var(--accent);display:flex;gap:10px;align-items:center;max-width:calc(100% - 32px);flex-wrap:wrap}
+.tunepanel button{position:static}
+.tunepanel textarea{width:min(560px,80vw);height:160px;font-family:var(--mono);font-size:11px;background:#151821;color:#E5E7EE;border:1px solid #2A2F3B}
+
+/* ==== COLOUR TESTER (open the page with #colors) — delete from here… ==== */
+.ctest{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:130;background:#0B0C10;color:#F3F4F8;border:1px solid rgba(243,244,248,.25);padding:10px 12px;font-family:var(--mono);font-size:11px;display:grid;gap:8px;max-width:calc(100% - 32px)}
+.ctest .sw{display:flex;flex-wrap:wrap;gap:6px}
+.ctest .sw button{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
+.ctest .sw button.on{border-color:#F3F4F8}
+.ctest .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ctest input[type=color]{width:30px;height:24px;padding:0;border:1px solid rgba(243,244,248,.3);background:none;cursor:pointer}
+.ctest .rb{font:inherit;background:transparent;color:#F3F4F8;border:1px solid rgba(243,244,248,.35);padding:3px 8px;cursor:pointer}
+.ctest textarea{width:min(520px,80vw);height:70px;font:inherit;background:#151821;color:#E5E7EE;border:1px solid #2A2F3B}
+/* ==== …to here ==== */
 </style>
 </head>
 <body>
@@ -415,7 +441,9 @@ footer.foot{border-top:1px solid var(--line)}
 </main>
 
 <script>
-const ACCENT=getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim()||"74,104,255";   // accent as "r,g,b", from the CSS palette block
+/* tune mode (open the page with #tune): frame each project image by hand; the state lives here so it survives re-rendering the cards */
+const TUNE=/(^|[#&])tune\b/.test(location.hash),TUNED={},TUNE_INIT={};let tuneReady=false;
+let ACCENT=getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim()||"254,246,215";   // accent as "r,g,b", from the CSS palette block
 const SCALES=[
   {name:"Molecules",short:"Mol",exp:-9,unit:"10⁻⁹ m · a DNA double helix is 2 nm wide",intro:"Where it started: designing matter one base pair at a time."},
   {name:"Bodies",short:"Body",exp:0,unit:"10⁰ m · arm's length",intro:"Objects and interfaces you can walk around, hold, or step into."},
@@ -423,125 +451,137 @@ const SCALES=[
   {name:"Systems",short:"Sys",exp:7,unit:"10⁻⁶ → 10⁷ m · from one cell's interactome to public health",intro:"Networks as the common language across scales: biological systems laid out so that position means something, and work that links molecules to populations."}
 ];
 
-/* net: how the project appears in the header network (n: short node label, f: main category, one of the filter categories (Research, Visualization, Art, Curation, Outreach, Teaching), c: concepts, i: institute keys from INST).
-   k: label shown in [brackets] next to the title (Publication, Exhibition, Artwork, Talk, …). img: photo path, or a list of paths for a gallery (["img/a.jpg","img/b.mp4"]); .mp4/.webm/.mov files play as muted videos; a list entry can also be {src,credit,pos}. ph: what the photo shows (alt text, or the placeholder label while no photo exists). */
+/* net: how the project appears in the header network (n: short node label, f: main category, one of the filter categories (Research, Visualization, Art, Curation, Outreach, Teaching), c: concepts, i: institute keys from INST; the first one is the project's group when the network is clustered by institute).
+   k: label shown in [brackets] next to the title (Publication, Exhibition, Artwork, Talk, …). img: photo path, or a list of paths for a gallery (["img/a.jpg","img/b.mp4"]); .mp4/.webm/.mov files play as muted videos; a list entry can also be {src,credit,...framing}.
+   Framing (on the project for all its images, or on one list entry {src:"img/a.jpg",fit:"fill",pos:"50% 20%"}):
+     fit:"whole"  the entire image, with space around it (default)      fit:"fill"  zoomed to fill the frame, edges may be cut off
+     pos:"50% 20%"  which part stays in view (x% y%, or "top", "left bottom"...)      zoom:1.3  extra zoom
+     bg:"#fff"  colour of the space around a whole image (default: taken from the image edges)      pad:12  space in px around a whole image ph: what the photo shows (alt text, or the placeholder label while no photo exists). */
 const P=[
  {s:0,y:"2019",t:"ECHIDNA — designing 3D DNA nanostructures",
-  img:"img/p-echidna.jpg",
+  img:{src:"img/p-echidna.jpg",fit:"fill"},
   net:{n:"ECHIDNA",f:"Research",c:["DNA nanotechnology", "caDNAno"],i:["ait", "fhc"]},k:"Thesis",role:"Researcher",where:"AIT Austrian Institute of Technology · FH Campus Wien",medium:"SAMSON, caDNAno, Python",cat:["Research"],
   d:"BSc thesis on computational design of DNA origami, developed during a research internship in molecular diagnostics.",
   ph:"ECHIDNA: a Python package to parse 3D data models for DNA origami design",src:""},
- {s:0,y:"2020",t:"A multicomponent DNA origami rotor",fit:"contain",
-  img:"img/p-dna-rotor.jpg",
+ {s:0,y:"2020",t:"A multicomponent DNA origami rotor",bg:"#fff",pad:12,
+  img:{src:"img/p-dna-rotor.jpg",zoom:1.1,bg:"#fff",pad:0},
   net:{n:"DNA origami rotor",f:"Research",c:["DNA nanotechnology", "Brownian motion"],i:["ait"]},k:"Publication",role:"Co-author",where:"Small (2020)",medium:"DNA origami, molecular modelling",cat:["Research"],
   d:"Brownian and flow-driven rotational dynamics of a DNA nanomachine.",links:[["Paper","https://doi.org/10.1002/smll.202001855"]],
   ph:"3D model of the DNA origami rotor",src:""},
  {s:2,y:"2022",t:"Network Cartographs",
-  img:"img/p-cartographs-cover.jpg",
+  img:{src:"img/p-cartographs-cover.jpg",fit:"fill"},
   net:{n:"Network Cartographs",f:"Visualization",c:["network layouts", "cover art"],i:["cemm", "lbi"]},k:"Publication",role:"First author · cover artist",where:"Nature Computational Science 2, 84–89",medium:"Python, 2D/3D layouts",cat:["Research","Visualization"],badge:"Cover",
   d:"Layouts that encode chosen structural or functional features directly into node position, so a network can be read like a map. Also the cover of issue 2.",
   links:[["Paper","https://doi.org/10.1038/s43588-022-00199-z"],["Research briefing","https://doi.org/10.1038/s43588-022-00203-6"]],
   ph:"Cover art for Nature Computational Science: a network layout rendered as a flowing landscape",src:"Cover art · Nature Computational Science"},
  {s:2,y:"2021",t:"VRNetzer",
-  img:"img/p-vrnetzer.jpg",
+  img:{src:"img/p-vrnetzer.jpg",fit:"fill"},
   net:{n:"VRNetzer",f:"Visualization",c:["virtual reality", "network layouts", "collaboration"],i:["cemm"]},k:"Publication",role:"Co-author",where:"Nature Communications 12, 2432",medium:"Virtual reality, Unity, Python",cat:["Research","Visualization"],
   d:"A platform for exploring large biological networks in virtual reality, alone or together.",links:[["Paper","https://doi.org/10.1038/s41467-021-22570-w"]],
   ph:"A researcher explores a network in virtual reality with VRNetzer",src:""},
- {s:3,y:"2023",t:"AutoCore",fit:"contain",
-  img:"img/p-autocore.jpg",
+ {s:3,y:"2023",t:"AutoCore",bg:"#fff",pad:12,
+  img:{src:"img/p-autocore.jpg",zoom:1.1,bg:"#fff",pad:12},
   net:{n:"AutoCore",f:"Research",c:["network medicine", "autoimmunity"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Science Advances 9, eadg6375",medium:"Network analysis",cat:["Research"],
   d:"A network-based definition of the core module of human autoimmunity and autoinflammation.",links:[["Paper","https://doi.org/10.1126/sciadv.adg6375"]],
   ph:"Figure: the AutoCore disease module and its functional groups",src:"Figure: Science Advances"},
  {s:1,y:"2024-2025",t:"Co-creators",
-  img:["img/p-co-creators-1.jpg","img/p-co-creators-2.jpg", "img/p-co-creators-3.jpg"],
+  img:[{src:"img/p-co-creators-1.jpg",fit:"fill"}, {src:"img/p-co-creators-2.jpg",fit:"fill",pos:"50% 48%"}, {src:"img/p-co-creators-3.jpg",fit:"fill"}],
   net:{n:"Co-creators",f:"Art",c:["robotics","human–machine collaboration","art + science"],i:["lbi"]},k:"Artwork",role:"Concept, Curator",where:"Artist: Rudolf Friedrich Bliem · Robot: S. Pirch",medium:"Painting, robotics",cat:["Art"],
   d:"An artist and a robot make work together, sharing the gestures, decisions and authorship of each piece.",
   links:[["R. F. Bliem at Interalia","https://www.interaliamag.org/author/rfbliem/"],["SciArt exhibitions","https://www.sciart.at/exhibitions/"]],
   ph:"Large drawing made together by an artist and a robot",src:"© Philipp Friedrich"},
  {s:2,y:"2021-ongoing",t:"The Workshop",
-  img:["img/p-workshop-1.jpg", "img/p-workshop-2.mp4", "img/p-workshop-3.jpg"],
+  img:[{src:"img/p-workshop-1.jpg",bg:"#847863"}, {src:"img/p-workshop-2.mp4",fit:"fill"}, {src:"img/p-workshop-3.jpg",fit:"fill"}],
   net:{n:"LBI Workshop",f:"Art",c:["electronics","3D printing","data made physical"],i:["lbi"]},k:"Lab",role:"Co-lead",where:"LBI-NetMed, Vienna",medium:"Electronics, 3D printing, laser cutting",cat:["Art","Research"],
   d:"The institute's workshop, where we experiment artistically with design and technology: electronics, fabrication and prototypes that turn data and ideas into physical things.",
   ph:"Entrance to the institute workshop",src:""},
  {s:1,y:"2026",t:"Network Sculpture",
-  img:["img/p-network-sculpture-2026-1.jpg", "img/p-network-sculpture-2026-2.png", "img/p-network-sculpture-2026-3.jpeg", "img/p-network-sculpture-2026-4.jpeg"],
+  img:[{src:"img/p-network-sculpture-2026-1.jpg",fit:"fill"}, {src:"img/p-network-sculpture-2026-2.png",fit:"fill"}, {src:"img/p-network-sculpture-2026-3.jpeg",fit:"fill"}, {src:"img/p-network-sculpture-2026-4.jpeg",fit:"fill"}],
   net:{n:"Network Sculpture",f:"Art",c:["3D printing", "data made physical", "electronics"],i:["lbi"]},k:"Artwork",role:"Artist",where:"LBI-NetMed, Vienna",medium:"PLA, PVC, electronics",cat:["Art"],
   d:"A physical, electronically activated network representing the structure and connections within the LBI institute. [work in progress]",
   ph:"Network sculpture prototype suspended along the institute corridor",src:""},
  {s:0,y:"2020",t:"Network Sculpture — DNA Synthesome Complex",
-  img:"img/p-synthesome.jpg",
+  img:{src:"img/p-synthesome.jpg",bg:"#2d2d2d"},
   net:{n:"Synthesome sculpture",f:"Art",c:["3D printing", "data made physical", "protein complex"],i:["cemm"]},k:"Artwork",role:"Artist",where:"CeMM, Vienna",medium:"PLA, PMMA",cat:["Art"],
   d:"A protein complex network printed and assembled as an object you can walk around.",
   ph:"Detail of the DNA Synthesome Complex network sculpture",src:""},
  {s:1,y:"2025",t:"The Datascope",
-  img:"img/p-datascope.jpg",
+  img:{src:"img/p-datascope.jpg",fit:"fill"},
   net:{n:"The Datascope",f:"Visualization",c:["high-dimensional data", "Best Lightning Talk award"],i:["lbi"]},k:"Talk",role:"Speaker",where:"BioMed Data Science conference, Budapest",medium:"Lightning talk",cat:["Research","Visualization"],badge:"Best lightning talk",
   d:"A lightning talk on an instrument for looking into high-dimensional data.",
   ph:"Lightning talk on the Datascope at the BioMed Data Science conference",src:"© Sara Chitgaran"},
  {s:1,y:"2025–26",t:"XR stations for the public",
-  img:["img/p-xr-stations-1.jpg", "img/p-xr-stations-2.jpg", "img/p-xr-stations-3.jpg"],
+  img:[{src:"img/p-xr-stations-1.jpg",fit:"fill"}, {src:"img/p-xr-stations-2.jpg",fit:"fill"}, {src:"img/p-xr-stations-3.jpg",fit:"fill"}],
   net:{n:"XR stations",f:"Outreach",c:["virtual reality", "public outreach"],i:["lbi", "nhm", "vis"]},k:"Installation",role:"Designer, host",where:"Long Night of Research 2026 · Natural History Museum Vienna 2025 · IEEE VIS 2025",medium:"Virtual and extended reality",cat:["Outreach","Visualization"],
   d:"Visitors walk through biological networks and cell structures in XR. At the Long Night of Research on Maria-Theresien-Platz the station was visited by the Federal Minister for Science.",
   links:[["Long Night of Research","https://netmed.lbg.ac.at/society/"]],
   ph:"Visitors exploring biological networks in VR at the XR station",src:"© Annette Tesarek"},
- {s:1,y:"2023",t:"Multiscale Human — Why 3D?",fit:"contain",
-  img:"img/p-why-3d.jpg", 
+ {s:1,y:"2023",t:"Multiscale Human — Why 3D?",bg:"#fff",pad:12,
+  img:{src:"img/p-why-3d.jpg",fit:"fill"}, 
   net:{n:"Multiscale Human",f:"Visualization",c:["3D perception", "high-dimensional data"],i:["cns"]},k:"Talk",role:"Invited talk, panellist",where:"CNS 24h event",medium:"Talk",cat:["Research","Visualization"],
   links:[["Event","https://humanatlas.io/events/2024-24h/"]],ph:"Programme of the “Why 3D?” session at the CNS 24h event",src:"CNS · Indiana University"},
  {s:2,y:"2025",t:"X FRAMES PER SPACE — different logics, shared questions",
-  img:"img/p-x-frames.jpg",
+  img:{src:"img/p-x-frames.jpg",fit:"fill"},
   net:{n:"X Frames per Space",f:"Curation",c:["curation", "art + science", "1,200 m²"],i:["lbi", "vcas"]},k:"Exhibition",role:"Co-curator, artist",where:"alte WU, Vienna · with Vienna Contemporary Art Space",medium:"1,200 m², digital art, robotics, painting, sculpture",cat:["Curation","Art"],
   d:"A large exhibition built as a mycelial network between biology, medicine and artistic production. Covered by PARNASS art magazine.",
   links:[["PARNASS feature","https://www.parnass.at/news/x-frames-per-space"],["Digital gallery","https://whatevr.xyz/"]],
   ph:"Exhibition poster for X Frames per Space, 8–14 Nov 2025",src:""},
  {s:2,y:"2022",t:"The Shape of Things to Come",
-  img:"img/p-shape-of-things.jpg",  
+  img:{src:"img/p-shape-of-things.jpg",fit:"fill",zoom:1.1},  
   net:{n:"Shape of Things to Come",f:"Curation",c:["curation", "mixed reality", "virtual reality"],i:["ars", "vbc"]},k:"Exhibition",role:"Curator, artist",where:"Ars Electronica Festival, Kepler's Garden, Linz (5 days) · Vienna BioCenter campus (3 days)",medium:"Mixed reality exhibition: sound, video, VR performance, AR",cat:["Curation","Art"],
   d:"Scenarios by artists and scientists on how we imagine, assess and influence our future environment, shown at Ars Electronica in Linz and on the Vienna BioCenter campus.",
   links:[["Ars Electronica","https://ars.electronica.art/planetb/en/the-shape-of-things/"],["Vienna BioCenter exhibition","https://whatevr.xyz/exhibition2022/"]],
   ph:"Title visual of The Shape of Things to Come",src:""},
  {s:2,y:"2021–23",t:"Deep Space 8K trilogy: Entangled · The Nature of Systems · Connected",
-  img: ["img/p-deep-space-1.jpg", "img/p-deep-space-2.jpg", "img/p-deep-space-3.jpg", "img/p-deep-space-4.jpg", "img/p-deep-space-5.jpg", "img/p-deep-space-6.jpg", "img/p-deep-space-7.jpg"],
+  img:[{src:"img/p-deep-space-1.jpg",fit:"fill"}, {src:"img/p-deep-space-2.jpg",fit:"fill"}, {src:"img/p-deep-space-3.jpg",fit:"fill"}, {src:"img/p-deep-space-4.jpg",fit:"fill"}, {src:"img/p-deep-space-5.jpg",fit:"fill"}, {src:"img/p-deep-space-6.jpg",fit:"fill"}, {src:"img/p-deep-space-7.jpg",fit:"fill"}],
   net:{n:"Deep Space 8K",f:"Art",c:["art + science", "live performance", "complex systems"],i:["ars"]},k:"Artwork",role:"Artist",where:"Ars Electronica Center, Linz",medium:"3D projection, live performance",cat:["Art","Visualization"],
   d:"Three works for a 16 × 9 m stereoscopic projection space, on the emergence and breakdown of complex systems from cells to the planet.",
   links:[["Entangled Realities","https://ars.electronica.art/newdigitaldeal/en/entangled-realities/"],["The Nature of Systems","https://ars.electronica.art/planetb/en/nature-of-systems/"]],
   ph:"“Connected: How the World is More than the Sum of its Parts” in Deep Space 8K",src:"Ars Electronica Center"},
- {s:3,y:"2026",t:"A network map of the chemical exposome",fit:"contain",img:"img/p-exposome.jpg",net:{n:"Exposome map",f:"Research",c:["network medicine", "public health"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Nature Communications 17, 5754",medium:"Network medicine",cat:["Research"],
+ {s:3,y:"2026",t:"A network map of the chemical exposome",bg:"#fff",pad:12,img:{src:"img/p-exposome.jpg",pos:"49% 49%",bg:"#fff",pad:0},net:{n:"Exposome map",f:"Research",c:["network medicine", "public health"],i:["lbi"]},k:"Publication",role:"Co-author",where:"Nature Communications 17, 5754",medium:"Network medicine",cat:["Research"],
   d:"Connects molecular interactions of environmental chemicals to public health outcomes.",links:[["Paper","https://doi.org/10.1038/s41467-026-72402-y"]],
   ph:"Figure: network map connecting chemical exposures to disease",src:"Figure: Nature Communications"},
- {s:3,y:"2026",t:"Theory-grounded data visualization in extended reality",fit:"contain",
-  img:"img/p-xr-vis-theory.jpg",
+ {s:3,y:"2026",t:"Theory-grounded data visualization in extended reality",bg:"#fff",pad:12,
+  img:{src:"img/p-xr-vis-theory.jpg",zoom:1.2,bg:"#fff",pad:12},
   net:{n:"XR vis theory",f:"Visualization",c:["extended reality", "vis theory"],i:["cns", "lbi"]},k:"Publication",role:"Co-author",where:"IEEE Computer Graphics and Applications 46(4)",medium:"Position paper",cat:["Research","Visualization"],
   links:[["Paper","https://doi.org/10.1109/MCG.2026.3685140"]],ph:"First page of the IEEE CG&A viewpoint on theory-grounded data visualization in XR",src:"IEEE CG&A"},
  {s:3,y:"2024",t:"The emotional echo of cultural intelligences",
-  img:["img/p-emotional-echo-1.jpg", "img/p-emotional-echo-2.png", "img/p-emotional-echo-3.png", "img/p-emotional-echo-4.png", "img/p-emotional-echo-5.png"],
+  img:[{src:"img/p-emotional-echo-1.jpg",fit:"fill"}, {src:"img/p-emotional-echo-2.png",fit:"fill"}, {src:"img/p-emotional-echo-3.png",bg:"#000000"}, {src:"img/p-emotional-echo-4.png",bg:"#000000"}, {src:"img/p-emotional-echo-5.png",bg:"#000000"}],
   net:{n:"Emotional echo",f:"Art",c:["science map", "art + science"],i:["cns"]},k:"Artwork",role:"Artist, scientist",where:"Places & Spaces: Mapping Science · permanent collection",medium:"Science map",cat:["Visualization","Art"],badge:"Collection",
   d:"A data visualization acquired into the permanent collection, also presented as talk and panel at the CNS 24h event.",links:[["scimaps.org","https://scimaps.org"]],
   ph:"The emotional echo of cultural intelligences, shown as a large science map",src:"© Sophie Menegaldo | Ivory Rose Photography"},
  {s:3,y:"2025",t:"TALK TRY TELL — panel",
-  img:"img/p-talk-try-tell.jpg",
+  img:{src:"img/p-talk-try-tell.jpg",fit:"fill"},
   net:{n:"TALK TRY TELL",f:"Visualization",c:["extended reality", "vis theory"],i:["vis"]},k:"Panel",role:"Co-organiser",where:"IEEE VIS 2025, Vienna",medium:"Panel",cat:["Research","Visualization"],
   d:"Challenges and opportunities for theory-grounded data visualization in extended reality.",ph:"Panel discussion TALK TRY TELL at IEEE VIS 2025",src:""},
- {s:3,y:"2024",t:"On data visualization workshops",fit:"contain",
-  img:"img/p-vis-workshops.jpg",
+ {s:3,y:"2024",t:"On data visualization workshops",bg:"#fff",pad:12,
+  img:{src:"img/p-vis-workshops.jpg",fit:"fill"},
   net:{n:"Vis workshops",f:"Teaching",c:["teaching"],i:["cns"]},k:"Talk",role:"Invited talk, panellist",where:"CNS 24h event",medium:"Talk",cat:["Teaching","Visualization"],
   links:[["Event","https://cns-iu.github.io/workshops/2025-24h/"]],ph:"Panel on data visualization workshops at the CNS 24h event",src:"CNS · Indiana University"},
- {s:3,y:"2023",t:"Women's Day talk",img:"img/p-womens-day.jpg",pos:"50% 84%",net:{n:"Women's Day talk",f:"Outreach",c:["public outreach"],i:["ars"]},k:"Talk",role:"Invited speaker",where:"Ars Electronica Center, Linz",medium:"Talk",cat:["Outreach"],ph:"Talking on stage in Deep Space 8K in front of a projected protein network",src:"© Martin Chiettini"}
+ {s:3,y:"2023",t:"Women's Day talk",img:{src:"img/p-womens-day.jpg",fit:"fill",pos:"50% 84%"},pos:"50% 84%",net:{n:"Women's Day talk",f:"Outreach",c:["public outreach"],i:["ars"]},k:"Talk",role:"Invited speaker",where:"Ars Electronica Center, Linz",medium:"Talk",cat:["Outreach"],ph:"Talking on stage in Deep Space 8K in front of a projected protein network",src:"© Martin Chiettini"}
 ];
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const powHTML=e=>`10<sup>${e<0?"−":""}${Math.abs(e)}</sup><small>m</small>`;
 
+/* framing of one image: fit "whole" (entire image, space around it) or "fill" (zoomed to fill the frame), pos, zoom, bg ("auto" = from the image edges), pad */
+function frameStyle(c){const fill=c.fit==="fill",bg=c.bg&&c.bg!=="auto"?c.bg:"";
+  return [`object-fit:${fill?"cover":"contain"}`,c.pos&&`object-position:${c.pos}`,c.zoom&&c.zoom!=1&&`transform:scale(${c.zoom});transform-origin:${c.pos||"50% 50%"}`,
+    !fill&&c.pad&&`padding:${c.pad}px`,!fill&&bg&&`background-color:${bg}`].filter(Boolean).join(";")}
+function autoBg(c){return c.fit!=="fill"&&!(c.bg&&c.bg!=="auto")}
 function fig(p){
   const imgs=(Array.isArray(p.img)?p.img:p.img?[p.img]:[]).map(m=>typeof m==="string"?{src:m}:m);
   if(imgs.length){const gal=imgs.length>1;
     const still=matchMedia("(prefers-reduced-motion: reduce)").matches;      // no autoplaying video for reduced motion
-    const tags=imgs.map((m,i)=>{const pos=m.pos||p.pos,credit=m.credit||p.src||"",alt=esc(p.ph)+(gal?` (${i+1} of ${imgs.length})`:"");
-      const a=` class="sl${i===0?" on":""}"${pos?` style="object-position:${esc(pos)}"`:""} data-credit="${esc(credit)}" onerror="slideErr(this)" ${isVid(m.src)?"onloadeddata":"onload"}="fitBg(this)"`;
+    const tags=imgs.map((m,i)=>{const credit=m.credit||p.src||"",alt=esc(p.ph)+(gal?` (${i+1} of ${imgs.length})`:"");
+      /* framing, per image or for the whole project: fit "whole" (default) or "fill", pos, zoom, bg, pad (see the note above P) */
+      const o=k=>m[k]!==undefined?m[k]:p[k],pi=P.indexOf(p);
+      const c=(TUNED[pi]&&TUNED[pi][i])||{fit:o("fit")==="fill"?"fill":"whole",pos:o("pos")||"",zoom:+o("zoom")||1,bg:o("bg")||"",pad:+o("pad")||0};
+      const a=` class="sl${i===0?" on":""}" style="${esc(frameStyle(c))}" data-cfg="${esc(JSON.stringify(c))}" data-credit="${esc(credit)}" onerror="slideErr(this)"${autoBg(c)?` ${isVid(m.src)?"onloadeddata":"onload"}="fitBg(this)"`:""}`;
       return isVid(m.src)?`<video src="${esc(m.src)}" aria-label="${alt}" muted playsinline preload="metadata"${i===0&&!still?" autoplay":""}${gal?"":" loop"}${a}></video>`
         :`<img src="${esc(m.src)}" alt="${alt}" loading="lazy"${a}>`}).join("");
     const credit=imgs[0].credit||p.src||"",anyCredit=imgs.some(m=>m.credit)||p.src;
-    return `<figure class="fig has${p.fit==="contain"?" contain":""}${gal?" gal":""}"${gal?' tabindex="0" role="button" aria-label="Show next image"':""}>${tags}${gal?`<span class="dots" aria-hidden="true">${imgs.map((m,i)=>`<i${i?"":' class="on"'}></i>`).join("")}</span>`:""}${anyCredit?`<figcaption class="credit"${credit?"":" hidden"}>${esc(credit)}</figcaption>`:""}</figure>`}
+    return `<figure class="fig has${gal?" gal":""}"${gal?' tabindex="0" role="button" aria-label="Show next image"':""}>${tags}${gal?`<span class="dots" aria-hidden="true">${imgs.map((m,i)=>`<i${i?"":' class="on"'}></i>`).join("")}</span>`:""}${anyCredit?`<figcaption class="credit"${credit?"":" hidden"}>${esc(credit)}</figcaption>`:""}</figure>`}
   return `<figure class="fig" aria-label="Image placeholder"><i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
     <div class="ph"><span class="k">Image</span><span class="what">${esc(p.ph)}</span><span class="src">${esc(p.src||"")}</span></div></figure>`;
 }
@@ -573,6 +613,7 @@ function render(){
   else bar.hidden=true;
   host.classList.toggle("has-sel",!!selected);
   host.innerHTML=items.length?items.map(card).join(""):`<li class="empty">No ${esc(active.toLowerCase())} projects yet.</li>`;
+  if(TUNE&&tuneReady)tuneDecorate();
 }
 chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;active=b.dataset.c;selected=null;render()});
 
@@ -604,8 +645,7 @@ let paused=RM;                                          // visitors who prefer r
 /* ways to cluster the header network: each maps a project to one group */
 const GROUPINGS={
   category:{label:"Category",groups:{Research:"Research",Visualization:"Visualization",Art:"Art",Curation:"Curation",Outreach:"Outreach",Teaching:"Teaching"},of:p=>p.net.f},
-  type:{label:"Type",groups:{pub:"Publications",exh:"Exhibitions",art:"Artworks",talk:"Talks & panels",other:"Installation & thesis"},
-        of:p=>({Publication:"pub",Exhibition:"exh",Artwork:"art",Talk:"talk",Panel:"talk"})[p.k]||"other"},
+  institute:{label:"Institute",groups:Object.fromEntries([...new Set(P.filter(p=>p.net).map(p=>p.net.i[0]))].map(k=>[k,INST[k]])),of:p=>p.net.i[0]},   // a project's group is the first institute in its net.i
   scale:{label:"Scale",linear:["10⁻⁹ m","10⁷ m"],groups:{0:"Molecules",1:"Bodies",2:"Spaces",3:"Systems"},of:p=>String(p.s)},
   time:{label:"Time",linear:["2019","2026"],groups:{a:"2019–2021",b:"2022–2023",c:"2024–2026"},of:p=>{const y=+p.y.slice(0,4);return y<=2021?"a":y<=2023?"b":"c"}},
   links:{label:"Links",groups:null}        // no groups: only the shared concepts and institutes shape the layout
@@ -628,44 +668,125 @@ const net=(()=>{
   /* projects reached from any node: itself, or the projects around a concept/institute */
   const projectsOf=i=>N[i].type==="proj"?[N[i].pi]:nbr[i].filter(j=>N[j].type==="proj").map(j=>N[j].pi);
 
-  /* force layout (Fruchterman–Reingold), computed once per aspect ratio, deterministic */
+  /* layout: similar projects sit close together, groups are compact and clearly apart; computed once per aspect ratio and grouping, deterministic */
   let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647,(seed-1)/2147483646);
   const cache={};
   function groupKeys(mode){const G=GROUPINGS[mode];return G.groups?Object.keys(G.groups):[]}
   function groupOfNode(i,mode){const G=GROUPINGS[mode];return (G.groups&&N[i].type==="proj")?G.of(P[N[i].pi]):null}
-  /* force-directed pass over the nodes in `idx` (others stay fixed), inside rectangle [x0,x1]×[y0,y1] */
-  function fr(idx,x0,x1,y0,y1,IT,kScale,grav=.6){
-    const move=new Set(idx),k=kScale*Math.sqrt((x1-x0)*(y1-y0)/Math.max(1,idx.length)),w=n=>n.type==="inst"?1.8:n.type==="proj"?1.4:1;
-    const cx=(x0+x1)/2,cy=(y0+y1)/2;
-    for(let it=0;it<IT;it++){const T=.08*(x1-x0)*(1-it/IT)+.001,D=N.map(()=>[0,0]);
-      for(let a=0;a<N.length;a++)for(let b=a+1;b<N.length;b++){if(!move.has(a)&&!move.has(b))continue;
-        const dx=N[a].x-N[b].x,dy=N[a].y-N[b].y,d=Math.hypot(dx,dy)||1e-3,f=k*k/d*w(N[a])*w(N[b]);
-        D[a][0]+=dx/d*f;D[a][1]+=dy/d*f;D[b][0]-=dx/d*f;D[b][1]-=dy/d*f}
-      for(const [a,b] of E){if(!move.has(a)&&!move.has(b))continue;const dx=N[a].x-N[b].x,dy=N[a].y-N[b].y,d=Math.hypot(dx,dy)||1e-3,f=d*d/k;
-        D[a][0]-=dx/d*f;D[a][1]-=dy/d*f;D[b][0]+=dx/d*f;D[b][1]+=dy/d*f}
-      for(const i of idx){const n=N[i];D[i][0]+=(cx-n.x)*grav;D[i][1]+=(cy-n.y)*grav;const m=Math.hypot(D[i][0],D[i][1])||1,st=Math.min(m,T);
-        n.x=Math.min(x1,Math.max(x0,n.x+D[i][0]/m*st));n.y=Math.min(y1,Math.max(y0,n.y+D[i][1]/m*st))}}
-  }
+  const projIdx=N.map((n,i)=>i).filter(i=>N[i].type==="proj");
+  /* similarity of two projects: weighted overlap (Jaccard) of their concepts (weight 1) and institutes (weight .5) */
+  const feats=projIdx.map(i=>new Map(nbr[i].map(j=>[j,N[j].type==="inst"?.5:1])));
+  function sim(a,b){const A=feats[a],B=feats[b];let inter=0,uni=0;
+    for(const [k,w] of A){uni+=w;if(B.has(k))inter+=w}
+    for(const [k,w] of B)if(!A.has(k))uni+=w;
+    return uni?inter/uni:0}
+  /* distances through the network (Floyd–Warshall): links to institutes count longer, so a big hub like LBI-NetMed doesn't pull everything together */
+  const GD=N.map((_,i)=>N.map((_,j)=>i===j?0:Infinity));
+  E.forEach(([a,b])=>{const l=(N[a].type==="inst"||N[b].type==="inst")?1.8:1;if(l<GD[a][b])GD[a][b]=GD[b][a]=l});
+  for(let k=0;k<N.length;k++)for(let i=0;i<N.length;i++){const ik=GD[i][k];if(ik===Infinity)continue;for(let j=0;j<N.length;j++)if(ik+GD[k][j]<GD[i][j])GD[i][j]=ik+GD[k][j]}
+  {const mx=Math.max(...GD.flat().filter(isFinite));GD.forEach(r=>r.forEach((d,j)=>{if(d===Infinity)r[j]=mx+1}))}   // unconnected parts sit clearly apart
+  /* stress layout (SGD, Zheng et al. 2018): places every pair of points as close as possible to its target distance D[i][j] */
+  function stress(n,D,IT,b){        // b: rectangle {x0,x1,y0,y1} the points must stay inside
+    const X=[...Array(n)].map(()=>[b.x0+rnd()*(b.x1-b.x0),b.y0+rnd()*(b.y1-b.y0)]);
+    const clamp=p=>{p[0]=Math.min(b.x1,Math.max(b.x0,p[0]));p[1]=Math.min(b.y1,Math.max(b.y0,p[1]))};
+    const pairs=[];for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)pairs.push([i,j]);
+    if(!pairs.length)return X;
+    let wmin=Infinity,wmax=0;for(const [i,j] of pairs){const w=1/(D[i][j]*D[i][j]);wmin=Math.min(wmin,w);wmax=Math.max(wmax,w)}
+    const eMax=1/wmin,eMin=.01/wmax,lam=Math.log(eMax/eMin)/Math.max(1,IT-1);
+    for(let t=0;t<IT;t++){const eta=eMax*Math.exp(-lam*t);
+      for(let k=pairs.length-1;k>0;k--){const r=Math.floor(rnd()*(k+1));[pairs[k],pairs[r]]=[pairs[r],pairs[k]]}
+      for(const [i,j] of pairs){const d=D[i][j],mu=Math.min(eta/(d*d),1),dx=X[i][0]-X[j][0],dy=X[i][1]-X[j][1],m=Math.hypot(dx,dy)||1e-6,r=mu*(m-d)/(2*m);
+        X[i][0]-=r*dx;X[i][1]-=r*dy;X[j][0]+=r*dx;X[j][1]+=r*dy;clamp(X[i]);clamp(X[j])}}
+    return X}
+  /* fit points into a rectangle: turn them so their long side follows the rectangle's, scale without stretching more than `cap`× in one direction */
+  function fit(pts,x0,x1,y0,y1,cap=1.6){if(!pts.length)return[];
+    const mx=pts.reduce((a,p)=>a+p[0],0)/pts.length,my=pts.reduce((a,p)=>a+p[1],0)/pts.length;
+    let sxx=0,syy=0,sxy=0;pts.forEach(([x,y])=>{sxx+=(x-mx)**2;syy+=(y-my)**2;sxy+=(x-mx)*(y-my)});
+    let a=.5*Math.atan2(2*sxy,sxx-syy);if((x1-x0)<(y1-y0))a+=Math.PI/2;                         // principal axis along the rectangle's long side
+    const c=Math.cos(-a),s=Math.sin(-a),R=pts.map(([x,y])=>[(x-mx)*c-(y-my)*s,(x-mx)*s+(y-my)*c]);
+    const rx=Math.max(1e-6,...R.map(p=>Math.abs(p[0]))),ry=Math.max(1e-6,...R.map(p=>Math.abs(p[1])));
+    let fx=(x1-x0)/2/rx,fy=(y1-y0)/2/ry;const f=Math.min(fx,fy);fx=Math.min(fx,f*cap);fy=Math.min(fy,f*cap);
+    return R.map(([x,y])=>[(x0+x1)/2+x*fx,(y0+y1)/2+y*fy])}
   function layout(AR,mode){
     const key=mode+"|"+AR;if(cache[key]){cache[key].forEach(([x,y],i)=>{N[i].x=x;N[i].y=y});return}
-    seed=7;N.forEach(n=>{n.x=.1*AR+rnd()*.8*AR;n.y=.1+rnd()*.8});
-    const keys=groupKeys(mode),all=N.map((_,i)=>i);
-    if(!keys.length){fr(all,AR*.03,AR*.97,.04,.96,600,.4,.9)}
+    seed=7;
+    const G=GROUPINGS[mode],keys=groupKeys(mode),lin=!!G.linear,n=projIdx.length,grp=projIdx.map(i=>groupOfNode(i,mode));
+    /* 1. projects. Target distance between two projects = how different they are */
+    const dP=(a,b)=>Math.max(.3,GD[projIdx[a]][projIdx[b]]/2*(1-.35*sim(a,b))),   // 1 = one shared concept; more shared features pull closer
+      FREE={x0:-1e9,x1:1e9,y0:-1e9,y1:1e9},bx={x0:AR*.05,x1:AR*.95,y0:.13,y1:.9},pos=new Array(n);
+    const norm=X=>{const mx=X.reduce((s,p)=>s+p[0],0)/X.length,my=X.reduce((s,p)=>s+p[1],0)/X.length,C=X.map(p=>[p[0]-mx,p[1]-my]),r=Math.max(1e-6,...C.map(p=>Math.hypot(p[0],p[1])));return C.map(p=>[p[0]/r,p[1]/r])};
+    let whole=false;
+    if(!keys.length){                                   // no groups: the whole network (concepts and institutes too) laid out by distance through it, filling the band
+      /* separately connected parts each get a slot across the band, sized by how many nodes they have */
+      const comp=new Array(N.length).fill(-1),parts=[];
+      N.forEach((_,i)=>{if(comp[i]>=0)return;const st=[i],m=[];comp[i]=parts.length;while(st.length){const v=st.pop();m.push(v);nbr[v].forEach(w=>{if(comp[w]<0){comp[w]=parts.length;st.push(w)}})}parts.push(m)});
+      parts.sort((p1,p2)=>p2.length-p1.length);
+      const tot=parts.reduce((t,m)=>t+Math.sqrt(m.length),0);let x=bx.x0;
+      parts.forEach(m=>{const w=(bx.x1-bx.x0)*Math.sqrt(m.length)/tot,gap=parts.length>1?AR*.02:0;
+        let X=[[x+w/2,.5]];
+        if(m.length>1){const D=m.map(a=>m.map(b=>GD[a][b])),sc=(w-2*gap)*.85/Math.max(...D.map(r=>Math.max(...r))),r={x0:x+gap,x1:x+w-gap,y0:.08,y1:.94};
+          X=stress(m.length,D.map(q=>q.map(d=>d*sc)),250,r);                  // laid out inside its slot, so it takes the band's wide shape
+          const xs=X.map(p=>p[0]),ys=X.map(p=>p[1]),ax=Math.min(...xs),bx2=Math.max(...xs),ay=Math.min(...ys),by=Math.max(...ys);
+          X=X.map(p=>[r.x0+(p[0]-ax)/Math.max(1e-6,bx2-ax)*(r.x1-r.x0),r.y0+(p[1]-ay)/Math.max(1e-6,by-ay)*(r.y1-r.y0)])}
+        m.forEach((i,k)=>{N[i].x=X[k][0];N[i].y=X[k][1]});x+=w});
+      whole=true}
     else{
-      /* 1. each group gets its own cell; its projects and the concepts only it uses are laid out there */
-      const lin=!!GROUPINGS[mode].linear,cols=lin?keys.length:Math.max(1,Math.round(Math.sqrt(keys.length*AR))),rows=Math.ceil(keys.length/cols),cw=AR/cols,ch=1/rows,mx=cw*(lin?.1:.2),my=ch*(lin?.08:.18);
-      const home=new Array(N.length).fill(null);
-      all.forEach(i=>{const g=groupOfNode(i,mode);if(g)home[i]=g});
-      all.forEach(i=>{if(N[i].type==="con"){const gs=[...new Set(nbr[i].map(j=>home[j]))];if(gs.length===1&&gs[0])home[i]=gs[0]}});
-      keys.forEach((g,j)=>{const r=Math.floor(j/cols),inRow=Math.min(cols,keys.length-r*cols),c=j-r*cols,rw=AR/inRow,rmx=rw*(lin?.1:.2);   // a short last row spreads out
-        const idx=all.filter(i=>home[i]===g),x0=c*rw+rmx,x1=(c+1)*rw-rmx,y0=r*ch+my*1.5,y1=(r+1)*ch-my;
-        idx.forEach(i=>{N[i].x=x0+rnd()*(x1-x0);N[i].y=y0+rnd()*(y1-y0)});fr(idx,x0,x1,y0,y1,350,.5,1.4)});
-      /* 2. shared concepts and institutes settle between the groups they connect */
-      const rest=all.filter(i=>!home[i]);
-      rest.forEach(i=>{const nb=nbr[i];if(nb.length){N[i].x=nb.reduce((a,j)=>a+N[j].x,0)/nb.length+(rnd()-.5)*.04;N[i].y=nb.reduce((a,j)=>a+N[j].y,0)/nb.length+(rnd()-.5)*.04}});
-      fr(rest,AR*.02,AR*.98,.03,.97,250,.25,.3);
+      const gs=keys.filter(g=>grp.includes(g)),mem=gs.map(g=>grp.map((q,a)=>q===g?a:-1).filter(a=>a>=0)),K=gs.length;
+      /* each group's own layout, by similarity, scaled to radius 1 */
+      const local=mem.map(ids=>ids.length===1?[[0,0]]:norm(stress(ids.length,ids.map(a=>ids.map(b=>a===b?0:dP(a,b))),150,FREE)));
+      if(lin){const cw=AR/keys.length;                   // ordered columns, left to right
+        gs.forEach((g,k)=>{const c=keys.indexOf(g);fit(local[k],c*cw+cw*.24,(c+1)*cw-cw*.24,.2,.84).forEach((p,m)=>pos[mem[k][m]]=p)})}
+      else{
+        /* groups side by side (two rows on narrow screens), in the order that puts groups close through the network next to each other (tries every order) */
+        const gdist=(i,j)=>{let t=0;mem[i].forEach(a=>mem[j].forEach(b=>t+=dP(a,b)));return t/(mem[i].length*mem[j].length)};
+        const Wt=gs.map((_,i)=>gs.map((_,j)=>i===j?0:1/gdist(i,j)**2)),share=mem.map(ids=>.7+Math.sqrt(ids.length));
+        const rows=AR<1.6&&K>3?2:1,perRow=Math.ceil(K/rows);
+        let order=[...gs.keys()],bestC=Infinity;
+        const place=o=>{const P2=new Array(K);for(let r=0;r<rows;r++){const row=o.slice(r*perRow,(r+1)*perRow),tot=row.reduce((s,k)=>s+share[k],0);let x=0;
+            row.forEach(k=>{P2[k]=[r,(x+share[k]/2)/tot,share[k]/tot];x+=share[k]})}return P2};
+        const perm=(a,l=0)=>{if(l===a.length){const P2=place(a);let c=0;
+            for(let i=0;i<K;i++)for(let j=i+1;j<K;j++)c+=Wt[i][j]*(Math.abs(P2[i][1]-P2[j][1])*AR+Math.abs(P2[i][0]-P2[j][0]));
+            if(c<bestC-1e-9){bestC=c;order=a.slice()}return}
+          for(let i=l;i<a.length;i++){[a[l],a[i]]=[a[i],a[l]];perm(a,l+1);[a[l],a[i]]=[a[i],a[l]]}};
+        if(K<=7)perm([...gs.keys()]);
+        else{const C=stress(K,gs.map((_,i)=>gs.map((_,j)=>i===j?0:gdist(i,j))),200,FREE),F=fit(C,0,AR,0,1,99);order=[...gs.keys()].sort((a,b)=>F[a][0]-F[b][0])}
+        const slot=place(order),rowH=(bx.y1-bx.y0)/rows,gapX=AR*.03;
+        /* each group fills its slot; mirrored whichever way puts projects with ties to a neighbouring group on that side */
+        const ctr=slot.map(([r,cx])=>[bx.x0+cx*(bx.x1-bx.x0),bx.y0+(r+.5)*rowH]);
+        mem.forEach((ids,k)=>{const [r,cx,wf]=slot[k],hw=Math.max(.05,(wf*(bx.x1-bx.x0)/2-gapX)*.62),hh=Math.min(rowH*.36,hw*1.1),y0=ctr[k][1]-hh,y1=ctr[k][1]+hh;   // compact: a group uses about 60% of its slot, so the gaps between groups stay open
+          const base=ids.length===1?[[ctr[k][0],ctr[k][1]]]:fit(local[k],ctr[k][0]-hw,ctr[k][0]+hw,y0,y1,2.2);
+          let best=base,bestCost=Infinity;
+          for(const [fx,fy] of [[1,1],[-1,1],[1,-1],[-1,-1]]){const Q=base.map(([x,y])=>[ctr[k][0]+(x-ctr[k][0])*fx,ctr[k][1]+(y-ctr[k][1])*fy]);let cost=0;
+            ids.forEach((a,m)=>projIdx.forEach((_,b)=>{const kb=gs.indexOf(grp[b]);if(kb===k)return;const w=sim(a,b);if(w)cost+=w*Math.hypot(Q[m][0]-ctr[kb][0],Q[m][1]-ctr[kb][1])}));
+            if(cost<bestCost-1e-9){bestCost=cost;best=Q}}
+          best.forEach((p,m)=>pos[ids[m]]=p)})}
     }
-    cache[key]=N.map(n=>[n.x,n.y]);
+    if(!whole)projIdx.forEach((i,a)=>{N[i].x=pos[a][0];N[i].y=pos[a][1]});
+    /* 2. concepts and institutes: at the centre of their projects; one used by a single project sits just outside it, away from its group's centre */
+    const cen={};projIdx.forEach((i,a)=>{const g=grp[a]||"_";(cen[g]||(cen[g]=[0,0,0]));cen[g][0]+=N[i].x;cen[g][1]+=N[i].y;cen[g][2]++});
+    const leaves={};
+    if(!whole)N.forEach((nd,i)=>{if(nd.type==="proj")return;const ps=nbr[i].filter(j=>N[j].type==="proj");
+      if(ps.length>1){const cx=ps.reduce((s,j)=>s+N[j].x,0)/ps.length,cy=ps.reduce((s,j)=>s+N[j].y,0)/ps.length;
+        /* shared by several groups: sit mostly with the group that uses it most (only leaning toward the others), so the gaps between groups stay clear */
+        const cnt={};ps.forEach(j=>{const g=groupOfNode(j,mode);if(g)cnt[g]=(cnt[g]||0)+1});const top=Object.keys(cnt).sort((x,y)=>cnt[y]-cnt[x])[0];
+        const own=top&&Object.keys(cnt).length>1?ps.filter(j=>groupOfNode(j,mode)===top):ps;
+        const ox=own.reduce((s,j)=>s+N[j].x,0)/own.length,oy=own.reduce((s,j)=>s+N[j].y,0)/own.length;
+        nd.x=ox*.8+cx*.2;nd.y=oy*.8+cy*.2}
+      else if(ps.length===1)(leaves[ps[0]]||(leaves[ps[0]]=[])).push(i)});
+    for(const pj in leaves){const p=N[pj],c=cen[groupOfNode(+pj,mode)||"_"],L=leaves[pj];
+      let ang=Math.atan2(p.y-c[1]/c[2],p.x-c[0]/c[2]);if(!isFinite(ang)||(Math.abs(p.x-c[0]/c[2])<1e-3&&Math.abs(p.y-c[1]/c[2])<1e-3))ang=+pj*2.4;
+      L.forEach((i,k)=>{const t=ang+(k-(L.length-1)/2)*.75;N[i].x=p.x+Math.cos(t)*.085;N[i].y=p.y+Math.sin(t)*.085})}
+    if(!whole)N.forEach((nd,i)=>{if(nd.type!=="proj"&&!nbr[i].some(j=>N[j].type==="proj")&&nbr[i].length){   // institutes tied only to other institutes
+      nd.x=nbr[i].reduce((s,j)=>s+N[j].x,0)/nbr[i].length+.05;nd.y=nbr[i].reduce((s,j)=>s+N[j].y,0)/nbr[i].length+.05}});
+    /* 3. relax: push apart anything too close, while every node stays near its place from 1–2 (projects hold on more firmly) */
+    const A=N.map(nd=>[nd.x,nd.y]);
+    for(let it=0;it<220;it++){
+      for(let a=0;a<N.length;a++)for(let b=a+1;b<N.length;b++){const pa=N[a].type==="proj",pb=N[b].type==="proj",min=pa&&pb?.085:pa||pb?.06:.045;
+        let dx=N[a].x-N[b].x,dy=N[a].y-N[b].y,d=Math.hypot(dx,dy);if(d>=min)continue;if(d<1e-6){dx=Math.cos(a+b);dy=Math.sin(a+b);d=1}
+        const push=(min-d)/2,wa=pa?.35:1,wb=pb?.35:1;N[a].x+=dx/d*push*wa;N[a].y+=dy/d*push*wa;N[b].x-=dx/d*push*wb;N[b].y-=dy/d*push*wb}
+      N.forEach((nd,i)=>{const k=nd.type==="proj"?.12:.05;nd.x+=(A[i][0]-nd.x)*k;nd.y+=(A[i][1]-nd.y)*k;
+        nd.x=Math.min(AR*.98,Math.max(AR*.02,nd.x));nd.y=Math.min(.97,Math.max(.04,nd.y))})}
+    cache[key]=N.map(nd=>[nd.x,nd.y]);
   }
 
   /* sizing */
@@ -723,7 +844,7 @@ const net=(()=>{
         tctx.fillStyle=gr;tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r*1.4,0,6.283);tctx.fill()}}
       /* tint: white for all groups, the accent for the one in focus */
       tctx.globalCompositeOperation="source-in";tctx.fillStyle=on?`rgb(${ACCENT})`:"rgb(243,244,248)";tctx.fillRect(0,0,tc.width,tc.height);tctx.globalCompositeOperation="source-over";
-      bctx.globalAlpha=on?.26:.075;bctx.drawImage(tc,0,0);bctx.globalAlpha=1}
+      bctx.globalAlpha=on?.28:.11;bctx.drawImage(tc,0,0);bctx.globalAlpha=1}
   }
   /* collision-free labels: every label claims a rectangle; later labels try other sides or stay hidden */
   let placed=[],labelRect=[],prevSide=[],textBlocks=[];
@@ -762,7 +883,6 @@ const net=(()=>{
   const labelAt=(x,y)=>groupLabels.find(L=>x>=L.x-4&&x<=L.x+L.w+4&&y>=L.y-4&&y<=L.y+L.h+4);
 
   /* draw */
-  const LIME=ACCENT;
   function frame(t){
     const s=paused?0:t/1000,real=ptr.on&&t-ptr.last<3000;
     let hov=real?hit(ptr.x,ptr.y):-1;
@@ -778,17 +898,17 @@ const net=(()=>{
     for(let i=0;i<N.length;i++){const r=N[i].type==="con"?3:6;placed.push({x:S[i].x-r,y:S[i].y-r,w:2*r,h:2*r,node:i})}   // dots are obstacles too
     const G=GROUPINGS[clusterBy];drawGroups(focusProj>=0&&G.groups?G.of(P[N[focusProj].pi]):null);
     for(const [a,b] of E){const A=S[a],B=S[b],g=Math.min(A.glow,B.glow),inst=N[a].type==="inst"||N[b].type==="inst";
-      ctx.strokeStyle=g>.05?`rgba(${LIME},${.3+.7*g})`:inst?"rgba(160,168,186,.45)":"rgba(160,168,186,.38)";   // dashed institute links get more opacity: a dash carries less ink than a solid line
-      ctx.lineWidth=inst?1.25:1;if(inst&&g<.05)ctx.setLineDash([4,4]);ctx.shadowBlur=g>.05?4*g:0;ctx.shadowColor=`rgba(${LIME},.6)`;   // neon: highlighted links glow
+      ctx.strokeStyle=g>.05?`rgba(${ACCENT},${.3+.7*g})`:inst?"rgba(160,168,186,.45)":"rgba(160,168,186,.38)";   // dashed institute links get more opacity: a dash carries less ink than a solid line
+      ctx.lineWidth=inst?1.25:1;if(inst&&g<.05)ctx.setLineDash([4,4]);ctx.shadowBlur=g>.05?4*g:0;ctx.shadowColor=`rgba(${ACCENT},.6)`;   // neon: highlighted links glow
       ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.setLineDash([])}
     ctx.shadowBlur=0;
     ctx.lineWidth=1;
     /* dots first, labels after, in order of importance */
     for(let i=0;i<N.length;i++){const n=N[i],p=S[i],g=p.glow,h=i===hov;
-      if(n.type==="inst"){const r=h?6.5:5;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.strokeStyle=g>.1?`rgba(${LIME},${.5+.5*g})`:"rgba(160,168,186,.7)";ctx.lineWidth=1.5;ctx.strokeRect(-r,-r,r*2,r*2);ctx.restore()}
-      else if(n.type==="proj"){const r=4.5+g*2+(h?1.5:0);ctx.fillStyle=g>.1?`rgb(${LIME})`:"#F3F4F8";ctx.shadowBlur=g>.1?6*g:0;ctx.shadowColor=`rgba(${LIME},.7)`;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();ctx.shadowBlur=0;
-        if(g>.1){ctx.strokeStyle=`rgba(${LIME},${.35*g})`;ctx.beginPath();ctx.arc(p.x,p.y,r+5,0,6.283);ctx.stroke()}}
-      else{const r=2.2+g*.8+(h?1.5:0);ctx.fillStyle=g>.1?`rgba(${LIME},${.6+.4*g})`:"rgba(160,168,186,.55)";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill()}}
+      if(n.type==="inst"){const r=h?6.5:5;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.strokeStyle=g>.1?`rgba(${ACCENT},${.5+.5*g})`:"rgba(160,168,186,.7)";ctx.lineWidth=1.5;ctx.strokeRect(-r,-r,r*2,r*2);ctx.restore()}
+      else if(n.type==="proj"){const r=4.5+g*2+(h?1.5:0);ctx.fillStyle=g>.1?`rgb(${ACCENT})`:"#F3F4F8";ctx.shadowBlur=g>.1?6*g:0;ctx.shadowColor=`rgba(${ACCENT},.7)`;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();ctx.shadowBlur=0;
+        if(g>.1){ctx.strokeStyle=`rgba(${ACCENT},${.35*g})`;ctx.beginPath();ctx.arc(p.x,p.y,r+5,0,6.283);ctx.stroke()}}
+      else{const r=2.2+g*.8+(h?1.5:0);ctx.fillStyle=g>.1?`rgba(${ACCENT},${.6+.4*g})`:"rgba(160,168,186,.55)";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill()}}
     const want=[];
     for(let i=0;i<N.length;i++){const n=N[i],g=S[i].glow,on=g>.1,h=i===hov;let pr=-1;
       if(h)pr=0;else if(on&&n.type==="proj")pr=1;else if(on)pr=2;
@@ -801,10 +921,10 @@ const net=(()=>{
     for(const [pr,i] of want){const n=N[i],p=S[i],g=p.glow,on=g>.1;
       placed=placed.filter(q=>q.node!==i);              // a label may sit next to its own dot
       let font,col,txt=n.label,d,h;
-      if(n.type==="proj"){font=`${on?600:500} ${narrow?11:12}px 'Archivo',sans-serif`;col=on?`rgb(${LIME})`:"rgba(243,244,248,.82)";d=9;h=15}
-      else if(n.type==="inst"){font="500 10px 'JetBrains Mono',monospace";col=on?`rgba(${LIME},${.6+.4*g})`:"rgba(142,148,164,.85)";txt=txt.toUpperCase();d=11;h=13}
-      else{font="10.5px 'JetBrains Mono',monospace";col=on?`rgba(${LIME},${.55+.45*g})`:"rgba(142,148,164,.75)";d=6;h=13}
-      ctx.font=font;const r=placeLabel(i,txt,p.x,p.y,d,h,pr<=2);
+      if(n.type==="proj"){font=`${on?600:500} ${narrow?11:12}px 'Archivo',sans-serif`;col=on?`rgb(${ACCENT})`:"rgba(243,244,248,.82)";d=9;h=15}
+      else if(n.type==="inst"){font="500 10px 'JetBrains Mono',monospace";col=on?`rgba(${ACCENT},${.6+.4*g})`:"rgba(142,148,164,.85)";txt=txt.toUpperCase();d=11;h=13}
+      else{font="10.5px 'JetBrains Mono',monospace";col=on?`rgba(${ACCENT},${.55+.45*g})`:"rgba(142,148,164,.75)";d=6;h=13}
+      ctx.font=font;const r=placeLabel(i,txt,p.x,p.y,d,h,pr<=3);   // project names also try positions further out before giving up
       const own=n.type==="con"?3:6;placed.push({x:p.x-own,y:p.y-own,w:2*own,h:2*own,node:i});
       if(!r)continue;labelRect[i]=r;ctx.fillStyle=col;ctx.fillText(txt,r.x,r.y+r.h/2)}
     /* card next to the focused node */
@@ -883,9 +1003,9 @@ function slideErr(el){
   if(el.classList.contains("on"))nextSlide(f)}
 /* click (or Enter / Space) on a gallery shows the next image; the automatic change then waits a full 3 s again */
 function stepGallery(f){nextSlide(f);f.dataset.t=Date.now()}
-host.addEventListener("click",e=>{const f=e.target.closest(".fig.gal");if(f)stepGallery(f)});
-host.addEventListener("keydown",e=>{const f=e.target.closest(".fig.gal");if(f&&(e.key==="Enter"||e.key===" ")){e.preventDefault();stepGallery(f)}});
-setInterval(()=>{if(paused||document.hidden)return;
+host.addEventListener("click",e=>{const f=e.target.closest(".fig.gal");if(f&&!TUNE)stepGallery(f)});
+host.addEventListener("keydown",e=>{const f=e.target.closest(".fig.gal");if(f&&!TUNE&&(e.key==="Enter"||e.key===" ")){e.preventDefault();stepGallery(f)}});
+setInterval(()=>{if(paused||document.hidden||TUNE)return;
   document.querySelectorAll(".fig.gal").forEach(f=>{if(f.matches(":hover")||Date.now()-(+f.dataset.t||0)<2900)return;
     const v=f.querySelector("video.sl.on");
     if(v){v.dataset.t0||=Date.now();const max=(isFinite(v.duration)?v.duration:8)*1000+2000;   // let a playing video finish, but don't wait forever on one that stalls
@@ -926,6 +1046,105 @@ document.getElementById("copyBtn").addEventListener("click",async e=>{
   catch{const r=document.createRange();r.selectNodeContents(document.getElementById("mail"));const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent="Selected, press ⌘C"}
   setTimeout(()=>btn.textContent="Copy address",2200);
 });
+
+/* ---- tune mode: open the page with #tune. Each project image gets framing controls; drag the picture to move it.
+   The img:… line under each card (and "copy all" in the corner) is what goes into P, replacing that project's img:… ---- */
+const TUNE_KEYS=["fit","pos","zoom","bg","pad"];
+function parsePos(v){let x=50,y=50;const w=String(v||"").trim().split(/\s+/).filter(Boolean),pc=w.filter(t=>/%$/.test(t)).map(parseFloat);
+  if(pc.length){x=pc[0];if(pc.length>1)y=pc[1]}
+  w.forEach(t=>{if(t==="left")x=0;else if(t==="right")x=100;else if(t==="top")y=0;else if(t==="bottom")y=100});return [x,y]}
+function tuneSnippet(pi){const p=P[pi],E=(Array.isArray(p.img)?p.img:[p.img]).map(m=>typeof m==="string"?{src:m}:m),T=TUNED[pi],J=JSON.stringify;
+  const has=k=>p[k]!==undefined;                           // a project-wide setting must be overridden on the image explicitly
+  const one=(m,i)=>{const c=T[i],f=[`src:${J(m.src)}`];if(m.credit)f.push(`credit:${J(m.credit)}`);
+    if(c.fit==="fill"||has("fit"))f.push(`fit:${J(c.fit)}`);
+    if(c.pos||has("pos"))f.push(`pos:${J(c.pos||"50% 50%")}`);
+    if(c.zoom!==1||has("zoom"))f.push(`zoom:${+c.zoom.toFixed(2)}`);
+    if(c.fit!=="fill"){if(c.bg||has("bg"))f.push(`bg:${J(c.bg||"auto")}`);if(c.pad||has("pad"))f.push(`pad:${c.pad}`)}
+    return f.length===1?J(m.src):`{${f.join(",")}}`};
+  const parts=E.map(one);return E.length>1||Array.isArray(p.img)?`img:[${parts.join(", ")}],`:`img:${parts[0]},`}
+const tuneChanged=pi=>TUNE_INIT[pi]!==undefined&&tuneSnippet(pi)!==TUNE_INIT[pi];
+function tuneCopy(text,btn){const done=()=>{const t=btn.textContent;btn.textContent="copied";setTimeout(()=>btn.textContent=t,1200)};
+  (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(done).catch(()=>{       // no clipboard (e.g. opened from disk): show the text to copy by hand
+    let ta=document.getElementById("tuneTA");if(!ta){ta=document.createElement("textarea");ta.id="tuneTA";document.querySelector(".tunepanel").appendChild(ta)}ta.value=text;ta.focus();ta.select()})}
+function tunePanel(){let el=document.querySelector(".tunepanel");
+  if(!el){el=document.createElement("div");el.className="tunepanel";document.body.appendChild(el);
+    el.addEventListener("click",e=>{if(e.target.dataset.a!=="all")return;
+      const txt=Object.keys(TUNED).filter(tuneChanged).map(pi=>`// ${P[pi].t}\n${tuneSnippet(pi)}`).join("\n\n");tuneCopy(txt||"// nothing changed yet",e.target)})}
+  const n=Object.keys(TUNED).filter(tuneChanged).length,ta=document.getElementById("tuneTA");
+  el.innerHTML=`<span>Tune mode · ${n} project${n===1?"":"s"} changed</span><button type="button" data-a="all">copy all changes</button>`;if(ta)el.appendChild(ta)}
+function tuneDecorate(){
+  host.querySelectorAll(".project").forEach(li=>{const f=li.querySelector(".fig.has");if(!f||f.querySelector(".tunebar"))return;
+    const pi=+li.id.slice(5),slides=()=>[...f.querySelectorAll(".sl")],cur=()=>Math.max(0,slides().findIndex(x=>x.classList.contains("on")));
+    if(!TUNED[pi])TUNED[pi]=slides().map(x=>JSON.parse(x.dataset.cfg));
+    if(TUNE_INIT[pi]===undefined)TUNE_INIT[pi]=tuneSnippet(pi);
+    f.classList.add("tuning");
+    const bar=document.createElement("div");bar.className="tunebar";f.appendChild(bar);
+    const pre=document.createElement("pre");pre.className="tunecode";f.after(pre);
+    const apply=k=>{const el=slides()[k],c=TUNED[pi][k];el.setAttribute("style",frameStyle(c));
+      if(autoBg(c)&&(el.tagName==="VIDEO"?el.readyState>=2:el.complete&&el.naturalWidth))fitBg(el)};
+    const draw=()=>{const k=cur(),c=TUNED[pi][k],n=slides().length,B=(a,t,on)=>`<button type="button" data-a="${a}"${on?' class="on"':""}>${t}</button>`;
+      bar.innerHTML=(n>1?B("prev","‹")+`<span>${k+1}/${n}</span>`+B("next","›"):"")+B("whole","whole",c.fit!=="fill")+B("fill","fill",c.fit==="fill")+
+        B("z-","−")+`<span>${c.zoom.toFixed(2)}×</span>`+B("z+","+")+
+        (c.fit==="fill"?"":B("bg","bg: "+(c.bg||"auto"))+`<input type="color" data-a="bgc" value="${/^#[0-9a-f]{6}$/i.test(c.bg)?c.bg:"#ffffff"}" title="Pick a background colour">`+B("p-","pad −")+`<span>${c.pad}</span>`+B("p+","+"))+
+        B("reset","reset");
+      pre.innerHTML=`${esc(tuneSnippet(pi))}<button type="button" class="tc">copy</button>`;pre.classList.toggle("changed",tuneChanged(pi));tunePanel()};
+    const act=a=>{const k=cur(),c=TUNED[pi][k],n=slides().length;
+      if(a==="prev"||a==="next"){showSlide(f,(k+(a==="next"?1:n-1))%n);draw();return}
+      if(a==="whole")c.fit="whole";else if(a==="fill")c.fit="fill";
+      else if(a==="z-")c.zoom=Math.max(1,+(c.zoom-.1).toFixed(2));else if(a==="z+")c.zoom=Math.min(3,+(c.zoom+.1).toFixed(2));
+      else if(a==="bg"){const cyc=["","#fff","#000"];c.bg=cyc[(cyc.indexOf(c.bg)+1)%cyc.length]||""}
+      else if(a==="p-")c.pad=Math.max(0,c.pad-4);else if(a==="p+")c.pad=Math.min(48,c.pad+4);
+      else if(a==="reset"){const init=JSON.parse(slides()[k].dataset.cfg);Object.assign(c,init)}
+      apply(k);draw()};
+    bar.addEventListener("click",e=>{e.stopPropagation();const b=e.target.closest("button");if(b)act(b.dataset.a)});
+    bar.addEventListener("input",e=>{if(e.target.dataset.a!=="bgc")return;const k=cur();TUNED[pi][k].bg=e.target.value;apply(k);pre.innerHTML=`${esc(tuneSnippet(pi))}<button type="button" class="tc">copy</button>`;pre.classList.toggle("changed",tuneChanged(pi));tunePanel()});
+    pre.addEventListener("click",e=>{if(e.target.classList.contains("tc"))tuneCopy(tuneSnippet(pi),e.target)});
+    /* drag the picture to choose which part shows (fill), or where it sits in the frame (whole) */
+    let drag=null;
+    f.addEventListener("pointerdown",e=>{if(e.target.closest(".tunebar"))return;const k=cur();drag={k,x:e.clientX,y:e.clientY,p:parsePos(TUNED[pi][k].pos)};f.setPointerCapture(e.pointerId);f.classList.add("dragging")});
+    f.addEventListener("pointermove",e=>{if(!drag)return;const c=TUNED[pi][drag.k],r=f.getBoundingClientRect(),s=c.fit==="fill"?-1:1;
+      const x=Math.round(Math.min(100,Math.max(0,drag.p[0]+s*(e.clientX-drag.x)/r.width*150))),y=Math.round(Math.min(100,Math.max(0,drag.p[1]+s*(e.clientY-drag.y)/r.height*150)));
+      c.pos=`${x}% ${y}%`;apply(drag.k)});
+    const end=()=>{if(!drag)return;drag=null;f.classList.remove("dragging");draw()};
+    f.addEventListener("pointerup",end);f.addEventListener("pointercancel",end);
+    draw()})}
+if(TUNE){tuneReady=true;tuneDecorate()}
+
+/* ==== COLOUR TESTER (open the page with #colors) — delete from here… ====
+   Try accent colours live. Every shade the site needs is worked out from the one colour; "copy" gives the lines for the palette block at the top of the CSS. */
+if(/(^|[#&])colors\b/.test(location.hash)){
+  const PRESETS=[["neon Klein blue (now)","#3D72FF"],["Klein blue (earlier)","#4A68FF"],["periwinkle","#AEB6F5"],["neon aqua","#5EF2DE"],["soft aqua","#8FD6D0"],
+    ["silver","#C8CDD6"],["slate","#8C95A6"],["graphite","#5E6474"],["neon orange","#FF7A1F"],["vermilion","#F0643C"],["apricot","#F4B58E"],["neon beige","#FFDFAE"],["lime","#BCDF8C"]];
+  const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),toHex=c=>"#"+c.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,"0")).join("").toUpperCase();
+  const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t),lum=c=>{const l=c.map(v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4});return .2126*l[0]+.7152*l[1]+.0722*l[2]};
+  const cr=(a,b)=>{const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+  function tokens(h){const c=hx(h),W=[255,255,255],K=[11,12,16],tint=mix(c,W,.9);
+    let ink=c;for(let t=0;t<1&&cr(ink,tint)<4.8;t+=.04)ink=mix(c,K,t);                 // darkened until it reads on its tint
+    let dk=mix(c,W,.35);const dt=mix(c,[14,16,21],.86);for(let t=.35;t<1&&cr(dk,dt)<7;t+=.05)dk=mix(c,W,t);
+    const glow=mix(c,W,.45);
+    return {"--accent":toHex(c),"--accent-rgb":c.map(Math.round).join(","),"--glow-rgb":glow.map(Math.round).join(","),
+      "--accent-ink":cr(c,K)>=cr(c,W)?"#0B0C10":"#FFFFFF","--sel-ink":toHex(ink),"--sel-tint":toHex(tint),"--sel-dot":toHex(c),
+      "--sel-ink-dark":toHex(dk),"--sel-tint-dark":toHex(dt)}}
+  const st=document.createElement("style");document.head.appendChild(st);      // a later :root rule: overrides the palette block, dark mode still maps --sel-ink to its dark shade
+  let curHex=null;
+  function use(h,redraw=true){curHex=h.toUpperCase();const T=tokens(h);st.textContent=":root{"+Object.entries(T).map(([k,v])=>`${k}:${v}`).join(";")+"}";
+    ACCENT=T["--accent-rgb"];net.setCluster(clusterBy);                          // the network is drawn on a canvas: give it the new colour and repaint its group areas
+    try{localStorage.setItem("ctest",h)}catch(e){}if(redraw)draw();else box.querySelector("div").innerHTML=`Colour tester · <b>custom</b> ${curHex}`}
+  const box=document.createElement("div");box.className="ctest";document.body.appendChild(box);
+  function draw(){box.innerHTML=`<div>Colour tester · <b>${(PRESETS.find(p=>p[1].toUpperCase()===curHex)||["custom"])[0]}</b> ${curHex||""}</div>
+    <div class="sw">${PRESETS.map(([n,h])=>`<button type="button" title="${n} ${h}" data-h="${h}" style="background:${h}"${h.toUpperCase()===curHex?' class="on"':""}></button>`).join("")}</div>
+    <div class="row">any colour <input type="color" value="${curHex?curHex.toLowerCase():"#3d72ff"}"><button type="button" class="rb" data-a="copy">copy CSS</button><button type="button" class="rb" data-a="hide">hide</button></div>`}
+  box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.h)use(b.dataset.h);
+    else if(b.dataset.a==="hide")box.remove();
+    else if(b.dataset.a==="copy"){const T=tokens(curHex||"#3D72FF"),line=`  --accent:${T["--accent"]}; --accent-rgb:${T["--accent-rgb"]}; --glow-rgb:${T["--glow-rgb"]}; --accent-ink:${T["--accent-ink"]}; --sel-ink:${T["--sel-ink"]}; --sel-tint:${T["--sel-tint"]}; --sel-dot:${T["--sel-dot"]};\n  --sel-ink-dark:${T["--sel-ink-dark"]}; --sel-tint-dark:${T["--sel-tint-dark"]};`;
+      const ok=()=>{b.textContent="copied";setTimeout(()=>b.textContent="copy CSS",1200)};
+      (navigator.clipboard?navigator.clipboard.writeText(line):Promise.reject()).then(ok).catch(()=>{const ta=document.createElement("textarea");ta.value=line;box.appendChild(ta);ta.select()})}});
+  box.addEventListener("input",e=>{if(e.target.type==="color")use(e.target.value,false)});   // no redraw while picking, so the picker stays open
+  let saved=null;try{saved=localStorage.getItem("ctest")}catch(e){}
+  if(saved)use(saved);else{curHex="#3D72FF";draw()}
+}
+/* ==== …to here ==== */
 </script>
 </body>
 </html>

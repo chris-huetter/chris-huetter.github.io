@@ -213,7 +213,9 @@ section.block{border-top:1px solid var(--line);padding-block:clamp(56px,10vh,100
 
 /* header network */
 .hero .net{position:absolute;inset:0;width:100%;height:100%;display:block}
-.net-cap{gap:10px}
+.net-cap{gap:10px;position:relative}
+/* small cube sitting on the legend's top line, right corner: the network is 3D */
+.cube3d{position:absolute;right:0;bottom:calc(100% + 8px);width:22px;height:22px;display:block}
 .legend{display:grid;grid-template-columns:24px 1fr;gap:5px 9px;margin:0;align-items:center;font-family:var(--mono);font-size:10.5px;line-height:1.35;color:rgba(243,244,248,.72)}
 .legend dt{margin:0;display:flex}.legend dt svg{width:24px;height:12px}
 .legend dd{margin:0}
@@ -288,6 +290,12 @@ footer.foot{border-top:1px solid var(--line)}
   .portrait{width:84px}
   .legal{grid-template-columns:1fr}
   .hero-grid{grid-template-columns:1fr}
+  /* stacked: intro text first, then the network, the legend right under it, then the projects */
+  .hero{display:flex;flex-direction:column}
+  .hero-in,.hero-in>.hero-grid{display:contents}
+  .hero-text{order:1;padding:clamp(28px,5vh,48px) clamp(16px,4vw,56px) 32px}
+  .net-band{order:2;border-top:1px solid rgba(243,244,248,.10);border-bottom:0}
+  .hero-cap{order:3;margin:0 clamp(16px,4vw,56px);padding-bottom:40px}
   body{font-size:17px}
   .projects{grid-template-columns:1fr}
   .about{grid-template-columns:1fr}
@@ -351,6 +359,7 @@ footer.foot{border-top:1px solid var(--line)}
         <div class="hero-cta"><a href="#work" class="btn solid">See the work</a><button type="button" class="btn" id="cvBtn2">Download CV</button></div>
       </div>
       <div class="hero-cap net-cap">
+        <svg class="cube3d" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12V2.5M12 12L3.8 16.8M12 12l8.2 4.8" fill="none" stroke="rgba(243,244,248,.35)" stroke-width="1"/><path d="M12 2.5l8.2 4.7v9.6L12 21.5l-8.2-4.7V7.2z" fill="none" stroke="#F3F4F8" stroke-width="1.2" stroke-linejoin="round"/></svg>
         <div class="clusterby" role="group" aria-label="Cluster the network by"><span class="cb-l">Cluster by</span><span class="cb-b" id="clusterBtns"></span></div>
         <dl class="legend">
           <dt><svg viewBox="0 0 24 12" aria-hidden="true"><circle cx="12" cy="6" r="4.5" fill="#F3F4F8"/></svg></dt><dd>Project · click to open</dd>
@@ -360,7 +369,7 @@ footer.foot{border-top:1px solid var(--line)}
           <dt><svg viewBox="0 0 24 12" aria-hidden="true"><line x1="2" y1="6" x2="22" y2="6" stroke="#A0A8BA" stroke-width="1.2" stroke-dasharray="2 3"/></svg></dt><dd>Project happened at this institute</dd>
           <dt><svg viewBox="0 0 24 12" aria-hidden="true"><ellipse cx="12" cy="6" rx="11" ry="5.5" style="fill:rgba(var(--accent-rgb),.25)"/></svg></dt><dd>Group, set by “Cluster by”</dd>
         </dl>
-        <p class="net-hint">Projects that share a concept or an institute are related. Hover a node for details.</p>
+        <p class="net-hint">Projects that share a concept or an institute are related. Hover a node for details, drag to turn the network in 3D.</p>
         <button type="button" class="pause" id="pause" aria-pressed="false" aria-label="Pause animation"><span class="ico" aria-hidden="true"></span><span class="txt">Pause</span></button>
       </div>
     </div></div>
@@ -659,7 +668,7 @@ const net=(()=>{
   const tip=document.getElementById("tip"),tipK=document.getElementById("tipK"),tipT=document.getElementById("tipT"),tipM=document.getElementById("tipM");
   /* graph */
   const N=[],E=[],byKey={};
-  const node=(key,type,label,extra)=>{if(byKey[key]!==undefined)return byKey[key];byKey[key]=N.length;N.push(Object.assign({type,label,x:0,y:0},extra||{}));return byKey[key]};
+  const node=(key,type,label,extra)=>{if(byKey[key]!==undefined)return byKey[key];byKey[key]=N.length;N.push(Object.assign({type,label,x:0,y:0,z:0},extra||{}));return byKey[key]};
   P.forEach((p,pi)=>{if(!p.net)return;const a=node("p:"+pi,"proj",p.net.n,{pi});
     p.net.c.forEach(c=>E.push([a,node("c:"+c,"con",c)]));
     p.net.i.forEach(k=>E.push([a,node("i:"+k,"inst",INST[k])]))});
@@ -668,9 +677,8 @@ const net=(()=>{
   /* projects reached from any node: itself, or the projects around a concept/institute */
   const projectsOf=i=>N[i].type==="proj"?[N[i].pi]:nbr[i].filter(j=>N[j].type==="proj").map(j=>N[j].pi);
 
-  /* layout: similar projects sit close together, groups are compact and clearly apart; computed once per aspect ratio and grouping, deterministic */
+  /* layout: similar projects sit close together, groups are compact and clearly apart; computed once per grouping, deterministic */
   let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647,(seed-1)/2147483646);
-  const cache={};
   function groupKeys(mode){const G=GROUPINGS[mode];return G.groups?Object.keys(G.groups):[]}
   function groupOfNode(i,mode){const G=GROUPINGS[mode];return (G.groups&&N[i].type==="proj")?G.of(P[N[i].pi]):null}
   const projIdx=N.map((n,i)=>i).filter(i=>N[i].type==="proj");
@@ -685,113 +693,117 @@ const net=(()=>{
   E.forEach(([a,b])=>{const l=(N[a].type==="inst"||N[b].type==="inst")?1.8:1;if(l<GD[a][b])GD[a][b]=GD[b][a]=l});
   for(let k=0;k<N.length;k++)for(let i=0;i<N.length;i++){const ik=GD[i][k];if(ik===Infinity)continue;for(let j=0;j<N.length;j++)if(ik+GD[k][j]<GD[i][j])GD[i][j]=ik+GD[k][j]}
   {const mx=Math.max(...GD.flat().filter(isFinite));GD.forEach(r=>r.forEach((d,j)=>{if(d===Infinity)r[j]=mx+1}))}   // unconnected parts sit clearly apart
-  /* stress layout (SGD, Zheng et al. 2018): places every pair of points as close as possible to its target distance D[i][j] */
-  function stress(n,D,IT,b){        // b: rectangle {x0,x1,y0,y1} the points must stay inside
-    const X=[...Array(n)].map(()=>[b.x0+rnd()*(b.x1-b.x0),b.y0+rnd()*(b.y1-b.y0)]);
-    const clamp=p=>{p[0]=Math.min(b.x1,Math.max(b.x0,p[0]));p[1]=Math.min(b.y1,Math.max(b.y0,p[1]))};
+  /* ---- one shared sphere: every node sits on its surface (a unit vector), each group is a region of it, links run along the surface ---- */
+  const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],crs=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+  const unit=a=>{const l=Math.hypot(a[0],a[1],a[2])||1;return [a[0]/l,a[1]/l,a[2]/l]},ang=(a,b)=>Math.acos(Math.max(-1,Math.min(1,dot(a,b))));
+  const dir=(lon,lat)=>[Math.sin(lon)*Math.cos(lat),Math.sin(lat),-Math.cos(lon)*Math.cos(lat)];   // lon 0 faces the viewer, + to the right
+  /* do the surface arcs a–b and c–d cross? (the two great circles meet at ±L; a crossing is where that point lies on both arcs) */
+  const onArc=(p,a,b,n)=>dot(crs(a,p),n)>=0&&dot(crs(p,b),n)>=0;
+  function arcsCross(a,b,c,d){const n1=crs(a,b),n2=crs(c,d),L=crs(n1,n2),l=Math.hypot(...L);if(l<1e-9)return false;
+    const p=[L[0]/l,L[1]/l,L[2]/l],q=[-p[0],-p[1],-p[2]];return (onArc(p,a,b,n1)&&onArc(p,c,d,n2))||(onArc(q,a,b,n1)&&onArc(q,c,d,n2))}
+  const pix=[];projIdx.forEach((i,a)=>pix[i]=a);
+  /* group of every node: projects by the grouping, concepts and institutes by the group most of their projects are in */
+  function nodeGroups(mode){const G=GROUPINGS[mode];if(!G.groups)return N.map(()=>null);
+    const g=N.map(n=>n.type==="proj"?G.of(P[n.pi]):null);
+    N.forEach((n,i)=>{if(n.type==="proj")return;const cnt={};nbr[i].forEach(j=>{if(N[j].type==="proj")cnt[g[j]]=(cnt[g[j]]||0)+1});
+      const top=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];g[i]=top===undefined?null:top});
+    return g}
+  const inc=N.map(()=>[]);E.forEach(([a,b],e)=>{inc[a].push(e);inc[b].push(e)});
+  function crossingsAt(i,U){let c=0;                   // crossings of the links at node i with all other links
+    for(const e of inc[i]){const [a,b]=E[e];for(let f=0;f<E.length;f++){const [x,y]=E[f];if(x===a||x===b||y===a||y===b)continue;if(arcsCross(U[a],U[b],U[x],U[y]))c++}}return c}
+  function crossings(U){let c=0;for(let e=0;e<E.length;e++){const [a,b]=E[e];for(let f=e+1;f<E.length;f++){const [x,y]=E[f];if(x===a||x===b||y===a||y===b)continue;if(arcsCross(U[a],U[b],U[x],U[y]))c++}}return c}
+  const ucache={},SR=.43,globe=()=>!GROUPINGS[clusterBy].linear;   // ordered groupings stay flat-ish columns, the others use the sphere
+                               // SR: the sphere's radius, in band heights
+  function sphereLayout(mode){if(ucache[mode])return ucache[mode];seed=7;
+    const G=GROUPINGS[mode],keys=groupKeys(mode),gof=nodeGroups(mode),n=N.length,gs=keys.filter(k=>gof.includes(k)),K=gs.length,C={};
+    /* 1. group centres: ordered groups side by side across the front (left to right); the others spread over the whole sphere,
+       with groups that share much next to each other (swaps until no swap helps) */
+    if(K&&G.linear)gs.forEach(g=>{const c=keys.indexOf(g);C[g]=dir(-1.8+3.6*(c+.5)/keys.length,0)});
+    else if(K){const F=[...Array(K)].map((_,k)=>{const y=1-2*(k+.5)/K,r=Math.sqrt(1-y*y),t=k*2.39996;return unit([r*Math.sin(t),y*.75,-r*Math.cos(t)])});
+      const mem=gs.map(g=>projIdx.filter(i=>gof[i]===g));
+      const Wt=gs.map((_,a)=>gs.map((_,b)=>{let t=0;if(a!==b)mem[a].forEach(i=>mem[b].forEach(j=>t+=sim(pix[i],pix[j])));return t}));
+      const perm=[...gs.keys()],cost=()=>{let c=0;for(let a=0;a<K;a++)for(let b=a+1;b<K;b++)c+=Wt[a][b]*ang(F[perm[a]],F[perm[b]]);return c};
+      let best=cost(),imp=true;
+      while(imp){imp=false;for(let a=0;a<K;a++)for(let b=a+1;b<K;b++){[perm[a],perm[b]]=[perm[b],perm[a]];const c=cost();if(c<best-1e-9){best=c;imp=true}else [perm[a],perm[b]]=[perm[b],perm[a]]}}
+      gs.forEach((g,k)=>C[g]=F[perm[k]])}
+    let sep=Math.PI;gs.forEach((a,i)=>gs.forEach((b,j)=>{if(i<j)sep=Math.min(sep,ang(C[a],C[b]))}));
+    /* 2. target angle between every pair: distance through the network (similar projects closer); in different groups, the angle between the group centres */
+    const mxGD=Math.max(...GD.flat()),al=K?sep*.2:2.6/mxGD;
+    const T=N.map((_,i)=>N.map((_,j)=>{if(i===j)return 0;let t=al*GD[i][j];
+      if(N[i].type==="proj"&&N[j].type==="proj")t*=1-.35*sim(pix[i],pix[j]);
+      const gi=gof[i],gj=gof[j];if(gi!==null&&gj!==null)t=gi===gj?Math.min(t,sep*.42):Math.max(ang(C[gi],C[gj]),t*.5);
+      return Math.max(.1,Math.min(Math.PI,t))}));
+    const Ch=T.map(r=>r.map(t=>2*Math.sin(t/2)));      // as chords, which is what the update below works with
+    const U=N.map((_,i)=>{const c=gof[i]!==null?C[gof[i]]:unit([rnd()-.5,rnd()-.5,rnd()-.5]);return unit([c[0]+(rnd()-.5)*.35,c[1]+(rnd()-.5)*.35,c[2]+(rnd()-.5)*.35])});
+    /* stress on the sphere (SGD on chords, back onto the surface after every step); nodes also lean toward their group's centre so the regions stay put */
     const pairs=[];for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)pairs.push([i,j]);
-    if(!pairs.length)return X;
-    let wmin=Infinity,wmax=0;for(const [i,j] of pairs){const w=1/(D[i][j]*D[i][j]);wmin=Math.min(wmin,w);wmax=Math.max(wmax,w)}
-    const eMax=1/wmin,eMin=.01/wmax,lam=Math.log(eMax/eMin)/Math.max(1,IT-1);
-    for(let t=0;t<IT;t++){const eta=eMax*Math.exp(-lam*t);
+    const IT=220,eMax=4,eMin=.01,lam=Math.log(eMax/eMin)/(IT-1);
+    for(let it=0;it<IT;it++){const eta=eMax*Math.exp(-lam*it);
       for(let k=pairs.length-1;k>0;k--){const r=Math.floor(rnd()*(k+1));[pairs[k],pairs[r]]=[pairs[r],pairs[k]]}
-      for(const [i,j] of pairs){const d=D[i][j],mu=Math.min(eta/(d*d),1),dx=X[i][0]-X[j][0],dy=X[i][1]-X[j][1],m=Math.hypot(dx,dy)||1e-6,r=mu*(m-d)/(2*m);
-        X[i][0]-=r*dx;X[i][1]-=r*dy;X[j][0]+=r*dx;X[j][1]+=r*dy;clamp(X[i]);clamp(X[j])}}
-    return X}
-  /* fit points into a rectangle: turn them so their long side follows the rectangle's, scale without stretching more than `cap`× in one direction */
-  function fit(pts,x0,x1,y0,y1,cap=1.6){if(!pts.length)return[];
-    const mx=pts.reduce((a,p)=>a+p[0],0)/pts.length,my=pts.reduce((a,p)=>a+p[1],0)/pts.length;
-    let sxx=0,syy=0,sxy=0;pts.forEach(([x,y])=>{sxx+=(x-mx)**2;syy+=(y-my)**2;sxy+=(x-mx)*(y-my)});
-    let a=.5*Math.atan2(2*sxy,sxx-syy);if((x1-x0)<(y1-y0))a+=Math.PI/2;                         // principal axis along the rectangle's long side
-    const c=Math.cos(-a),s=Math.sin(-a),R=pts.map(([x,y])=>[(x-mx)*c-(y-my)*s,(x-mx)*s+(y-my)*c]);
-    const rx=Math.max(1e-6,...R.map(p=>Math.abs(p[0]))),ry=Math.max(1e-6,...R.map(p=>Math.abs(p[1])));
-    let fx=(x1-x0)/2/rx,fy=(y1-y0)/2/ry;const f=Math.min(fx,fy);fx=Math.min(fx,f*cap);fy=Math.min(fy,f*cap);
-    return R.map(([x,y])=>[(x0+x1)/2+x*fx,(y0+y1)/2+y*fy])}
+      for(const [i,j] of pairs){const d=Ch[i][j],mu=Math.min(eta/(d*d),1),v=[U[i][0]-U[j][0],U[i][1]-U[j][1],U[i][2]-U[j][2]],m=Math.hypot(...v)||1e-6,r=mu*(m-d)/(2*m);
+        for(let q=0;q<3;q++){U[i][q]-=r*v[q];U[j][q]+=r*v[q]}U[i]=unit(U[i]);U[j]=unit(U[j])}
+      if(K)U.forEach((u,i)=>{const c=gof[i]!==null?C[gof[i]]:null;if(c)U[i]=unit([u[0]+(c[0]-u[0])*.02,u[1]+(c[1]-u[1])*.02,u[2]+(c[2]-u[2])*.02])})}
+    /* 3. keep dots apart: a minimum angle by kind (projects need the most room) */
+    const R=SR,minA=(i,j)=>{const pa=N[i].type==="proj",pb=N[j].type==="proj";return (pa&&pb?.1:pa||pb?.075:.055)/R};
+    const roomOK=(i,u)=>{for(let j=0;j<n;j++)if(j!==i&&ang(u,U[j])<minA(i,j)*.92)return false;return true};
+    for(let it=0;it<120;it++)for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const a=ang(U[i],U[j]),m=minA(i,j);if(a>=m)continue;
+      const v=[U[i][0]-U[j][0],U[i][1]-U[j][1],U[i][2]-U[j][2]],l=Math.hypot(...v)||1e-6,push=(m-a)/2;
+      U[i]=unit(U[i].map((x,q)=>x+v[q]/l*push));U[j]=unit(U[j].map((x,q)=>x-v[q]/l*push))}
+    /* 4. fewer crossings: nudge one node at a time along the surface; keep the move when it removes crossings without costing much stress or crowding a dot */
+    const stressAt=(i,u)=>{let s=0;for(let j=0;j<n;j++){if(j===i)continue;const d=Math.hypot(u[0]-U[j][0],u[1]-U[j][1],u[2]-U[j][2]);s+=(d-Ch[i][j])**2/(Ch[i][j]**2)}return s};
+    const before=crossings(U),TR=5000;
+    for(let it=0;it<TR;it++){const i=Math.floor(rnd()*n);if(!inc[i].length)continue;
+      const u=U[i],r=[rnd()-.5,rnd()-.5,rnd()-.5],pr=dot(r,u),t=unit([r[0]-pr*u[0],r[1]-pr*u[1],r[2]-pr*u[2]]),st=.03+.3*(1-it/TR);
+      const nu=unit([u[0]+t[0]*st,u[1]+t[1]*st,u[2]+t[2]*st]);if(!roomOK(i,nu))continue;
+      const c0=crossingsAt(i,U),s0=stressAt(i,u);U[i]=nu;const c1=crossingsAt(i,U),s1=stressAt(i,nu);
+      if(!((c1-c0)+.2*(s1-s0)<0))U[i]=u}
+    return ucache[mode]={U,before,after:crossings(U)}}
+  /* ---- ordered groupings (an axis): groups in columns left to right, straight links, some depth inside each column ---- */
+  const side=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+  const segsCross=(a,b,c,d)=>side(a,b,c)*side(a,b,d)<0&&side(c,d,a)*side(c,d,b)<0;   // straight links, as seen from the front
+  function flatCrossingsAt(i,X){let c=0;
+    for(const e of inc[i]){const [a,b]=E[e];for(let f=0;f<E.length;f++){const [x,y]=E[f];if(x===a||x===b||y===a||y===b)continue;if(segsCross(X[a],X[b],X[x],X[y]))c++}}return c}
+  const lcache={};
+  function linearLayout(AR,mode){const key=mode+"|"+AR;if(lcache[key])return lcache[key];seed=7;
+    const keys=groupKeys(mode),gof=nodeGroups(mode),n=N.length,cw=AR/keys.length,col=g=>(keys.indexOf(g)+.5)*cw,ZR=Math.min(cw*.3,.25);
+    /* where each node belongs along the axis: its group's column; a concept or institute shared across columns leans (20%) toward the others */
+    const TX=N.map((nd,i)=>{if(gof[i]===null)return AR/2;if(nd.type==="proj")return col(gof[i]);
+      const ps=nbr[i].filter(j=>N[j].type==="proj");return col(gof[i])*.8+ps.reduce((s,j)=>s+col(gof[j]),0)/ps.length*.2});
+    /* target distances: through the network, scaled to fit a column; across columns at least the columns' distance */
+    const al=cw*.1,T=N.map((_,i)=>N.map((_,j)=>{if(i===j)return 0;let t=al*GD[i][j];
+      if(N[i].type==="proj"&&N[j].type==="proj")t*=1-.35*sim(pix[i],pix[j]);
+      return Math.max(.06,t,Math.abs(TX[i]-TX[j])*.9)}));
+    const X=N.map((_,i)=>[TX[i]+(rnd()-.5)*cw*.4,.5+(rnd()-.5)*.5,(rnd()-.5)*ZR]);
+    const keep=(i,p)=>{const hw=N[i].type==="proj"?cw*.36:cw*.5;p[0]=Math.min(TX[i]+hw,Math.max(TX[i]-hw,p[0]));p[1]=Math.min(.9,Math.max(.14,p[1]));p[2]=Math.min(ZR,Math.max(-ZR,p[2]))};
+    const pairs=[];for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)pairs.push([i,j]);
+    const IT=200,eMax=4,eMin=.01,lam=Math.log(eMax/eMin)/(IT-1);
+    for(let it=0;it<IT;it++){const eta=eMax*Math.exp(-lam*it);
+      for(let k=pairs.length-1;k>0;k--){const r=Math.floor(rnd()*(k+1));[pairs[k],pairs[r]]=[pairs[r],pairs[k]]}
+      for(const [i,j] of pairs){const d=T[i][j],mu=Math.min(eta*al*al/(d*d),1),v=[0,1,2].map(q=>X[i][q]-X[j][q]),m=Math.hypot(...v)||1e-6,r=mu*(m-d)/(2*m);
+        for(let q=0;q<3;q++){X[i][q]-=r*v[q];X[j][q]+=r*v[q]}}
+      X.forEach((p,i)=>{p[0]+=(TX[i]-p[0])*.05;keep(i,p)})}
+    /* keep dots apart (in the front view, so labels have room) */
+    const minD=(i,j)=>{const pa=N[i].type==="proj",pb=N[j].type==="proj";return pa&&pb?.085:pa||pb?.06:.045};
+    for(let it=0;it<150;it++)for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){let dx=X[i][0]-X[j][0],dy=X[i][1]-X[j][1],d=Math.hypot(dx,dy);const m=minD(i,j);if(d>=m)continue;
+      if(d<1e-6){dx=Math.cos(i+j);dy=Math.sin(i+j);d=1}const push=(m-Math.min(d,m))/2;X[i][0]+=dx/d*push;X[i][1]+=dy/d*push;X[j][0]-=dx/d*push;X[j][1]-=dy/d*push;keep(i,X[i]);keep(j,X[j])}
+    const roomOK=(i,p)=>{for(let j=0;j<n;j++)if(j!==i&&Math.hypot(p[0]-X[j][0],p[1]-X[j][1])<minD(i,j)*.92)return false;return true};
+    /* fewer crossings: nudge one node at a time, as for the sphere */
+    const stressAt=(i,p)=>{let s=0;for(let j=0;j<n;j++){if(j===i)continue;const d=Math.hypot(p[0]-X[j][0],p[1]-X[j][1],p[2]-X[j][2]);s+=(d-T[i][j])**2/(T[i][j]**2)}return s};
+    const TR=5000;
+    for(let it=0;it<TR;it++){const i=Math.floor(rnd()*n);if(!inc[i].length)continue;
+      const p=X[i],st=(.01+.08*(1-it/TR)),np=[p[0]+(rnd()-.5)*st,p[1]+(rnd()-.5)*st,p[2]+(rnd()-.5)*st];keep(i,np);if(!roomOK(i,np))continue;
+      const c0=flatCrossingsAt(i,X),s0=stressAt(i,p);X[i]=np;const c1=flatCrossingsAt(i,X),s1=stressAt(i,np);
+      if(!((c1-c0)+.2*(s1-s0)<0))X[i]=p}
+    return lcache[key]=X}
   function layout(AR,mode){
-    const key=mode+"|"+AR;if(cache[key]){cache[key].forEach(([x,y],i)=>{N[i].x=x;N[i].y=y});return}
-    seed=7;
-    const G=GROUPINGS[mode],keys=groupKeys(mode),lin=!!G.linear,n=projIdx.length,grp=projIdx.map(i=>groupOfNode(i,mode));
-    /* 1. projects. Target distance between two projects = how different they are */
-    const dP=(a,b)=>Math.max(.3,GD[projIdx[a]][projIdx[b]]/2*(1-.35*sim(a,b))),   // 1 = one shared concept; more shared features pull closer
-      FREE={x0:-1e9,x1:1e9,y0:-1e9,y1:1e9},bx={x0:AR*.05,x1:AR*.95,y0:.13,y1:.9},pos=new Array(n);
-    const norm=X=>{const mx=X.reduce((s,p)=>s+p[0],0)/X.length,my=X.reduce((s,p)=>s+p[1],0)/X.length,C=X.map(p=>[p[0]-mx,p[1]-my]),r=Math.max(1e-6,...C.map(p=>Math.hypot(p[0],p[1])));return C.map(p=>[p[0]/r,p[1]/r])};
-    let whole=false;
-    if(!keys.length){                                   // no groups: the whole network (concepts and institutes too) laid out by distance through it, filling the band
-      /* separately connected parts each get a slot across the band, sized by how many nodes they have */
-      const comp=new Array(N.length).fill(-1),parts=[];
-      N.forEach((_,i)=>{if(comp[i]>=0)return;const st=[i],m=[];comp[i]=parts.length;while(st.length){const v=st.pop();m.push(v);nbr[v].forEach(w=>{if(comp[w]<0){comp[w]=parts.length;st.push(w)}})}parts.push(m)});
-      parts.sort((p1,p2)=>p2.length-p1.length);
-      const tot=parts.reduce((t,m)=>t+Math.sqrt(m.length),0);let x=bx.x0;
-      parts.forEach(m=>{const w=(bx.x1-bx.x0)*Math.sqrt(m.length)/tot,gap=parts.length>1?AR*.02:0;
-        let X=[[x+w/2,.5]];
-        if(m.length>1){const D=m.map(a=>m.map(b=>GD[a][b])),sc=(w-2*gap)*.85/Math.max(...D.map(r=>Math.max(...r))),r={x0:x+gap,x1:x+w-gap,y0:.08,y1:.94};
-          X=stress(m.length,D.map(q=>q.map(d=>d*sc)),250,r);                  // laid out inside its slot, so it takes the band's wide shape
-          const xs=X.map(p=>p[0]),ys=X.map(p=>p[1]),ax=Math.min(...xs),bx2=Math.max(...xs),ay=Math.min(...ys),by=Math.max(...ys);
-          X=X.map(p=>[r.x0+(p[0]-ax)/Math.max(1e-6,bx2-ax)*(r.x1-r.x0),r.y0+(p[1]-ay)/Math.max(1e-6,by-ay)*(r.y1-r.y0)])}
-        m.forEach((i,k)=>{N[i].x=X[k][0];N[i].y=X[k][1]});x+=w});
-      whole=true}
-    else{
-      const gs=keys.filter(g=>grp.includes(g)),mem=gs.map(g=>grp.map((q,a)=>q===g?a:-1).filter(a=>a>=0)),K=gs.length;
-      /* each group's own layout, by similarity, scaled to radius 1 */
-      const local=mem.map(ids=>ids.length===1?[[0,0]]:norm(stress(ids.length,ids.map(a=>ids.map(b=>a===b?0:dP(a,b))),150,FREE)));
-      if(lin){const cw=AR/keys.length;                   // ordered columns, left to right
-        gs.forEach((g,k)=>{const c=keys.indexOf(g);fit(local[k],c*cw+cw*.24,(c+1)*cw-cw*.24,.2,.84).forEach((p,m)=>pos[mem[k][m]]=p)})}
-      else{
-        /* groups side by side (two rows on narrow screens), in the order that puts groups close through the network next to each other (tries every order) */
-        const gdist=(i,j)=>{let t=0;mem[i].forEach(a=>mem[j].forEach(b=>t+=dP(a,b)));return t/(mem[i].length*mem[j].length)};
-        const Wt=gs.map((_,i)=>gs.map((_,j)=>i===j?0:1/gdist(i,j)**2)),share=mem.map(ids=>.7+Math.sqrt(ids.length));
-        const rows=AR<1.6&&K>3?2:1,perRow=Math.ceil(K/rows);
-        let order=[...gs.keys()],bestC=Infinity;
-        const place=o=>{const P2=new Array(K);for(let r=0;r<rows;r++){const row=o.slice(r*perRow,(r+1)*perRow),tot=row.reduce((s,k)=>s+share[k],0);let x=0;
-            row.forEach(k=>{P2[k]=[r,(x+share[k]/2)/tot,share[k]/tot];x+=share[k]})}return P2};
-        const perm=(a,l=0)=>{if(l===a.length){const P2=place(a);let c=0;
-            for(let i=0;i<K;i++)for(let j=i+1;j<K;j++)c+=Wt[i][j]*(Math.abs(P2[i][1]-P2[j][1])*AR+Math.abs(P2[i][0]-P2[j][0]));
-            if(c<bestC-1e-9){bestC=c;order=a.slice()}return}
-          for(let i=l;i<a.length;i++){[a[l],a[i]]=[a[i],a[l]];perm(a,l+1);[a[l],a[i]]=[a[i],a[l]]}};
-        if(K<=7)perm([...gs.keys()]);
-        else{const C=stress(K,gs.map((_,i)=>gs.map((_,j)=>i===j?0:gdist(i,j))),200,FREE),F=fit(C,0,AR,0,1,99);order=[...gs.keys()].sort((a,b)=>F[a][0]-F[b][0])}
-        const slot=place(order),rowH=(bx.y1-bx.y0)/rows,gapX=AR*.03;
-        /* each group fills its slot; mirrored whichever way puts projects with ties to a neighbouring group on that side */
-        const ctr=slot.map(([r,cx])=>[bx.x0+cx*(bx.x1-bx.x0),bx.y0+(r+.5)*rowH]);
-        mem.forEach((ids,k)=>{const [r,cx,wf]=slot[k],hw=Math.max(.05,(wf*(bx.x1-bx.x0)/2-gapX)*.62),hh=Math.min(rowH*.36,hw*1.1),y0=ctr[k][1]-hh,y1=ctr[k][1]+hh;   // compact: a group uses about 60% of its slot, so the gaps between groups stay open
-          const base=ids.length===1?[[ctr[k][0],ctr[k][1]]]:fit(local[k],ctr[k][0]-hw,ctr[k][0]+hw,y0,y1,2.2);
-          let best=base,bestCost=Infinity;
-          for(const [fx,fy] of [[1,1],[-1,1],[1,-1],[-1,-1]]){const Q=base.map(([x,y])=>[ctr[k][0]+(x-ctr[k][0])*fx,ctr[k][1]+(y-ctr[k][1])*fy]);let cost=0;
-            ids.forEach((a,m)=>projIdx.forEach((_,b)=>{const kb=gs.indexOf(grp[b]);if(kb===k)return;const w=sim(a,b);if(w)cost+=w*Math.hypot(Q[m][0]-ctr[kb][0],Q[m][1]-ctr[kb][1])}));
-            if(cost<bestCost-1e-9){bestCost=cost;best=Q}}
-          best.forEach((p,m)=>pos[ids[m]]=p)})}
-    }
-    if(!whole)projIdx.forEach((i,a)=>{N[i].x=pos[a][0];N[i].y=pos[a][1]});
-    /* 2. concepts and institutes: at the centre of their projects; one used by a single project sits just outside it, away from its group's centre */
-    const cen={};projIdx.forEach((i,a)=>{const g=grp[a]||"_";(cen[g]||(cen[g]=[0,0,0]));cen[g][0]+=N[i].x;cen[g][1]+=N[i].y;cen[g][2]++});
-    const leaves={};
-    if(!whole)N.forEach((nd,i)=>{if(nd.type==="proj")return;const ps=nbr[i].filter(j=>N[j].type==="proj");
-      if(ps.length>1){const cx=ps.reduce((s,j)=>s+N[j].x,0)/ps.length,cy=ps.reduce((s,j)=>s+N[j].y,0)/ps.length;
-        /* shared by several groups: sit mostly with the group that uses it most (only leaning toward the others), so the gaps between groups stay clear */
-        const cnt={};ps.forEach(j=>{const g=groupOfNode(j,mode);if(g)cnt[g]=(cnt[g]||0)+1});const top=Object.keys(cnt).sort((x,y)=>cnt[y]-cnt[x])[0];
-        const own=top&&Object.keys(cnt).length>1?ps.filter(j=>groupOfNode(j,mode)===top):ps;
-        const ox=own.reduce((s,j)=>s+N[j].x,0)/own.length,oy=own.reduce((s,j)=>s+N[j].y,0)/own.length;
-        nd.x=ox*.8+cx*.2;nd.y=oy*.8+cy*.2}
-      else if(ps.length===1)(leaves[ps[0]]||(leaves[ps[0]]=[])).push(i)});
-    for(const pj in leaves){const p=N[pj],c=cen[groupOfNode(+pj,mode)||"_"],L=leaves[pj];
-      let ang=Math.atan2(p.y-c[1]/c[2],p.x-c[0]/c[2]);if(!isFinite(ang)||(Math.abs(p.x-c[0]/c[2])<1e-3&&Math.abs(p.y-c[1]/c[2])<1e-3))ang=+pj*2.4;
-      L.forEach((i,k)=>{const t=ang+(k-(L.length-1)/2)*.75;N[i].x=p.x+Math.cos(t)*.085;N[i].y=p.y+Math.sin(t)*.085})}
-    if(!whole)N.forEach((nd,i)=>{if(nd.type!=="proj"&&!nbr[i].some(j=>N[j].type==="proj")&&nbr[i].length){   // institutes tied only to other institutes
-      nd.x=nbr[i].reduce((s,j)=>s+N[j].x,0)/nbr[i].length+.05;nd.y=nbr[i].reduce((s,j)=>s+N[j].y,0)/nbr[i].length+.05}});
-    /* 3. relax: push apart anything too close, while every node stays near its place from 1–2 (projects hold on more firmly) */
-    const A=N.map(nd=>[nd.x,nd.y]);
-    for(let it=0;it<220;it++){
-      for(let a=0;a<N.length;a++)for(let b=a+1;b<N.length;b++){const pa=N[a].type==="proj",pb=N[b].type==="proj",min=pa&&pb?.085:pa||pb?.06:.045;
-        let dx=N[a].x-N[b].x,dy=N[a].y-N[b].y,d=Math.hypot(dx,dy);if(d>=min)continue;if(d<1e-6){dx=Math.cos(a+b);dy=Math.sin(a+b);d=1}
-        const push=(min-d)/2,wa=pa?.35:1,wb=pb?.35:1;N[a].x+=dx/d*push*wa;N[a].y+=dy/d*push*wa;N[b].x-=dx/d*push*wb;N[b].y-=dy/d*push*wb}
-      N.forEach((nd,i)=>{const k=nd.type==="proj"?.12:.05;nd.x+=(A[i][0]-nd.x)*k;nd.y+=(A[i][1]-nd.y)*k;
-        nd.x=Math.min(AR*.98,Math.max(AR*.02,nd.x));nd.y=Math.min(.97,Math.max(.04,nd.y))})}
-    cache[key]=N.map(nd=>[nd.x,nd.y]);
-  }
+    if(GROUPINGS[mode].linear){const X=linearLayout(AR,mode);N.forEach((nd,i)=>{nd.x=X[i][0];nd.y=X[i][1];nd.z=X[i][2]});return}
+    const L=sphereLayout(mode),R=SR;
+    N.forEach((nd,i)=>{nd.x=AR/2+L.U[i][0]*R;nd.y=.5+L.U[i][1]*R;nd.z=L.U[i][2]*R})}
 
   /* sizing */
   let W=0,H=0,box={x:0,y:0,w:1,h:1},AR=0,narrow=false;
-  const S=N.map(()=>({x:0,y:0,vx:0,vy:0,hx:0,hy:0,glow:0}));
+  /* S: ux,uy,uz drift around the home spot hx,hy,hz (flat layout, pixels); x,y are where the node shows after turning the scene in 3D; k its perspective scale, f how near it is (1 near, 0 far) */
+  const S=N.map(()=>({x:0,y:0,ux:NaN,uy:0,uz:0,vx:0,vy:0,vz:0,hx:0,hy:0,hz:0,k:1,f:1,glow:0}));
   function labelBox(i){const n=N[i],s=S[i];
     if(n.type==="proj")return narrow?null:{x:s.hx+9,y:s.hy-8,w:n.label.length*6.6,h:16};
     if(n.type==="inst")return narrow?null:{x:s.hx+11,y:s.hy-7,w:n.label.length*6.4,h:14};
@@ -808,8 +820,31 @@ const net=(()=>{
     box={x:side,y:narrow?40:52,w:W-side*2-(narrow?W*.08:70),h:H-(narrow?40:52)-(narrow?44:52)};
     textBlocks=[];
     AR=+(box.w/box.h).toFixed(2);layout(AR,clusterBy);
-    N.forEach((n,i)=>{S[i].hx=box.x+n.x/AR*box.w;S[i].hy=box.y+n.y*box.h});declutter();
-    N.forEach((n,i)=>{if(!S[i].x){S[i].x=S[i].hx;S[i].y=S[i].hy}})}
+    N.forEach((n,i)=>{S[i].hx=box.x+n.x/AR*box.w;S[i].hy=box.y+n.y*box.h;S[i].hz=n.z*box.h});declutter();
+    N.forEach((n,i)=>{if(isNaN(S[i].ux)){S[i].ux=S[i].hx;S[i].uy=S[i].hy;S[i].uz=S[i].hz}});project()}
+
+  /* 3D view: the scene sways slowly around its centre and can be turned by dragging */
+  const view={yaw:0,pitch:0,uy:0,up:0,t:0,drag:null,moved:false};
+  let cam=null;                                          // this frame's camera: turn, then perspective
+  function aim(){const a=view.yaw+view.uy,b=view.pitch+view.up;
+    cam={cx:box.x+box.w/2,cy:box.y+box.h/2,F:Math.max(box.w,box.h)*.9,ZR:box.h*.4,ca:Math.cos(a),sa:Math.sin(a),cb:Math.cos(b),sb:Math.sin(b)}}
+  function proj(px,py,pz,o){const c=cam,X=px-c.cx,Y=py-c.cy,x1=X*c.ca+pz*c.sa,z1=-X*c.sa+pz*c.ca,y2=Y*c.cb-z1*c.sb,z2=Y*c.sb+z1*c.cb,k=c.F/(c.F+z2);
+    o.x=c.cx+x1*k;o.y=c.cy+y2*k;o.k=k;o.d=z2;o.f=Math.max(0,Math.min(1,.5-z2/(2*c.ZR)));return o}
+  function project(){aim();for(const p of S)proj(p.ux,p.uy,p.uz,p)}
+  /* a link as an arc along the sphere's surface (points between its ends, pushed back out to the surface) */
+  const ap={};
+  function arc(A,B){if(!globe()){ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);return}const cx=cam.cx,cy=cam.cy,a=[A.ux-cx,A.uy-cy,A.uz],b=[B.ux-cx,B.uy-cy,B.uz],la=Math.hypot(...a)||1,lb=Math.hypot(...b)||1,th=Math.acos(Math.max(-1,Math.min(1,dot(a,b)/(la*lb)))),M=Math.max(1,Math.ceil(th/.1));
+    ctx.moveTo(A.x,A.y);
+    for(let m=1;m<M;m++){const t=m/M,v=[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t],l=Math.hypot(...v)||1,r=la+(lb-la)*t;
+      proj(cx+v[0]/l*r,cy+v[1]/l*r,v[2]/l*r,ap);ctx.lineTo(ap.x,ap.y)}
+    ctx.lineTo(B.x,B.y)}
+  hero.style.touchAction="pan-y";                       // on touch screens a sideways drag turns the network, an upward one still scrolls
+  hero.addEventListener("pointerdown",e=>{if(e.target.closest("a,button"))return;view.drag={x:e.clientX,y:e.clientY,yaw:view.uy,pitch:view.up};view.moved=false});
+  addEventListener("pointermove",e=>{const d=view.drag;if(!d)return;const dx=e.clientX-d.x,dy=e.clientY-d.y;
+    if(!view.moved&&Math.hypot(dx,dy)<5)return;view.moved=true;hero.style.cursor="grabbing";
+    view.uy=d.yaw+dx*.006;view.up=Math.max(-.5,Math.min(.5,d.pitch+dy*.004))});
+  const endDrag=()=>{if(view.drag&&view.moved)hero.style.cursor="grab";view.drag=null};
+  addEventListener("pointerup",endDrag);addEventListener("pointercancel",endDrag);
 
   /* pointer: hovering a node focuses it; with no pointer, the projects are highlighted one after another */
   const ptr={x:0,y:0,on:false,last:-1e9};
@@ -818,13 +853,13 @@ const net=(()=>{
   hero.addEventListener("pointerleave",()=>{ptr.on=false;hero.style.cursor=""});
   const tour=N.map((n,i)=>i).filter(i=>N[i].type==="proj").sort(()=>rnd()-.5);let ti=0,tStart=0;
   /* the node under the pointer: its dot, or (for projects) its label */
-  function hit(x,y){let best=-1,bd=13;
-    N.forEach((n,i)=>{const d=Math.hypot(S[i].x-x,S[i].y-y);if(d<bd){bd=d;best=i}});
+  function hit(x,y){let best=-1,bd=13;                  // only the half of the sphere facing the viewer
+    N.forEach((n,i)=>{if(globe()&&S[i].f<.45)return;const d=Math.hypot(S[i].x-x,S[i].y-y);if(d<bd){bd=d;best=i}});
     if(best<0)N.forEach((n,i)=>{const r=labelRect[i];if(n.type==="proj"&&r&&x>=r.x-2&&x<=r.x+r.w+2&&y>=r.y-2&&y<=r.y+r.h+2)best=i});
     return best}
-  hero.addEventListener("click",e=>{if(e.target.closest("a,button"))return;const [x,y]=local(e),L=labelAt(x,y);if(L){goTo(L.members,GROUPINGS[clusterBy].groups[L.g]);return}
+  hero.addEventListener("click",e=>{if(e.target.closest("a,button")||view.moved){view.moved=false;return}const [x,y]=local(e),L=labelAt(x,y);if(L){goTo(L.members,GROUPINGS[clusterBy].groups[L.g]);return}
     const i=hit(x,y);if(i<0)return;goTo(projectsOf(i),N[i].label)});
-  hero.addEventListener("pointermove",e=>{if(e.target.closest("a,button"))return;const [x,y]=local(e);hero.style.cursor=(labelAt(x,y)||hit(x,y)>=0)?"pointer":""});
+  hero.addEventListener("pointermove",e=>{if(e.target.closest("a,button")||view.drag&&view.moved)return;const [x,y]=local(e);hero.style.cursor=(labelAt(x,y)||hit(x,y)>=0)?"pointer":"grab"});   // empty space: grab to turn
 
   /* group areas: soft, very transparent blobs behind each group's projects and the concepts only they use */
   let groupLabels=[],blobTick=0;
@@ -836,10 +871,10 @@ const net=(()=>{
     const G=GROUPINGS[clusterBy],sc=.5;bc.width=tc.width=Math.ceil(W*sc);bc.height=tc.height=Math.ceil(H*sc);
     if(!G.groups)return;
     const r=(narrow?30:48)*sc;
-    for(const g of Object.keys(G.groups)){const pts=groupMembers(g).concat(ownConcepts(g));if(!pts.length)continue;const on=g===fg;
+    for(const g of Object.keys(G.groups)){const pts=groupMembers(g).concat(ownConcepts(g)).filter(i=>!globe()||S[i].f>.4);if(!pts.length)continue;const on=g===fg;
       tctx.clearRect(0,0,tc.width,tc.height);
       if(canBlur){tctx.filter=`blur(${(narrow?14:22)*sc}px)`;tctx.fillStyle="#fff";
-        for(const i of pts){tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r,0,6.283);tctx.fill()}tctx.filter="none"}
+        for(const i of pts){tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r*S[i].k,0,6.283);tctx.fill()}tctx.filter="none"}
       else{for(const i of pts){const gr=tctx.createRadialGradient(S[i].x*sc,S[i].y*sc,0,S[i].x*sc,S[i].y*sc,r*1.4);gr.addColorStop(0,"rgba(255,255,255,.7)");gr.addColorStop(1,"rgba(255,255,255,0)");
         tctx.fillStyle=gr;tctx.beginPath();tctx.arc(S[i].x*sc,S[i].y*sc,r*1.4,0,6.283);tctx.fill()}}
       /* tint: white for all groups, the accent for the one in focus */
@@ -862,10 +897,10 @@ const net=(()=>{
     if(blobTick++%4===0)paintBlobs(fg);ctx.drawImage(bc,0,0,W,H);
     ctx.font="600 10.5px 'JetBrains Mono',monospace";ctx.textBaseline="alphabetic";
     const keys=Object.keys(G.groups);
-    for(const g of keys){const members=groupMembers(g);if(!members.length)continue;const pts=members.concat(ownConcepts(g)).map(i=>S[i]);
+    for(const g of keys){const members=groupMembers(g);if(!members.length)continue;const pts=members.concat(ownConcepts(g)).map(i=>S[i]).filter(p=>!globe()||p.f>.5);if(!pts.length)continue;   // groups on the far side stay unlabelled
       const on=g===fg,txt=G.groups[g].toUpperCase()+"  "+members.length,tw=ctx.measureText(txt).width;
       let lx=Math.max(8,Math.min(Math.min(...pts.map(p=>p.x))-10,W-tw-10)),ly=Math.max(14,Math.min(...pts.map(p=>p.y))-(narrow?20:30));
-      if(G.linear){const c=keys.indexOf(g),cw=box.w/keys.length;lx=box.x+c*cw+cw*.08;ly=box.y-6}     // linear: labels line up above the columns
+      if(G.linear){const c=keys.indexOf(g),cw=box.w/keys.length,q=proj(box.x+c*cw+cw*.08,box.y-6,0,{});lx=q.x;ly=q.y}     // linear: labels line up above the columns
       {let ok=false;const y0=ly,x0=lx;                                   // try nearby spots until one is clear
         for(const [dx,dy] of [[0,0],[0,-15],[0,-30],[40,0],[-40,0],[0,15],[40,-15],[-40,-15],[80,0],[-80,0],[0,-45],[0,30]]){lx=Math.max(4,Math.min(x0+dx,W-tw-6));ly=y0+dy;if(free({x:lx,y:ly-11,w:tw,h:14})){ok=true;break}}
         if(!ok)continue;}
@@ -873,9 +908,10 @@ const net=(()=>{
       ctx.fillStyle=on?`rgb(${ACCENT})`:`rgba(${ACCENT},.72)`;ctx.fillText(txt,lx,ly);
       groupLabels.push({g,x:lx,y:ly-11,w:tw,h:15,members:members.map(i=>N[i].pi)})}
     if(G.linear){const cw=box.w/keys.length;ctx.strokeStyle="rgba(243,244,248,.10)";ctx.setLineDash([2,5]);   // faint dividers between the columns
-      for(let c=1;c<keys.length;c++){const x=box.x+c*cw;ctx.beginPath();ctx.moveTo(x,box.y-2);ctx.lineTo(x,box.y+box.h+4);ctx.stroke()}ctx.setLineDash([])}
-    if(G.linear){const y=box.y+box.h+(narrow?10:18),x0=box.x,x1=box.x+box.w;             // the axis under a linear grouping
-      ctx.strokeStyle="rgba(243,244,248,.28)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.moveTo(x1-6,y-4);ctx.lineTo(x1,y);ctx.lineTo(x1-6,y+4);ctx.stroke();
+      for(let c=1;c<keys.length;c++){const a=proj(box.x+c*cw,box.y-2,0,{}),b=proj(box.x+c*cw,box.y+box.h+4,0,{});ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.setLineDash([])}
+    if(G.linear){const Y=box.y+box.h+(narrow?10:18),a=proj(box.x,Y,0,{}),b=proj(box.x+box.w,Y,0,{}),x0=a.x,x1=b.x,y=(a.y+b.y)/2;   // the axis under a linear grouping, across the band
+      const an=Math.atan2(b.y-a.y,b.x-a.x),hx=x1-6*Math.cos(an),hy=b.y-6*Math.sin(an);
+      ctx.strokeStyle="rgba(243,244,248,.28)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,a.y);ctx.lineTo(x1,b.y);ctx.moveTo(hx+4*Math.sin(an),hy-4*Math.cos(an));ctx.lineTo(x1,b.y);ctx.lineTo(hx-4*Math.sin(an),hy+4*Math.cos(an));ctx.stroke();
       ctx.font="10.5px 'JetBrains Mono',monospace";ctx.fillStyle="rgba(243,244,248,.55)";ctx.textBaseline="top";
       ctx.fillText(G.linear[0],x0,y+6);ctx.textAlign="right";ctx.fillText(G.linear[1],x1,y+6);ctx.textAlign="left";
       claim({x:x0,y:y+4,w:ctx.measureText(G.linear[0]).width,h:14});const w1=ctx.measureText(G.linear[1]).width;claim({x:x1-w1,y:y+4,w:w1,h:14})}
@@ -886,32 +922,42 @@ const net=(()=>{
   function frame(t){
     const s=paused?0:t/1000,real=ptr.on&&t-ptr.last<3000;
     let hov=real?hit(ptr.x,ptr.y):-1;
-    if(!real&&!paused&&t-tStart>3800){ti=(ti+1)%tour.length;tStart=t}
+    if(!real&&!paused&&t-tStart>3800){for(let k=0;k<tour.length;k++){ti=(ti+1)%tour.length;if(!globe()||S[tour[ti]].f>.6)break}tStart=t}   // the next project on the front
     const focusProj=hov>=0?(N[hov].type==="proj"?hov:-1):(real?-1:tour[ti]);
     const lit=new Set(),light=i=>{lit.add(i);nbr[i].forEach(j=>lit.add(j))};
     if(hov>=0&&N[hov].type!=="proj"){light(hov);nbr[hov].forEach(j=>{if(N[j].type==="proj")lit.add(j)})}else if(focusProj>=0)light(focusProj);
     for(let i=0;i<N.length;i++){const p=S[i];
-      const tx=p.hx+(paused?0:Math.sin(s*.35+i*1.7)*4),ty=p.hy+(paused?0:Math.cos(s*.29+i*2.3)*4);
-      const fx=(tx-p.x)*.03,fy=(ty-p.y)*.03;
-      p.glow+=((lit.has(i)?1:0)-p.glow)*.12;p.vx=(p.vx+fx)*.84;p.vy=(p.vy+fy)*.84;p.x+=p.vx;p.y+=p.vy}
+      const tx=p.hx+(paused?0:Math.sin(s*.35+i*1.7)*4),ty=p.hy+(paused?0:Math.cos(s*.29+i*2.3)*4),tz=p.hz+(paused?0:Math.sin(s*.31+i*1.3)*6);
+      const fx=(tx-p.ux)*.03,fy=(ty-p.uy)*.03,fz=(tz-p.uz)*.03;
+      p.glow+=((lit.has(i)?1:0)-p.glow)*.12;p.vx=(p.vx+fx)*.84;p.vy=(p.vy+fy)*.84;p.vz=(p.vz+fz)*.84;p.ux+=p.vx;p.uy+=p.vy;p.uz+=p.vz}
+    /* sway: a slow turn back and forth, paused when the visitor holds the network or asked for less motion */
+    if(!paused&&!view.drag&&!real)view.t+=1/60;
+    /* a globe keeps turning; with an ordered grouping (an axis) it only sways, so left to right keeps its meaning */
+    view.yaw=GROUPINGS[clusterBy].linear?.5*Math.sin(view.t*.16):view.t*.09;view.pitch=.26+.08*Math.sin(view.t*.11);
+    project();
     ctx.clearRect(0,0,W,H);ctx.lineWidth=1;placed=textBlocks.slice();labelRect=[];      // page text is an obstacle for labels
     for(let i=0;i<N.length;i++){const r=N[i].type==="con"?3:6;placed.push({x:S[i].x-r,y:S[i].y-r,w:2*r,h:2*r,node:i})}   // dots are obstacles too
-    const G=GROUPINGS[clusterBy];drawGroups(focusProj>=0&&G.groups?G.of(P[N[focusProj].pi]):null);
+    const G=GROUPINGS[clusterBy],fg=focusProj>=0&&G.groups?G.of(P[N[focusProj].pi]):null;drawGroups(fg);
+    const fog=p=>Math.max(p.glow,.38+.62*p.f);          // depth cue: far things fade into the dark, lit ones stay bright
     for(const [a,b] of E){const A=S[a],B=S[b],g=Math.min(A.glow,B.glow),inst=N[a].type==="inst"||N[b].type==="inst";
+      ctx.globalAlpha=Math.max(g,.3+.7*(A.f+B.f)/2);
       ctx.strokeStyle=g>.05?`rgba(${ACCENT},${.3+.7*g})`:inst?"rgba(160,168,186,.45)":"rgba(160,168,186,.38)";   // dashed institute links get more opacity: a dash carries less ink than a solid line
       ctx.lineWidth=inst?1.25:1;if(inst&&g<.05)ctx.setLineDash([4,4]);ctx.shadowBlur=g>.05?4*g:0;ctx.shadowColor=`rgba(${ACCENT},.6)`;   // neon: highlighted links glow
-      ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.setLineDash([])}
-    ctx.shadowBlur=0;
+      ctx.beginPath();arc(A,B);ctx.stroke();ctx.setLineDash([])}
+    ctx.shadowBlur=0;ctx.globalAlpha=1;
     ctx.lineWidth=1;
-    /* dots first, labels after, in order of importance */
-    for(let i=0;i<N.length;i++){const n=N[i],p=S[i],g=p.glow,h=i===hov;
-      if(n.type==="inst"){const r=h?6.5:5;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.strokeStyle=g>.1?`rgba(${ACCENT},${.5+.5*g})`:"rgba(160,168,186,.7)";ctx.lineWidth=1.5;ctx.strokeRect(-r,-r,r*2,r*2);ctx.restore()}
-      else if(n.type==="proj"){const r=4.5+g*2+(h?1.5:0);ctx.fillStyle=g>.1?`rgb(${ACCENT})`:"#F3F4F8";ctx.shadowBlur=g>.1?6*g:0;ctx.shadowColor=`rgba(${ACCENT},.7)`;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();ctx.shadowBlur=0;
+    /* dots first (far to near), labels after, in order of importance */
+    const byDepth=N.map((_,i)=>i).sort((a,b)=>S[b].d-S[a].d);
+    for(const i of byDepth){const n=N[i],p=S[i],g=p.glow,h=i===hov,K=Math.max(.6,Math.min(1.5,p.k));ctx.globalAlpha=fog(p);
+      if(n.type==="inst"){const r=(h?6.5:5)*K;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.strokeStyle=g>.1?`rgba(${ACCENT},${.5+.5*g})`:"rgba(160,168,186,.7)";ctx.lineWidth=1.5;ctx.strokeRect(-r,-r,r*2,r*2);ctx.restore()}
+      else if(n.type==="proj"){const r=(4.5+g*2+(h?1.5:0))*K;ctx.fillStyle=g>.1?`rgb(${ACCENT})`:"#F3F4F8";ctx.shadowBlur=g>.1?6*g:0;ctx.shadowColor=`rgba(${ACCENT},.7)`;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();ctx.shadowBlur=0;
         if(g>.1){ctx.strokeStyle=`rgba(${ACCENT},${.35*g})`;ctx.beginPath();ctx.arc(p.x,p.y,r+5,0,6.283);ctx.stroke()}}
-      else{const r=2.2+g*.8+(h?1.5:0);ctx.fillStyle=g>.1?`rgba(${ACCENT},${.6+.4*g})`:"rgba(160,168,186,.55)";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill()}}
+      else{const r=(2.2+g*.8+(h?1.5:0))*K;ctx.fillStyle=g>.1?`rgba(${ACCENT},${.6+.4*g})`:"rgba(160,168,186,.55)";ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill()}}
+    ctx.globalAlpha=1;
     const want=[];
     for(let i=0;i<N.length;i++){const n=N[i],g=S[i].glow,on=g>.1,h=i===hov;let pr=-1;
       if(h)pr=0;else if(on&&n.type==="proj")pr=1;else if(on)pr=2;
+      else if(globe()&&S[i].f<.55)pr=-1;                // the far side of the sphere stays unlabelled
       else if(n.type==="proj"&&!narrow)pr=3;
       else if(n.type==="inst"&&!narrow&&!G.linear)pr=4;
       else if(n.type==="con"&&nbr[i].length>1&&!narrow&&!G.linear)pr=5;
@@ -924,9 +970,9 @@ const net=(()=>{
       if(n.type==="proj"){font=`${on?600:500} ${narrow?11:12}px 'Archivo',sans-serif`;col=on?`rgb(${ACCENT})`:"rgba(243,244,248,.82)";d=9;h=15}
       else if(n.type==="inst"){font="500 10px 'JetBrains Mono',monospace";col=on?`rgba(${ACCENT},${.6+.4*g})`:"rgba(142,148,164,.85)";txt=txt.toUpperCase();d=11;h=13}
       else{font="10.5px 'JetBrains Mono',monospace";col=on?`rgba(${ACCENT},${.55+.45*g})`:"rgba(142,148,164,.75)";d=6;h=13}
-      ctx.font=font;const r=placeLabel(i,txt,p.x,p.y,d,h,pr<=3);   // project names also try positions further out before giving up
+      ctx.font=font;const r=placeLabel(i,txt,p.x,p.y,d*Math.max(.8,p.k),h,pr<=3);   // project names also try positions further out before giving up
       const own=n.type==="con"?3:6;placed.push({x:p.x-own,y:p.y-own,w:2*own,h:2*own,node:i});
-      if(!r)continue;labelRect[i]=r;ctx.fillStyle=col;ctx.fillText(txt,r.x,r.y+r.h/2)}
+      if(!r)continue;labelRect[i]=r;ctx.fillStyle=col;ctx.globalAlpha=Math.max(fog(p),.55);ctx.fillText(txt,r.x,r.y+r.h/2);ctx.globalAlpha=1}
     /* card next to the focused node */
     const show=hov>=0?hov:focusProj;
     if(show>=0){const n=N[show],q=S[show];
@@ -934,7 +980,7 @@ const net=(()=>{
       else{const ps=projectsOf(show);tipK.textContent=n.type==="inst"?"Institute / venue":"Concept";tipT.textContent=n.label;
         tipM.innerHTML=esc(ps.map(pi=>P[pi].net.n).join(" · "))+'<span class="go">Click to see '+(ps.length>1?ps.length+" projects":"the project")+" ↓</span>"}
       const tw=tip.offsetWidth,th=tip.offsetHeight,yMax=box.y+box.h+24;let x=q.x+16,y=q.y+16;if(x+tw>W-12)x=q.x-tw-16;if(y+th>yMax)y=q.y-th-16;   // the card stays inside the network area
-      tip.style.left=Math.max(8,x)+"px";tip.style.top=Math.max(8,y)+"px";tip.classList.add("on")}
+      tip.style.left=Math.max(8,Math.min(x,W-tw-8))+"px";tip.style.top=Math.max(8,y)+"px";tip.classList.add("on")}
     else tip.classList.remove("on");
     requestAnimationFrame(frame)}
   addEventListener("resize",size);size();requestAnimationFrame(frame);

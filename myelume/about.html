@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>myelume – about the work</title>
+<meta name="description" content="myelume – emotions as passing chemistry. It models emotion as a shifting mix of seven neuromodulators. The feeling is never set, only read from the mix.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f1; --ink:#1c1a22; --muted:#5f5a6a; --line:rgba(28,26,34,.13); --card:rgba(28,26,34,.04);
+  --accent:#1c1a22; --link:#3346b8;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d0c12; --ink:#ece8f3; --muted:#a39db2; --line:rgba(236,232,243,.13); --card:rgba(236,232,243,.045);
+    --accent:#ece8f3; --link:#9fb6ff; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d0c12; --ink:#ece8f3; --muted:#a39db2; --line:rgba(236,232,243,.13); --card:rgba(236,232,243,.045);
+  --accent:#ece8f3; --link:#9fb6ff; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+main{max-width:46rem;margin:0 auto;padding:clamp(40px,8vw,96px) 16px 80px}
+a{color:var(--link);text-underline-offset:3px}
+h1,h2,h3{font-family:'Instrument Serif',Georgia,'Times New Roman',serif;font-weight:400;line-height:1.08;margin:0}
+h1{font-size:clamp(44px,8vw,76px);letter-spacing:-.01em}
+h2{font-size:clamp(28px,4.4vw,36px);margin:72px 0 16px}
+h3{font-size:24px;margin:0 0 4px}
+p{margin:0 0 16px}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.subtitle{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:clamp(24px,3.6vw,32px);line-height:1.2;color:var(--muted);margin:6px 0 0}
+.lede{font-family:'Instrument Serif',Georgia,serif;font-size:clamp(22px,3.2vw,28px);line-height:1.3;margin:28px 0 32px}
+.enter{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:500;text-decoration:none;
+  color:var(--bg);background:var(--accent);padding:12px 20px;border-radius:999px}
+.enter:focus-visible{outline:2px solid var(--link);outline-offset:3px}
+.muted{color:var(--muted)}
+.chain{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0 8px}
+.chain div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.chain b{display:block;font-weight:500;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.chain span{font-family:'Instrument Serif',Georgia,serif;font-size:20px;line-height:1.25}
+.chem{list-style:none;padding:0;margin:20px 0 0;border-top:1px solid var(--line)}
+.chem li{display:grid;grid-template-columns:12px 9.5rem 1fr;gap:4px 14px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line)}
+.chem .sw{align-self:center}
+.chem .name{font-weight:500}
+.chem .pace{grid-column:3;font-size:14px;color:var(--muted)}
+.sw{width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:inset 0 0 0 1px var(--line)}
+.feelings{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px}
+.feeling{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.feeling header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.feeling .moment{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:19px;line-height:1.3;margin-bottom:12px}
+.feeling dl{margin:0;font-size:15px}
+.feeling dt{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.feeling dd{margin:2px 0 0}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:16px 0}
+kbd{font-family:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;background:var(--card)}
+.refs{padding-left:1.1em}
+.refs li{margin-bottom:10px}
+.note{border-left:3px solid var(--accent);background:var(--card);border-radius:0 12px 12px 0;padding:16px 20px;margin:24px 0}
+.note b{display:block;font-weight:600;margin-bottom:4px}
+.note p:last-child{margin-bottom:0}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:20px 0 24px;font-size:14px}
+.flow span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.flow i{font-style:normal;color:var(--muted)}
+h3.sub{font-family:'Instrument Sans',system-ui,sans-serif;font-weight:600;font-size:17px;margin:32px 0 8px}
+.tbl{width:100%;border-collapse:collapse;font-size:15px;margin:12px 0 8px}
+.tbl th{text-align:left;font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px 8px 0;border-bottom:1px solid var(--line)}
+.tbl td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.legend-parts{list-style:none;padding:0;margin:12px 0}
+.legend-parts li{display:grid;grid-template-columns:7.5rem 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.legend-parts li:first-child{border-top:1px solid var(--line)}
+.legend-parts b{font-weight:500}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:var(--card);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+@media (max-width:640px){
+  body{font-size:16px}
+  .chain,.feelings{grid-template-columns:1fr}
+  .chem li{grid-template-columns:12px 1fr}
+  .chem .pace,.chem .does{grid-column:2}
+  .legend-parts li{grid-template-columns:1fr;gap:4px}
+  .tbl{font-size:14px}
+}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">About the work</p>
+  <h1>myelume</h1>
+  <p class="subtitle">emotions as passing chemistry</p>
+  <p class="lede">Between an event and a feeling lies a chemistry. myelume models emotion as a shifting mix of seven neuromodulators, each released and cleared at its own pace. The feeling is never set, only read from the mix, so moods emerge, overlap and linger like weather in the nervous system.</p>
+  <a class="enter" href="index.html">Enter the piece <span aria-hidden="true">→</span></a>
+
+  <h2>The idea</h2>
+  <p>We tend to speak of emotions as states we are in: happy, afraid, calm. Physiologically they behave more like weather. A moment in the world sets off a release of signalling molecules in the brain; each of them rises, acts and clears again on its own schedule; and what we experience as a feeling is the changing balance between them. Fronts move through, overlap, and leave traces long after their cause has passed.</p>
+  <p>myelume is a generative, never-repeating piece built on that idea. It does not illustrate emotions from the outside. It runs a small model of the chemistry from the inside, and lets colour, movement and depth follow from it.</p>
+
+  <h2>From moment to feeling</h2>
+  <p>Every scene follows the same chain, and the legend on the wall makes each step readable.</p>
+  <div class="chain">
+    <div><b>Outside</b><span>An everyday moment, told to you</span></div>
+    <div><b>Inside</b><span>Seven brain chemicals rise and fall</span></div>
+    <div><b>Felt as</b><span>The feeling the mix most resembles</span></div>
+  </div>
+  <p class="muted">The moments are deliberately ordinary and personal, recognisable at any age: “Someone tells you the good news.” “You miss a step on the stairs.”</p>
+
+  <h2>Seven chemicals, seven rhythms</h2>
+  <p>Each feeling is a recipe of neuromodulators: some pushed up, some held down. What gives the piece its sense of time is that each of them moves at its own speed. Alarm signals arrive in fractions of a second; serotonin and oxytocin build over many seconds; the stress hormone cortisol comes last and stays longest. The timings are compressed for viewing (real cortisol takes tens of minutes), but their order is kept.</p>
+  <ul class="chem">
+    <li><span class="sw" style="background:#e6f6ff"></span><span class="name">Noradrenaline</span><span class="does">Alarm and arousal. Quickens everything, adds tremor and a heartbeat.</span><span class="pace">Fastest to rise, quick to fade.</span></li>
+    <li><span class="sw" style="background:#ffc83d"></span><span class="name">Dopamine</span><span class="does">Wanting and anticipation. Reach, surges, a pull toward something; when it drops, colour drains and movement stalls.</span><span class="pace">Fast, in bursts.</span></li>
+    <li><span class="sw" style="background:#ff7a45"></span><span class="name">Endorphins</span><span class="does">Liking and warmth. Brightness and lift.</span><span class="pace">Builds over seconds.</span></li>
+    <li><span class="sw" style="background:#2fd3b0"></span><span class="name">Serotonin</span><span class="does">Steadiness. Order and long, smooth waves.</span><span class="pace">Slow to build, slow to go.</span></li>
+    <li><span class="sw" style="background:#ff6fae"></span><span class="name">Oxytocin</span><span class="does">Closeness and bonding. Strands gather into bundles.</span><span class="pace">Slow.</span></li>
+    <li><span class="sw" style="background:#3b6cff"></span><span class="name">GABA</span><span class="does">The brain's brake. Calm; with too little, turbulence.</span><span class="pace">Moderate.</span></li>
+    <li><span class="sw" style="background:#b0244f"></span><span class="name">Cortisol</span><span class="does">The stress hormone, driven by the brain's stress signal CRF. Heaviness that sinks and lingers.</span><span class="pace">Slowest of all; outlasts its cause.</span></li>
+  </ul>
+
+  <h2>Six feelings and a resting state</h2>
+  <p>Each feeling has its own recipe, its own colour, its own tempo and its own way of moving. The gentle feelings move slowly; alarm and anger move fast.</p>
+  <div class="feelings">
+    <article class="feeling">
+      <header><span class="sw" style="background:#ffc83d"></span><h3>Joy</h3></header>
+      <p class="moment">Someone tells you the good news.</p>
+      <dl><dt>Chemistry</dt><dd>Dopamine bursts together with endorphins.</dd><dt>Movement</dt><dd>Slow, rising, surging on a beat.</dd></dl>
+    </article>
+    <article class="feeling">
+      <header><span class="sw" style="background:#2fd3b0"></span><h3>Contentment</h3></header>
+      <p class="moment">Someone holds you, long and warm.</p>
+      <dl><dt>Chemistry</dt><dd>Serotonin, oxytocin and GABA, with endorphins.</dd><dt>Movement</dt><dd>Slow, ordered swells that gather into bundles.</dd></dl>
+    </article>
+    <article class="feeling">
+      <header><span class="sw" style="background:#7f97bb"></span><h3>Sadness</h3></header>
+      <p class="moment">You say goodbye, and they’re gone.</p>
+      <dl><dt>Chemistry</dt><dd>Dopamine and endorphins fall below baseline; cortisol creeps up.</dd><dt>Movement</dt><dd>Slow; draining, sinking, stalling.</dd></dl>
+    </article>
+    <article class="feeling">
+      <header><span class="sw" style="background:#e6f6ff"></span><h3>Fear</h3></header>
+      <p class="moment">You miss a step on the stairs.</p>
+      <dl><dt>Chemistry</dt><dd>A noradrenaline spike; cortisol lingers after the threat has gone.</dd><dt>Movement</dt><dd>Fast; a startle, a freeze, then flight.</dd></dl>
+    </article>
+    <article class="feeling">
+      <header><span class="sw" style="background:#c86bff"></span><h3>Anxiety</h3></header>
+      <p class="moment">You wait for news you can’t change.</p>
+      <dl><dt>Chemistry</dt><dd>Steady stress signalling, a constant noradrenaline hum, weak GABA brakes.</dd><dt>Movement</dt><dd>Fast; trembling loops that never resolve.</dd></dl>
+    </article>
+    <article class="feeling">
+      <header><span class="sw" style="background:#ff4a24"></span><h3>Anger</h3></header>
+      <p class="moment">They blame you. It wasn’t you.</p>
+      <dl><dt>Chemistry</dt><dd>Noradrenaline with dopamine but no endorphins; low serotonin.</dd><dt>Movement</dt><dd>Fast; wanting that pushes, builds pressure and bursts.</dd></dl>
+    </article>
+  </div>
+  <p class="muted" style="margin-top:16px">Resting flow (“Nothing happens. You breathe.”): every chemical near its baseline.</p>
+
+  <h2>Read, not set</h2>
+  <p>Feelings are not switches, and in this piece they are not switched either. The piece never decides “now show anger”. It only decides what happens in the chemistry; the feeling you see named, and the colour that goes with it, is then <em>read</em> from that chemistry, the way you would read a thermometer rather than set a thermostat.</p>
+  <p>In practice, when anger begins, the piece sets anger's chemistry in motion: noradrenaline and dopamine rise, serotonin falls. Each of them changes at its own speed. Moment by moment the piece looks at the mix as it actually is, compares it with the recipe of every feeling, and names the one it most resembles. Only when the answer is clearly “anger” does the legend say so and the wall turn red.</p>
+  <p>Anger is therefore the <em>cause</em> the piece applies, and “anger” is the <em>reading</em> it takes afterwards. Usually the two agree. Sometimes, and deliberately, they do not:</p>
+  <ul>
+    <li><strong>Feelings take time to arrive.</strong> After a calm scene, serotonin drains slowly, so the mix needs a few seconds before it looks like anger. Joy arrives quickly, carried by fast dopamine; contentment slowly, as serotonin builds.</li>
+    <li><strong>Feelings linger.</strong> After a fright, cortisol stays high for tens of seconds. Even when calm is being played, the mix still reads as uneasy, and that is what is shown.</li>
+    <li><strong>Feelings blend.</strong> A mix between two recipes is named for the closer one, with the other noted as “a little … underneath”.</li>
+    <li><strong>Movement leads, the name follows.</strong> Speed, tremor, order and weight come straight from the chemistry and change at once; the name and colour change once the chemistry clearly resembles the new feeling.</li>
+  </ul>
+  <div class="note">
+    <b>Not a delay, the point</b>
+    <p>If a feeling seems to arrive late, to stay after its moment has passed, or to be named differently from what you expected, that is not a fault. It is the piece showing what the chemistry actually looks like, which is how emotions behave in us too: not as a switch inside, but as our reading of a changing internal state.</p>
+  </div>
+  <p>The same reading brings out a finding of affective neuroscience: chemically similar feelings look alike. Fear and anger share the same surge of arousal; what separates them is the presence of dopamine, wanting, which turns flight from a threat into a push toward it.</p>
+  <p>Running on its own, the piece moves from feeling to feeling in a random but plausible order (contentment often follows joy; anxiety often follows fear), with varying intensities and occasional mixtures. It never repeats.</p>
+
+  <h2>Using the piece</h2>
+  <p>myelume is made for the two-storey digital screen in the Lee Family Exchange at the MIT Museum, Cambridge, MA: an NEC LED wall of 3840 × 3024 pixels (80:63, about 1.27 : 1), some 20′ 3″ × 16′ 2″ (about 6.2 × 4.9 m). It reads from across the space while rewarding close viewing. It also runs on any recent computer or screen, adapting to its shape. Left alone, it plays forever; nothing needs to be touched.</p>
+
+  <h3 class="sub">On the Exchange screen</h3>
+  <table class="tbl">
+    <tbody>
+      <tr><td>Display</td><td>NEC LED wall, 3840 × 3024 pixels, 80:63; rendered live at the screen's native resolution (open the piece with <code>#full</code> in the address).</td></tr>
+      <tr><td>Format</td><td>Real-time and generative, running in a web browser on the screen's computer. Non-linear: it never loops and never repeats. Where a live page cannot run, a three-minute video version (3840 × 3024, HEVC, a seamless loop through all six feelings) can play instead.</td></tr>
+      <tr><td>Interaction</td><td>None for visitors: no touch, no QR codes. It runs on its own; the controls are for setting up and previewing only.</td></tr>
+      <tr><td>Sound</td><td>Silent. Nothing in the work depends on audio.</td></tr>
+      <tr><td>Duration</td><td>Endless; scenes of 10 to 30 seconds each, in an order that is never the same twice.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">The controls</h3>
+  <p>The controls are for setting up and previewing the piece; in the museum it runs untouched. Tap or click anywhere on the piece to open them in the lower left corner; tap again to close them. A short hint, “Tap for controls”, appears at the start and fades after a few seconds.</p>
+  <ul class="legend-parts">
+    <li><b>Let it run</b><span>The piece chooses its own feelings, durations, intensities and occasional mixtures. This is the normal state for an exhibition.</span></li>
+    <li><b>The six feelings</b><span>Hold one feeling (each marked with its colour) until you choose another or let it run again. A held feeling is shown at a medium intensity, without mixtures. Expect it to be named two to four seconds after you choose it, as its chemistry builds.</span></li>
+    <li><b>Full screen</b><span>Fills the whole screen. If the page is embedded somewhere that does not allow it, open it in its own browser tab first.</span></li>
+    <li><b>About the work</b><span>This page.</span></li>
+  </ul>
+  <div class="keys">
+    <span><kbd>1</kbd>–<kbd>6</kbd></span><span>Hold joy, contentment, sadness, fear, anxiety or anger</span>
+    <span><kbd>W</kbd></span><span>Let it run on its own</span>
+    <span><kbd>F</kbd></span><span>Full screen</span>
+    <span><kbd>I</kbd></span><span>Show or hide the controls</span>
+  </div>
+
+  <h3 class="sub">Reading the legend</h3>
+  <p>A small legend in the lower right corner follows the chain from moment to feeling. Its words type themselves out in place whenever they change; nothing in it moves.</p>
+  <ul class="legend-parts">
+    <li><b>Outside</b><span>The everyday moment that set the current feeling going, addressed to you.</span></li>
+    <li><b>Inside</b><span>The seven chemicals, live. The short vertical mark is each one's resting level; a bar to the right means it is above rest, to the left below. Bars grow and shrink at each chemical's own speed.</span></li>
+    <li><b>Felt as</b><span>The feeling the chemistry most resembles right now, with its colour, and a bar for how clearly it resembles it. “Stillness” means no feeling stands out.</span></li>
+    <li><b>Why</b><span>The line beneath names the two chemicals that most shape the reading, for example “noradrenaline surges, dopamine rushes in”.</span></li>
+    <li><b>Underneath</b><span>“A little … underneath” appears when a second feeling is nearly as close.</span></li>
+  </ul>
+
+  <h3 class="sub">What you will notice</h3>
+  <ul>
+    <li>Each scene is held in its feeling's colour: joy gold, contentment teal, sadness blue-grey, fear icy white, anxiety violet, anger red. A new colour washes in from the front: the nearest fibres change first, the farthest and the background a second or two later.</li>
+    <li>The gentle feelings move slowly, the alarmed ones fast. Movement changes the moment the chemistry does; the name and colour follow once the reading is clear.</li>
+    <li>Running on its own, a scene stays at least six seconds, and usually fifteen to thirty.</li>
+    <li>The piece adapts its detail to the computer it runs on. On a slower machine you may see slightly fewer fibres; the movement stays smooth.</li>
+  </ul>
+  <p class="muted">Flashing is kept well below three per second. With “reduce motion” switched on in the operating system, the piece moves more gently and draws fewer fibres.</p>
+
+  <h2>How it's made</h2>
+  <p>The piece is a single web page: plain HTML, CSS and JavaScript, with no framework, no build step and nothing to install. It runs in any current browser (Chrome, Edge, Safari or Firefox) with graphics acceleration, and works offline once loaded (without a connection, the two typefaces fall back to the system's own).</p>
+
+  <h3 class="sub">The model, step by step</h3>
+  <div class="flow"><span>Feeling chosen</span><i>→</i><span>Recipe</span><i>→</i><span>Seven chemicals, each at its own speed</span><i>→</i><span>Reading</span><i>→</i><span>Name, colour, tempo</span></div>
+  <ol>
+    <li><strong>Choosing.</strong> Running on its own, the next feeling is drawn at random from a table of plausible successions, with a random duration (for example joy 14–22 s, sadness 18–30 s) and intensity; in about a quarter of the scenes a second feeling joins at reduced strength. Feelings cross-fade over about a second.</li>
+    <li><strong>Chemistry.</strong> Each feeling is a recipe of pushes on the seven chemicals. Every chemical moves toward the sum of what the active feelings ask of it, faster when it is being released and more slowly when it clears (timings below). Short events ride on top: dopamine bursts on joy's beat, dips in sadness, a noradrenaline jolt at fear's startle and at anger's release.</li>
+    <li><strong>Reading.</strong> Every frame, the live mix of seven values is compared with each feeling's recipe by cosine similarity, which measures whether the mix points the same way as the recipe, whatever its strength. Scores are scaled down when the mix is weak and smoothed over about 0.8 s. Below 0.3 for every feeling, the reading is “stillness”.</li>
+    <li><strong>Showing.</strong> A new reading replaces the shown one only once it has led for a while: one second if it is the feeling being played, three and a half seconds if the chemistry is merely passing through it on the way to another. Running on its own, a scene is shown for at least six seconds.</li>
+    <li><strong>Movement.</strong> Speed, tremor, order, turbulence, bundling, sinking, flight and pull are computed from the chemistry directly, every frame.</li>
+  </ol>
+
+  <h3 class="sub">Chemical timings</h3>
+  <p>Seconds to move about two thirds of the way toward a new level, compressed for viewing.</p>
+  <table class="tbl">
+    <thead><tr><th>Chemical</th><th>Release</th><th>Clearing</th></tr></thead>
+    <tbody>
+      <tr><td>Noradrenaline</td><td class="num">0.4 s</td><td class="num">6 s</td></tr>
+      <tr><td>Dopamine</td><td class="num">1 s</td><td class="num">2.5 s</td></tr>
+      <tr><td>Endorphins</td><td class="num">4 s</td><td class="num">10 s</td></tr>
+      <tr><td>Serotonin</td><td class="num">8 s</td><td class="num">14 s</td></tr>
+      <tr><td>Oxytocin</td><td class="num">6 s</td><td class="num">12 s</td></tr>
+      <tr><td>GABA</td><td class="num">3 s</td><td class="num">5 s</td></tr>
+      <tr><td>CRF (stress signal)</td><td class="num">2 s</td><td class="num">6 s</td></tr>
+      <tr><td>Cortisol (follows CRF)</td><td class="num">14 s</td><td class="num">45 s</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">The flow</h3>
+  <p>The fibres are carried by a simulated wind built like a weather map: a prevailing current that meanders, gusts, and drifting pressure systems that turn as eddies. It is computed as a stream function, which keeps the flow free of sources and sinks, as real air is, so fibres never bunch up or vanish unnaturally. The chemistry shapes it: arousal speeds it up, GABA calms it, its absence breaks it into many small eddies, serotonin lengthens and orders its waves, cortisol makes it sink. Bursts and pulls curl as air does, never shooting fibres in straight lines.</p>
+
+  <h3 class="sub">Fibres and depth</h3>
+  <p>Each fibre is a particle that remembers its last 44 positions; its trail is drawn from that memory. The fibres fill a volume rather than a surface, in four layers from a faint deep layer far behind to near fibres in front. A slowly rolling depth field and tilted eddies carry them toward the viewer and away; seen in perspective from a slowly drifting viewpoint, near fibres move faster, thicker and brighter, cast a soft shadow on what lies behind them, and change colour first, while far ones thin and fade into the dark. Near fibres are drawn as bundles of three strands twisting round each other, and a slowly circling light gives every fibre a sheen where its direction meets it, as on hair or silk.</p>
+
+  <h3 class="sub">Rendering</h3>
+  <p>The fibres are drawn on the graphics card with WebGL2: each is a thin ribbon, read straight from its stored path, in three passes (a soft glow at low resolution, the fine strands, and sharp bright cores), blended so dense bundles ease toward white rather than clipping. A soft bloom and a fine film grain finish the image; the grain also smooths banding in dark gradients on large screens. Where WebGL2 is not available, a simpler canvas version with fewer fibres takes over automatically.</p>
+
+  <h3 class="sub">Adapting to the screen</h3>
+  <p>The number of fibres grows with the screen's pixels (about 4,900 per megapixel, plus the deep layer: some 22,000 on a 1920 × 1280 screen, and some 95,000 on the Exchange screen) while each stays about a pixel thin, so the grain is as fine on a wall as on a laptop. The piece renders at native resolution up to about 10 megapixels by default, and beyond with <code>#full</code>. A governor keeps the motion smooth: when frames run slower than about 24 a second it temporarily draws fewer fibres, and restores them when there is room.</p>
+
+  <h3 class="sub">Options in the address</h3>
+  <table class="tbl">
+    <tbody>
+      <tr><td><code>#full</code></td><td>Render at the screen's full native resolution beyond 10 megapixels. Use it on the Exchange screen (3840 × 3024, 11.6 megapixels).</td></tr>
+      <tr><td><code>?steady</code></td><td>Keep every fibre, never trimming for speed.</td></tr>
+      <tr><td><code>?canvas</code></td><td>Use the simpler canvas version instead of the graphics card.</td></tr>
+      <tr><td><code>?debug</code></td><td>Expose the live state in the browser console (<code>window.__iw</code>), for example the current fibre count.</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">Files</h3>
+  <table class="tbl">
+    <tbody>
+      <tr><td><code>index.html</code></td><td>The piece: canvas, hint and controls.</td></tr>
+      <tr><td><code>about.html</code></td><td>This page.</td></tr>
+      <tr><td><code>css/styles.css</code></td><td>Styling of the controls.</td></tr>
+      <tr><td><code>js/app.js</code></td><td>Everything else, in sections: chemistry, motion and colour, events, weather, fibres, rendering, legend, controls.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Notes on the science</h2>
+  <p>The links between feelings and chemicals follow common findings in affective neuroscience but are deliberately simplified. Real emotional states involve many more systems, vary between people, and unfold over longer times than shown here. The model is an artistic interpretation, not a diagnostic or clinical tool.</p>
+  <p>Further reading:</p>
+  <ul class="refs">
+    <li>Panksepp, J. (1998). <em>Affective Neuroscience: The Foundations of Human and Animal Emotions.</em> Oxford University Press.</li>
+    <li>LeDoux, J. (1996). <em>The Emotional Brain.</em> Simon &amp; Schuster.</li>
+    <li>Berridge, K. C., &amp; Robinson, T. E. (1998). What is the role of dopamine in reward: hedonic impact, reward learning, or incentive salience? <em>Brain Research Reviews</em>, 28(3), 309–369.</li>
+    <li>Davis, M., Walker, D. L., Miles, L., &amp; Grillon, C. (2010). Phasic vs sustained fear in rats and humans: role of the extended amygdala in fear vs anxiety. <em>Neuropsychopharmacology</em>, 35(1), 105–135.</li>
+    <li>Lövheim, H. (2012). A new three-dimensional model for emotions and monoamine neurotransmitters. <em>Medical Hypotheses</em>, 78(2), 341–348.</li>
+  </ul>
+
+  <footer>
+    <p>myelume – emotions as passing chemistry. Concept and development: Chris Huetter, 2026.</p>
+    <p><a href="index.html">Enter the piece</a></p>
+  </footer>
+</main>
+</body>
+</html>

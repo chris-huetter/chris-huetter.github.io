@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Terra Circadia</title>
+  <script type="module" crossorigin src="./assets/main-C7cP25gN.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-h3q3SCRR.css">
+  <link rel="stylesheet" crossorigin href="./assets/fonts-BDcF5uZQ.css">
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div id="stage" aria-label="Terra Circadia: the protein network as a topographic map; the body clock and the team for this time of day rise into mountains">
+    <canvas id="gl"></canvas>
+    <svg class="anno" id="anno" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="labels" id="labels"></div>
+    <div class="acol l" id="colL"></div>
+    <div class="acol r" id="colR"></div>
+    <svg class="dial" id="dial" viewBox="0 0 100 100" aria-hidden="true"></svg>
+    <div class="dialcap">ABOUT 24 HOURS</div>
+    <div class="key" id="key" aria-label="How to read the map"></div>
+    <div class="caption" id="caption" aria-live="polite"></div>
+    <div class="credits" id="credits"></div>
+    <div class="line on" id="line"><div class="kick"><span class="kt"></span></div><div class="h"></div><div class="s"></div></div>
+    <div class="busy" id="busy">Loading</div>
+  </div>
+</div>
+
+<div class="bar" id="bar">
+  <div class="grp" id="states" role="group" aria-label="Jump to scene"></div>
+  <div class="grp">
+    <button id="bPause" type="button" aria-pressed="false">Pause</button>
+    <button id="bFull" type="button">Fullscreen</button>
+    <button id="bHide" type="button">Hide controls</button>
+    <a href="./about.html">About the work</a>
+  </div>
+</div>
+</body>
+</html>

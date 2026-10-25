@@ -1,0 +1,582 @@
+# Proteins behind brain abilities: Gene Ontology release 2026-07-26, biological processes, experimental and curated annotations
+# (evidence codes other than IEA and ND), including more specific terms; proteins on the network only.
+# Source: Gene Ontology (geneontology.org), Gene Ontology Consortium, Genetics 2023. License: CC BY 4.0.
+# Built 2026-10-03 by scripts/fetch-data.mjs.
+ability	gene	group
+Remembering	ABCA7	behavior
+Remembering	ACSS2	behavior
+Remembering	ADCY8	behavior
+Remembering	APOE	behavior
+Remembering	APP	behavior
+Remembering	ARC	behavior
+Remembering	ATXN1	behavior
+Remembering	ATXN1L	behavior
+Remembering	CAMK4	behavior
+Remembering	CIC	behavior
+Remembering	CPEB3	behavior
+Remembering	DRD1	behavior
+Remembering	EGR1	behavior
+Remembering	EIF4EBP2	behavior
+Remembering	FGF13	behavior
+Remembering	GHSR	behavior
+Remembering	INSR	behavior
+Remembering	KAT2A	behavior
+Remembering	KLK8	behavior
+Remembering	LDLR	behavior
+Remembering	MAP1A	behavior
+Remembering	MAPT	behavior
+Remembering	MUSK	behavior
+Remembering	NFATC4	behavior
+Remembering	NPAS4	behavior
+Remembering	NTF4	behavior
+Remembering	PLCB1	behavior
+Remembering	PPP3CB	behavior
+Remembering	PRNP	behavior
+Remembering	PSEN1	behavior
+Remembering	PTN	behavior
+Remembering	RASGRF1	behavior
+Remembering	RELN	behavior
+Remembering	RGS14	behavior
+Remembering	SCN2A	behavior
+Remembering	SHANK1	behavior
+Remembering	SHANK3	behavior
+Remembering	SLC2A4	behavior
+Remembering	SLC6A1	behavior
+Remembering	SLC8A2	behavior
+Remembering	SLC8A3	behavior
+Remembering	SYT11	behavior
+Remembering	TH	behavior
+Remembering	TREM2	behavior
+Remembering	VLDLR	behavior
+Remembering	YTHDF1	behavior
+Learning	ABCA7	behavior
+Learning	ADCY3	behavior
+Learning	APP	behavior
+Learning	ATXN1	behavior
+Learning	ATXN1L	behavior
+Learning	CIC	behavior
+Learning	CLDN5	behavior
+Learning	CNTNAP2	behavior
+Learning	DLG4	behavior
+Learning	DRD1	behavior
+Learning	DRD2	behavior
+Learning	DRD3	behavior
+Learning	EPHB2	behavior
+Learning	FGF13	behavior
+Learning	FYN	behavior
+Learning	GHSR	behavior
+Learning	GPR88	behavior
+Learning	GRIN1	behavior
+Learning	HTT	behavior
+Learning	INSR	behavior
+Learning	MAP1A	behavior
+Learning	MAPK8IP2	behavior
+Learning	NF1	behavior
+Learning	NLGN3	behavior
+Learning	NLGN4X	behavior
+Learning	NLGN4Y	behavior
+Learning	NPAS4	behavior
+Learning	NRXN1	behavior
+Learning	NRXN2	behavior
+Learning	NRXN3	behavior
+Learning	NTRK2	behavior
+Learning	PLN	behavior
+Learning	PPP3CB	behavior
+Learning	PTN	behavior
+Learning	RELN	behavior
+Learning	RGS14	behavior
+Learning	SHANK1	behavior
+Learning	SHANK2	behavior
+Learning	SHANK3	behavior
+Learning	SLC6A1	behavior
+Learning	SLC8A2	behavior
+Learning	SLC8A3	behavior
+Learning	STRA6	behavior
+Learning	SYNJ1	behavior
+Learning	SYT11	behavior
+Learning	TH	behavior
+Learning	TLR2	behavior
+Learning	YTHDF1	behavior
+Moving	ABCA2	behavior
+Moving	ADCY8	behavior
+Moving	APOE	behavior
+Moving	APP	behavior
+Moving	ATP1A2	behavior
+Moving	ATP7A	behavior
+Moving	BTBD9	behavior
+Moving	DRD1	behavior
+Moving	DRD2	behavior
+Moving	DRD3	behavior
+Moving	DRD4	behavior
+Moving	EGR1	behavior
+Moving	FOXA2	behavior
+Moving	GDNF	behavior
+Moving	GPR52	behavior
+Moving	ID2	behavior
+Moving	MTA1	behavior
+Moving	NCOR1	behavior
+Moving	NPY2R	behavior
+Moving	NTF4	behavior
+Moving	PAFAH1B1	behavior
+Moving	PEX13	behavior
+Moving	PLN	behavior
+Moving	PRKN	behavior
+Moving	PTEN	behavior
+Moving	PUM1	behavior
+Moving	RASD2	behavior
+Moving	SOD1	behavior
+Moving	STRN	behavior
+Moving	TH	behavior
+Moving	TSC1	behavior
+Moving	USP2	behavior
+Keeping time (body clock)	AANAT	behavior
+Keeping time (body clock)	AHR	behavior
+Keeping time (body clock)	ARNTL	behavior
+Keeping time (body clock)	ARNTL2	behavior
+Keeping time (body clock)	ASS1	behavior
+Keeping time (body clock)	ATF4	behavior
+Keeping time (body clock)	BTBD9	behavior
+Keeping time (body clock)	CAVIN3	behavior
+Keeping time (body clock)	CLOCK	behavior
+Keeping time (body clock)	CREB1	behavior
+Keeping time (body clock)	CRY1	behavior
+Keeping time (body clock)	CRY2	behavior
+Keeping time (body clock)	CSNK1D	behavior
+Keeping time (body clock)	CSNK1E	behavior
+Keeping time (body clock)	DRD2	behavior
+Keeping time (body clock)	DRD3	behavior
+Keeping time (body clock)	DYRK1A	behavior
+Keeping time (body clock)	EGR1	behavior
+Keeping time (body clock)	EGR3	behavior
+Keeping time (body clock)	EP300	behavior
+Keeping time (body clock)	GSK3B	behavior
+Keeping time (body clock)	HDAC1	behavior
+Keeping time (body clock)	HDAC2	behavior
+Keeping time (body clock)	HDAC3	behavior
+Keeping time (body clock)	HEBP1	behavior
+Keeping time (body clock)	HNRNPD	behavior
+Keeping time (body clock)	HNRNPU	behavior
+Keeping time (body clock)	HTR7	behavior
+Keeping time (body clock)	HUWE1	behavior
+Keeping time (body clock)	ID2	behavior
+Keeping time (body clock)	IMPDH2	behavior
+Keeping time (body clock)	KDM2A	behavior
+Keeping time (body clock)	KDM5A	behavior
+Keeping time (body clock)	KDM8	behavior
+Keeping time (body clock)	KLF9	behavior
+Keeping time (body clock)	KMT2A	behavior
+Keeping time (body clock)	LGR4	behavior
+Keeping time (body clock)	MAGED1	behavior
+Keeping time (body clock)	MC3R	behavior
+Keeping time (body clock)	METTL3	behavior
+Keeping time (body clock)	MTA1	behavior
+Keeping time (body clock)	MTNR1A	behavior
+Keeping time (body clock)	MYBBP1A	behavior
+Keeping time (body clock)	MYCBP2	behavior
+Keeping time (body clock)	NCOA2	behavior
+Keeping time (body clock)	NCOR1	behavior
+Keeping time (body clock)	NDUFA9	behavior
+Keeping time (body clock)	NGFR	behavior
+Keeping time (body clock)	NONO	behavior
+Keeping time (body clock)	NPAS2	behavior
+Keeping time (body clock)	NR0B2	behavior
+Keeping time (body clock)	NR1D1	behavior
+Keeping time (body clock)	NR1D2	behavior
+Keeping time (body clock)	NRIP1	behavior
+Keeping time (body clock)	NUDT12	behavior
+Keeping time (body clock)	OGT	behavior
+Keeping time (body clock)	PASD1	behavior
+Keeping time (body clock)	PER1	behavior
+Keeping time (body clock)	PER2	behavior
+Keeping time (body clock)	PER3	behavior
+Keeping time (body clock)	PLN	behavior
+Keeping time (body clock)	PML	behavior
+Keeping time (body clock)	PPARA	behavior
+Keeping time (body clock)	PPARGC1A	behavior
+Keeping time (body clock)	PPP1CA	behavior
+Keeping time (body clock)	PPP1CB	behavior
+Keeping time (body clock)	PPP1CC	behavior
+Keeping time (body clock)	PRMT5	behavior
+Keeping time (body clock)	PTEN	behavior
+Keeping time (body clock)	RBM4	behavior
+Keeping time (body clock)	RELB	behavior
+Keeping time (body clock)	RORA	behavior
+Keeping time (body clock)	RORC	behavior
+Keeping time (body clock)	SIRT1	behavior
+Keeping time (body clock)	SIRT6	behavior
+Keeping time (body clock)	SUV39H1	behavior
+Keeping time (body clock)	SUV39H2	behavior
+Keeping time (body clock)	TIMELESS	behavior
+Keeping time (body clock)	TNFRSF11A	behavior
+Keeping time (body clock)	TOP1	behavior
+Keeping time (body clock)	TP53	behavior
+Keeping time (body clock)	USP2	behavior
+Keeping time (body clock)	ZFHX3	behavior
+Being social	ATXN1	behavior
+Being social	ATXN1L	behavior
+Being social	CIC	behavior
+Being social	CNTNAP2	behavior
+Being social	CX3CR1	behavior
+Being social	DRD3	behavior
+Being social	DRD4	behavior
+Being social	EIF4EBP2	behavior
+Being social	GRPR	behavior
+Being social	MAPK8IP2	behavior
+Being social	MKKS	behavior
+Being social	NLGN3	behavior
+Being social	NLGN4X	behavior
+Being social	NLGN4Y	behavior
+Being social	NPAS4	behavior
+Being social	NRXN1	behavior
+Being social	NRXN2	behavior
+Being social	NRXN3	behavior
+Being social	OXT	behavior
+Being social	OXTR	behavior
+Being social	PTEN	behavior
+Being social	RPTOR	behavior
+Being social	SEPTIN5	behavior
+Being social	SHANK1	behavior
+Being social	SHANK2	behavior
+Being social	SHANK3	behavior
+Being social	TREM2	behavior
+Seeing	ADGRV1	senses
+Seeing	AIPL1	senses
+Seeing	AOC2	senses
+Seeing	ARR3	senses
+Seeing	ATF6	senses
+Seeing	ATXN7	senses
+Seeing	BBS2	senses
+Seeing	CACNA1F	senses
+Seeing	CACNA2D4	senses
+Seeing	CEP250	senses
+Seeing	CHM	senses
+Seeing	CNGA1	senses
+Seeing	CNGA3	senses
+Seeing	CNGB1	senses
+Seeing	CNGB3	senses
+Seeing	COL11A1	senses
+Seeing	COL18A1	senses
+Seeing	COL1A1	senses
+Seeing	COL2A1	senses
+Seeing	CRX	senses
+Seeing	CRYAA	senses
+Seeing	CRYGC	senses
+Seeing	DHRS3	senses
+Seeing	DRAM2	senses
+Seeing	EFEMP1	senses
+Seeing	FSCN2	senses
+Seeing	GNAT1	senses
+Seeing	GNAT2	senses
+Seeing	GNAT3	senses
+Seeing	GRK1	senses
+Seeing	GRM6	senses
+Seeing	GRM8	senses
+Seeing	KCNK9	senses
+Seeing	KIFC3	senses
+Seeing	LUM	senses
+Seeing	MYO7A	senses
+Seeing	MYO9A	senses
+Seeing	NDP	senses
+Seeing	NRL	senses
+Seeing	NXNL2	senses
+Seeing	PAX2	senses
+Seeing	PAX6	senses
+Seeing	PCDH15	senses
+Seeing	PDE6A	senses
+Seeing	PDE6B	senses
+Seeing	PDE6D	senses
+Seeing	PDE6G	senses
+Seeing	RABGGTA	senses
+Seeing	RABGGTB	senses
+Seeing	RCVRN	senses
+Seeing	RDH10	senses
+Seeing	RDH12	senses
+Seeing	RDH5	senses
+Seeing	RGS16	senses
+Seeing	RGS9BP	senses
+Seeing	RHO	senses
+Seeing	RP2	senses
+Seeing	RPGR	senses
+Seeing	TACSTD2	senses
+Seeing	TGFBI	senses
+Seeing	TH	senses
+Seeing	TYR	senses
+Seeing	UNC119	senses
+Seeing	WFS1	senses
+Hearing	ADGRV1	senses
+Hearing	ALDH7A1	senses
+Hearing	ATP6V0A4	senses
+Hearing	ATP6V1B1	senses
+Hearing	BIRC5	senses
+Hearing	CACNA1D	senses
+Hearing	CDC14A	senses
+Hearing	CDH23	senses
+Hearing	CLIC5	senses
+Hearing	COL11A1	senses
+Hearing	COL11A2	senses
+Hearing	COL1A1	senses
+Hearing	COL2A1	senses
+Hearing	COL4A3	senses
+Hearing	DIAPH1	senses
+Hearing	EPS8L2	senses
+Hearing	ESPNL	senses
+Hearing	EYA1	senses
+Hearing	GJB6	senses
+Hearing	GRAP	senses
+Hearing	GRM7	senses
+Hearing	GRXCR1	senses
+Hearing	GRXCR2	senses
+Hearing	HOMER2	senses
+Hearing	HOXA1	senses
+Hearing	HPN	senses
+Hearing	KCNE1	senses
+Hearing	KCNQ1	senses
+Hearing	KCNQ4	senses
+Hearing	KIT	senses
+Hearing	LHFPL3	senses
+Hearing	LHFPL4	senses
+Hearing	LHFPL5	senses
+Hearing	LRIG1	senses
+Hearing	LRP2	senses
+Hearing	MARVELD2	senses
+Hearing	MKKS	senses
+Hearing	MYH1	senses
+Hearing	MYH14	senses
+Hearing	MYO15A	senses
+Hearing	MYO1A	senses
+Hearing	MYO3A	senses
+Hearing	MYO3B	senses
+Hearing	MYO7A	senses
+Hearing	MYO7B	senses
+Hearing	NDUFB9	senses
+Hearing	NIPBL	senses
+Hearing	OTOF	senses
+Hearing	P2RX2	senses
+Hearing	PAX3	senses
+Hearing	PCDH15	senses
+Hearing	PDZD7	senses
+Hearing	PJVK	senses
+Hearing	REST	senses
+Hearing	RIPOR2	senses
+Hearing	ROR1	senses
+Hearing	SERPINB6	senses
+Hearing	SNAI2	senses
+Hearing	SOD1	senses
+Hearing	SPTBN4	senses
+Hearing	STX4	senses
+Hearing	TBL1X	senses
+Hearing	TFAP2A	senses
+Hearing	TMC1	senses
+Hearing	TMC2	senses
+Hearing	TMIE	senses
+Hearing	TPRN	senses
+Hearing	USH1C	senses
+Hearing	USH1G	senses
+Hearing	USH2A	senses
+Hearing	WDR1	senses
+Hearing	WFS1	senses
+Hearing	WHRN	senses
+Hearing	ZNF354A	senses
+Tasting	ASIC1	senses
+Tasting	ASIC2	senses
+Tasting	ASIC3	senses
+Tasting	AZGP1	senses
+Tasting	CD36	senses
+Tasting	GNAT2	senses
+Tasting	GNAT3	senses
+Tasting	ITPR3	senses
+Tasting	LPO	senses
+Tasting	PIGR	senses
+Tasting	PIP	senses
+Tasting	SCNN1A	senses
+Tasting	SCNN1B	senses
+Tasting	SCNN1D	senses
+Tasting	SCNN1G	senses
+Tasting	TAS1R1	senses
+Tasting	TAS1R2	senses
+Tasting	TAS1R3	senses
+Tasting	TAS2R46	senses
+Rewiring	ABL1	rewiring
+Rewiring	ACE	rewiring
+Rewiring	ACHE	rewiring
+Rewiring	ADCY1	rewiring
+Rewiring	ADCY8	rewiring
+Rewiring	ADGRB1	rewiring
+Rewiring	ADGRF1	rewiring
+Rewiring	ADGRG1	rewiring
+Rewiring	ADGRL2	rewiring
+Rewiring	ADGRL3	rewiring
+Rewiring	AGER	rewiring
+Rewiring	AKAP5	rewiring
+Rewiring	ANAPC2	rewiring
+Rewiring	APOE	rewiring
+Rewiring	APP	rewiring
+Rewiring	ARC	rewiring
+Rewiring	ARF1	rewiring
+Rewiring	ATF4	rewiring
+Rewiring	BDNF	rewiring
+Rewiring	BSN	rewiring
+Rewiring	C1QA	rewiring
+Rewiring	C1QB	rewiring
+Rewiring	C1QC	rewiring
+Rewiring	C3	rewiring
+Rewiring	CALM1	rewiring
+Rewiring	CALM2	rewiring
+Rewiring	CALM3	rewiring
+Rewiring	CAMK2A	rewiring
+Rewiring	CAMK2B	rewiring
+Rewiring	CAMK2D	rewiring
+Rewiring	CAMK2G	rewiring
+Rewiring	CASP3	rewiring
+Rewiring	CBLN1	rewiring
+Rewiring	CDC20	rewiring
+Rewiring	CDH1	rewiring
+Rewiring	CDH2	rewiring
+Rewiring	CDK5	rewiring
+Rewiring	CNTN4	rewiring
+Rewiring	CPEB3	rewiring
+Rewiring	CPLX2	rewiring
+Rewiring	CRHR2	rewiring
+Rewiring	CTNNB1	rewiring
+Rewiring	CX3CL1	rewiring
+Rewiring	CX3CR1	rewiring
+Rewiring	DAG1	rewiring
+Rewiring	DBN1	rewiring
+Rewiring	DBNL	rewiring
+Rewiring	DKK1	rewiring
+Rewiring	DLG4	rewiring
+Rewiring	DNM3	rewiring
+Rewiring	DRD1	rewiring
+Rewiring	DRD2	rewiring
+Rewiring	DSCAM	rewiring
+Rewiring	DVL1	rewiring
+Rewiring	EGFLAM	rewiring
+Rewiring	EIF4EBP2	rewiring
+Rewiring	EPHA4	rewiring
+Rewiring	EPHB2	rewiring
+Rewiring	F2R	rewiring
+Rewiring	FBXO45	rewiring
+Rewiring	FGF13	rewiring
+Rewiring	FLRT3	rewiring
+Rewiring	FMR1	rewiring
+Rewiring	FXR1	rewiring
+Rewiring	FXR2	rewiring
+Rewiring	FZD1	rewiring
+Rewiring	FZD5	rewiring
+Rewiring	GABRA1	rewiring
+Rewiring	GABRA2	rewiring
+Rewiring	GABRA3	rewiring
+Rewiring	GABRA4	rewiring
+Rewiring	GABRA5	rewiring
+Rewiring	GABRA6	rewiring
+Rewiring	GABRB2	rewiring
+Rewiring	GABRB3	rewiring
+Rewiring	GABRE	rewiring
+Rewiring	GABRG1	rewiring
+Rewiring	GABRG2	rewiring
+Rewiring	GABRG3	rewiring
+Rewiring	GHSR	rewiring
+Rewiring	GIPC1	rewiring
+Rewiring	GRIA1	rewiring
+Rewiring	GRIA3	rewiring
+Rewiring	GRID2	rewiring
+Rewiring	GRIK2	rewiring
+Rewiring	GRIN1	rewiring
+Rewiring	GRIN2A	rewiring
+Rewiring	GRIN2B	rewiring
+Rewiring	GRIN2C	rewiring
+Rewiring	GRIN2D	rewiring
+Rewiring	GRIN3A	rewiring
+Rewiring	GRIN3B	rewiring
+Rewiring	GSK3B	rewiring
+Rewiring	IL1RAPL1	rewiring
+Rewiring	INS	rewiring
+Rewiring	ITGAM	rewiring
+Rewiring	JPH3	rewiring
+Rewiring	JPH4	rewiring
+Rewiring	KAT2A	rewiring
+Rewiring	KCNB1	rewiring
+Rewiring	KIRREL3	rewiring
+Rewiring	LGI2	rewiring
+Rewiring	LILRB2	rewiring
+Rewiring	LRP4	rewiring
+Rewiring	LRRC4	rewiring
+Rewiring	LRRC7	rewiring
+Rewiring	MAP1A	rewiring
+Rewiring	MAPT	rewiring
+Rewiring	MEF2C	rewiring
+Rewiring	MPP2	rewiring
+Rewiring	MYCBP2	rewiring
+Rewiring	NCDN	rewiring
+Rewiring	NFATC4	rewiring
+Rewiring	NLGN1	rewiring
+Rewiring	NLGN2	rewiring
+Rewiring	NLGN3	rewiring
+Rewiring	NLGN4X	rewiring
+Rewiring	NLGN4Y	rewiring
+Rewiring	NPAS4	rewiring
+Rewiring	NPTN	rewiring
+Rewiring	NRCAM	rewiring
+Rewiring	NRXN1	rewiring
+Rewiring	NRXN2	rewiring
+Rewiring	NRXN3	rewiring
+Rewiring	OXTR	rewiring
+Rewiring	PCLO	rewiring
+Rewiring	PENK	rewiring
+Rewiring	PICK1	rewiring
+Rewiring	PLXNA1	rewiring
+Rewiring	PLXNA2	rewiring
+Rewiring	PLXNA3	rewiring
+Rewiring	PLXNA4	rewiring
+Rewiring	PLXNB1	rewiring
+Rewiring	PLXNB2	rewiring
+Rewiring	PLXNB3	rewiring
+Rewiring	PLXNC1	rewiring
+Rewiring	PLXND1	rewiring
+Rewiring	POU4F1	rewiring
+Rewiring	PPFIA3	rewiring
+Rewiring	PPP3CB	rewiring
+Rewiring	PRKCZ	rewiring
+Rewiring	PRRT2	rewiring
+Rewiring	PTEN	rewiring
+Rewiring	PTK2B	rewiring
+Rewiring	PTN	rewiring
+Rewiring	PTPRD	rewiring
+Rewiring	RAB29	rewiring
+Rewiring	RAB3A	rewiring
+Rewiring	RAB5A	rewiring
+Rewiring	RAPGEF2	rewiring
+Rewiring	RASGRF1	rewiring
+Rewiring	RELN	rewiring
+Rewiring	RGS14	rewiring
+Rewiring	RYK	rewiring
+Rewiring	SCT	rewiring
+Rewiring	SCTR	rewiring
+Rewiring	SHANK2	rewiring
+Rewiring	SHANK3	rewiring
+Rewiring	SHISA6	rewiring
+Rewiring	SHISA9	rewiring
+Rewiring	SIPA1L1	rewiring
+Rewiring	SKP1	rewiring
+Rewiring	SLC18A3	rewiring
+Rewiring	SLC8A2	rewiring
+Rewiring	SLC8A3	rewiring
+Rewiring	SLITRK1	rewiring
+Rewiring	SORCS3	rewiring
+Rewiring	SQSTM1	rewiring
+Rewiring	SRGAP2	rewiring
+Rewiring	STX4	rewiring
+Rewiring	SYNGAP1	rewiring
+Rewiring	SYP	rewiring
+Rewiring	SYT7	rewiring
+Rewiring	TREM2	rewiring
+Rewiring	TYROBP	rewiring
+Rewiring	UBE3A	rewiring
+Rewiring	VAMP2	rewiring
+Rewiring	WNT3A	rewiring
+Rewiring	WNT5A	rewiring
+Rewiring	WNT7A	rewiring
+Rewiring	XKR8	rewiring
+Rewiring	YTHDF1	rewiring
+Rewiring	YWHAG	rewiring
+Rewiring	YWHAH	rewiring

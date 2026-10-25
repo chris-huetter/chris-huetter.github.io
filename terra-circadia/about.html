@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Terra Circadia · About the work</title>
+<meta name="description" content="Terra Circadia: a protein landscape that keeps time. Nearly 10,000 human proteins become a topographic map; teams behind everyday abilities rise into mountains, and the piece follows the real time of day.">
+<style>
+:root{
+  --bg:#070b16; --panel:#0e1526; --line:#22304d; --ink:#e3ecff; --dim:#9aabcc; --accent:#ffd166; --link:#8fb6ff;
+  --code:#0a1020; --on-accent:#1a1300; --card:rgba(143,182,255,.05);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ --bg:#f6f8fc; --panel:#ffffff; --line:#d7deeb; --ink:#0f1a30; --dim:#4a5875; --accent:#9a6a00; --link:#2457c5; --code:#eef2f9; --on-accent:#ffffff; --card:rgba(15,26,48,.035); }
+}
+:root[data-theme="light"]{ --bg:#f6f8fc; --panel:#ffffff; --line:#d7deeb; --ink:#0f1a30; --dim:#4a5875; --accent:#9a6a00; --link:#2457c5; --code:#eef2f9; --on-accent:#ffffff; --card:rgba(15,26,48,.035); }
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Bricolage Grotesque",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:clamp(40px,8vw,88px) 16px 96px}
+h1{font-size:clamp(44px,8vw,76px);line-height:1;margin:0;font-weight:650;letter-spacing:-.02em}
+h2{font-size:clamp(26px,4vw,32px);line-height:1.15;margin:72px 0 14px;font-weight:650;letter-spacing:-.01em}
+h3{font-size:19px;margin:32px 0 8px;font-weight:650}
+p{margin:0 0 16px}
+a{color:var(--link);text-underline-offset:3px}
+.kick{font:500 12px/1 "IBM Plex Mono",monospace;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin:0 0 18px}
+.subtitle{font-size:clamp(22px,3.4vw,30px);line-height:1.2;font-weight:350;color:var(--dim);margin:8px 0 0}
+.lede{font-size:clamp(19px,2.6vw,23px);line-height:1.45;font-weight:400;margin:28px 0 30px;max-width:44rem}
+.muted{color:var(--dim)}
+code,pre,kbd{font-family:"IBM Plex Mono",monospace;font-size:14px}
+code{background:var(--code);padding:1px 6px;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;line-height:1.5;margin:0 0 16px}
+pre code{background:none;padding:0}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 6px;background:var(--panel)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px}
+.btn{display:inline-block;padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-decoration:none;font-weight:500}
+.btn.main{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn:hover{border-color:var(--link)}
+.btn:focus-visible{outline:2px solid var(--link);outline-offset:3px}
+.note{border-left:3px solid var(--accent);background:var(--card);border-radius:0 10px 10px 0;padding:14px 18px;margin:24px 0}
+.note b{display:block;font-weight:650;margin-bottom:4px}
+.note p:last-child{margin-bottom:0}
+/* the map's key, as on the wall */
+.key{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0 10px}
+.key div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.key svg{display:block;width:38px;height:38px;padding:6px;margin-bottom:10px;border-radius:8px;background:#0b1222}   /* the wall's own dark key panel, in both themes */
+.key b{display:block;font-weight:600;margin-bottom:2px}
+.key span{font-size:15px;color:var(--dim);line-height:1.45}
+.sw{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none;box-shadow:inset 0 0 0 1px var(--line)}
+/* the six scenes */
+.scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:20px}
+.scene{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.scene header{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.scene .n{font:500 12px/1 "IBM Plex Mono",monospace;letter-spacing:.1em;color:var(--accent)}
+.scene h3{margin:0;font-size:20px}
+.scene .len{margin-left:auto;font:400 13px/1 "IBM Plex Mono",monospace;color:var(--dim)}
+.scene .head{font-size:18px;line-height:1.35;margin:0 0 10px}
+.scene p:last-child{margin:0;font-size:15px;color:var(--dim);line-height:1.5}
+/* tables */
+.table{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 10px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td .sw{margin-right:8px;vertical-align:-1px}
+/* lists of parts: a name, then what it is */
+.parts{list-style:none;padding:0;margin:12px 0}
+.parts li{display:grid;grid-template-columns:9rem 1fr;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.parts li:first-child{border-top:1px solid var(--line)}
+.parts b{font-weight:600}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:16px 0}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:20px 0 24px;font-size:14px}
+.flow span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.flow i{font-style:normal;color:var(--dim)}
+.loop{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 12px}
+.loop div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.loop b{display:flex;align-items:center;gap:8px;font-weight:600;margin-bottom:4px}
+.loop span{font-size:15px;color:var(--dim)}
+ol li,ul li{margin:6px 0}
+.refs{padding-left:1.1em}
+.refs li{margin-bottom:10px;font-size:15px}
+footer{margin-top:80px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim);font-size:14px}
+footer p{margin:0 0 6px}
+@media (max-width:640px){
+  body{font-size:16px}
+  .key{grid-template-columns:1fr 1fr}
+  .scenes,.loop{grid-template-columns:1fr}
+  .parts li{grid-template-columns:1fr;gap:2px}
+}
+</style>
+  <link rel="stylesheet" crossorigin href="./assets/fonts-BDcF5uZQ.css">
+</head>
+<body>
+<main>
+  <p class="kick">MIT Museum · BRAIN · About the work</p>
+  <h1>Terra Circadia</h1>
+  <p class="subtitle">a protein landscape that keeps time</p>
+  <p class="lede">Your brain runs on proteins, and proteins work in teams. Terra Circadia lays nearly 10,000 human
+    proteins out as a landscape: where they crowd together the land rises, and the teams behind everyday abilities
+    gather into mountains. At its heart is the body clock, and the piece keeps the real time of day.</p>
+  <div class="btns">
+    <a class="btn main" href="./index.html">Enter the piece <span aria-hidden="true">→</span></a>
+    <a class="btn" href="./index.html?wall">Full window, no controls</a>
+  </div>
+
+  <h2>The idea</h2>
+  <p>Almost every job in a cell is done by proteins, tiny machines that touch and work together. Mapped by who
+    touches whom, the human proteins form one vast network. Drawn as dots and lines it is a tangle no one can read.
+    Terra Circadia turns it into land. Every protein lifts the ground a little where it sits, so busy neighborhoods
+    become hills. A team of proteins with one job, such as keeping time, learning or remembering, gathers in one
+    place and rises into a mountain, and the proteins that belong to two teams form the ridge between their
+    mountains.</p>
+  <p>The piece is built around the body clock: 83 proteins that keep a rhythm of about 24 hours in your cells and
+    tell your body when to wake up and when to sleep. Terra Circadia reads the real clock, so the team that rises
+    beside the body clock depends on the hour of your visit.</p>
+
+  <h2>How to read the map</h2>
+  <p>Six things to look for. The same key sits in the lower left corner of the wall.</p>
+  <div class="key">
+    <div><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="#c6d4f0"/></svg><b>A point</b><span>One protein: a tiny machine inside your cells.</span></div>
+    <div><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="15" r="2.4" fill="#c6d4f0"/><circle cx="19" cy="8" r="2.4" fill="#c6d4f0"/><line x1="5" y1="15" x2="19" y2="8" stroke="#8fb6ff" stroke-width="1.4"/></svg><b>A line</b><span>Two proteins that touch and work together.</span></div>
+    <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20 Q12 2 22 20" fill="none" stroke="#7f9cd0" stroke-width="1.2"/><path d="M6 20 Q12 9 18 20" fill="none" stroke="#7f9cd0" stroke-width="1.2"/><path d="M9.5 20 Q12 15 14.5 20" fill="none" stroke="#7f9cd0" stroke-width="1.2"/></svg><b>A hill</b><span>A crowd of proteins working together; the bigger the crowd, the higher the hill.</span></div>
+    <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 21 Q12 1 22 21" fill="rgba(255,209,102,.18)" stroke="#ffd166" stroke-width="1.4"/><path d="M6.5 21 Q12 10 17.5 21" fill="none" stroke="#ffd166" stroke-width="1"/></svg><b>A colored mountain</b><span>A team of proteins with one job, such as keeping time or learning.</span></div>
+    <div><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="12" y2="3" stroke="#ffd166" stroke-width="1"/><line x1="12" y1="3" x2="18" y2="7" stroke="#ffd166" stroke-width="1"/><line x1="6" y1="6" x2="18" y2="7" stroke="#ffd166" stroke-width="1"/><circle cx="6" cy="6" r="1.8" fill="#ffe39a"/><circle cx="12" cy="3" r="1.8" fill="#ffe39a"/><circle cx="18" cy="7" r="1.8" fill="#ffe39a"/><line x1="12" y1="9" x2="12" y2="13" stroke="#8fb6ff" stroke-dasharray="1.5 1.5"/><path d="M4 22 Q12 11 20 22" fill="none" stroke="#ffd166" stroke-width="1.2"/></svg><b>Points and lines above a mountain</b><span>Who works with whom inside that team.</span></div>
+    <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21 Q6 6 10 16 Q12 19 14 16 Q18 6 23 21" fill="none" stroke="#b8ff5a" stroke-width="1.4"/></svg><b>Green</b><span>Proteins that are members of two teams at once.</span></div>
+  </div>
+  <p class="muted">Each team keeps its color through the piece: the body clock gold, moving apricot, being social
+    blue, learning pink, remembering violet, rewiring sky blue. The land is one deep blue across the whole wall. There
+    is no red.</p>
+
+  <h2>Six scenes</h2>
+  <p>Each scene shows one idea and one visible change. Every scene stands on its own, so a visitor can arrive at any
+    moment; together they take about three and a half minutes, and then begin again.</p>
+  <div class="scenes">
+    <article class="scene">
+      <header><span class="n">1</span><h3>Now</h3><span class="len">40 s</span></header>
+      <p class="head">“Inside you, thousands of proteins work together.”</p>
+      <p>The whole network floats as a cloud of points and lines, then settles onto the ground, and the land rises out
+        of it. Notes point out one protein (CLOCK), one link, and CLOCK’s cluster: 15 partners, 10 of which also
+        keep time.</p>
+    </article>
+    <article class="scene">
+      <header><span class="n">2</span><h3>Body clock</h3><span class="len">28 s</span></header>
+      <p class="head">“Your body runs on a 24-hour rhythm.”</p>
+      <p>The 83 body clock proteins light up where they are, then gather into one gold mountain; the network of who
+        works with whom floats above it.</p>
+    </article>
+    <article class="scene">
+      <header><span class="n">3</span><h3>The loop</h3><span class="len">30 s</span></header>
+      <p class="head">“Two groups take turns, like a seesaw.”</p>
+      <p>Six starters and eight stoppers rise as two summits that take turns. The group at work rises and glows, its
+        proteins larger and brighter; the resting group sinks and dims. A dial turns once for every turn of the loop,
+        which takes about a day.</p>
+    </article>
+    <article class="scene">
+      <header><span class="n">4</span><h3>This hour</h3><span class="len">28 s</span></header>
+      <p class="head">“Good morning.” · “Lunchtime.” · “After lunch.” · “Late afternoon.”</p>
+      <p>The body clock beside the team for this time of day. The line says how many proteins they share; those
+        proteins form a green ridge, and the two with the most links are named.</p>
+    </article>
+    <article class="scene">
+      <header><span class="n">5</span><h3>Tonight</h3><span class="len">28 s</span></header>
+      <p class="head">“Sleep helps your brain rewire.”</p>
+      <p>The rewiring team (184 proteins that strengthen, build and prune the links between nerve cells) beside the
+        body clock, joined by the 5 proteins they share.</p>
+    </article>
+    <article class="scene">
+      <header><span class="n">6</span><h3>Your brain</h3><span class="len">48 s</span></header>
+      <p class="head">“While you watched, your brain was rewiring.”</p>
+      <p>Teams rise one after another in new places, link up with the mountains already standing, and sink back into
+        the land; never more than three at once. A caption counts what they share. Data credits close the loop.</p>
+    </article>
+  </div>
+
+  <h2>The hour decides</h2>
+  <p>Terra Circadia follows the clock of the computer it runs on. In “This hour” the body clock is paired with a
+    different team as the day goes on, a small story of a day at the museum. The last scene says when the land will
+    change next: “Come back at 11 am: the land will look different.”</p>
+  <div class="table"><table>
+    <tr><th>Time</th><th>Headline</th><th>Team beside the body clock</th><th>Proteins</th><th>Shared</th><th>Direct links</th></tr>
+    <tr><td>Before 11 am</td><td>Good morning.</td><td><span class="sw" style="background:#ffb48a"></span>Moving</td><td class="num">32</td><td class="num">10</td><td class="num">3</td></tr>
+    <tr><td>11 am – 1 pm</td><td>Lunchtime.</td><td><span class="sw" style="background:#5aa8ff"></span>Being social</td><td class="num">27</td><td class="num">2</td><td class="num">3</td></tr>
+    <tr><td>1 – 3 pm</td><td>After lunch.</td><td><span class="sw" style="background:#ee9ef0"></span>Learning</td><td class="num">48</td><td class="num">3</td><td class="num">8</td></tr>
+    <tr><td>From 3 pm</td><td>Late afternoon.</td><td><span class="sw" style="background:#bb9cff"></span>Remembering</td><td class="num">46</td><td class="num">1</td><td class="num">13</td></tr>
+  </table></div>
+  <p class="muted">“Shared”: proteins that are members of both teams. “Direct links”: links with one end in each
+    team. The body clock has 83 proteins. All counts come from the bundled data.</p>
+  <div class="note">
+    <b>A way in, not a timetable</b>
+    <p>Pairing hours with teams is a storytelling choice: it gives each visit its own view of the data. It does not
+      claim that a team works only at that hour. What the scene shows (the size of each team and the proteins two
+      teams share) comes straight from the data, and the piece counts it afresh every time it starts.</p>
+  </div>
+
+  <h2>The body clock’s loop</h2>
+  <p>In each cell a small set of proteins keeps the clock going. Terra Circadia shows them as two groups:</p>
+  <div class="loop">
+    <div><b><span class="sw" style="background:#ffe39a"></span>The starters</b><span>CLOCK, BMAL1, NPAS2, BMAL2, RORA, RORC. When they are busy, they tell the cell to make the stoppers.</span></div>
+    <div><b><span class="sw" style="background:#ffb48a"></span>The stoppers</b><span>PER1–3, CRY1–2, NR1D1–2, TIMELESS. They pile up slowly; when there are enough, they switch the starters off, then wear away.</span></div>
+  </div>
+  <p>Then the starters are free again and the next turn begins. One turn takes about a day. On the wall a turn is
+    compressed into nine seconds: the group at work rises and glows, while the resting group sinks to about a third of
+    its height and dims, and the dial’s hand goes round once.</p>
+
+  <h2>Using the piece</h2>
+  <p>Terra Circadia is made for the two-story digital screen in the Lee Family Exchange at the MIT Museum: an NEC LED
+    wall of 3840 × 3024 pixels (80:63), 20′ 3″ × 16′ 2″, seen from stadium seating. It reads from across the room,
+    and its notes reward a closer look. It fills any screen edge to edge, whatever its shape (80:63, 3:2, 16:9), and
+    runs in any current desktop browser. Left alone, it plays forever.</p>
+
+  <h3>On the Exchange screen</h3>
+  <div class="table"><table>
+    <tr><td>Display</td><td>NEC LED wall, 3840 × 3024 pixels (80:63), rendered live at its native resolution (open the piece with <code>?wall</code>).</td></tr>
+    <tr><td>Format</td><td>Real time, in a web browser on the screen’s existing PC (Windows, RTX 3090). Non-linear: it follows the real time of day. A pre-rendered loop at the same resolution can serve as a fallback.</td></tr>
+    <tr><td>Interaction</td><td>None for visitors: no touch, no QR codes. The controls are for setting up and previewing only.</td></tr>
+    <tr><td>Sound</td><td>Silent. Nothing in the work depends on audio.</td></tr>
+    <tr><td>Duration</td><td>Endless: six scenes of 28 to 48 seconds, about three and a half minutes per loop.</td></tr>
+    <tr><td>Network</td><td>None needed. Data and typefaces ship with the piece.</td></tr>
+  </table></div>
+
+  <h3>Watch another time of day</h3>
+  <p>The piece reads your computer’s clock. To see the land at another hour, open “This hour” with a time:</p>
+  <div class="btns">
+    <a class="btn" href="./index.html?t=09:00&amp;scene=4">Morning (9:00)</a>
+    <a class="btn" href="./index.html?t=12:00&amp;scene=4">Lunchtime (12:00)</a>
+    <a class="btn" href="./index.html?t=14:00&amp;scene=4">After lunch (14:00)</a>
+    <a class="btn" href="./index.html?t=17:00&amp;scene=4">Late afternoon (17:00)</a>
+  </div>
+
+  <h3>The controls</h3>
+  <p>A quiet strip of buttons sits under the picture; on the wall it is hidden.</p>
+  <ul class="parts">
+    <li><b>Scenes 1–6</b><span>Jump to a scene. The piece then plays on from there.</span></li>
+    <li><b>Pause</b><span>Stops the story; the land keeps breathing.</span></li>
+    <li><b>Fullscreen</b><span>Fills the whole screen.</span></li>
+    <li><b>Hide controls</b><span>Leaves only the picture (<kbd>Esc</kbd> brings the controls back).</span></li>
+  </ul>
+  <div class="keys">
+    <span><kbd>1</kbd>–<kbd>6</kbd></span><span>Jump to a scene</span>
+    <span><kbd>Space</kbd></span><span>Pause and play</span>
+    <span><kbd>F</kbd></span><span>Full screen</span>
+    <span><kbd>H</kbd></span><span>Hide or show the controls (<kbd>Esc</kbd> shows them again)</span>
+  </div>
+
+  <h3>Reading the screen</h3>
+  <ul class="parts">
+    <li><b>Headline</b><span>Top left: the scene’s one idea, typed out, with a line of detail beneath it. The detail dims after a while, so the map’s own labels read clearly.</span></li>
+    <li><b>Labels</b><span>The name and size of each mountain; the network above a mountain shows exactly that many proteins. A label sits above its floating network (in “Body clock”, to its right). When a tall mountain stands at the back of the land, its label moves beside the network so it stays on the wall, clear of the headline and of other labels.</span></li>
+    <li><b>Notes</b><span>Boxes at the sides, each with a thin line to the protein or spot it explains, for example a protein’s full name and the two teams it belongs to. Box and line fade in and out together.</span></li>
+    <li><b>Key</b><span>Lower left: how to read the map.</span></li>
+    <li><b>Dial</b><span>In “The loop”: one turn of the clock, about 24 hours.</span></li>
+    <li><b>Caption</b><span>In “Your brain”: which team rose, what it shares with the mountains already standing, and which team settled back.</span></li>
+  </ul>
+
+  <h3>What you will notice</h3>
+  <ul>
+    <li>The land fills the wall: it has no edge, runs past the sides and fades into the blue in the distance. It sways
+      gently from side to side.</li>
+    <li>A network that drifts behind the headline dims while it is there, so the words stay readable.</li>
+    <li>Proteins drift gently around their places and move at their own pace, so mountains rise and sink softly rather than switching.</li>
+    <li>Words type themselves out in place. Nothing jumps; the space for every line is kept from the start.</li>
+    <li>Nothing flashes (well under three flashes a second), and the palette stays calm.</li>
+  </ul>
+
+  <h3>Address options</h3>
+  <p>Add these to the end of the address; combine them with <code>&amp;</code>, for example <code>index.html?wall&amp;t=09:00</code>.</p>
+  <div class="table"><table>
+    <tr><th>Option</th><th>What it does</th></tr>
+    <tr><td><code>?wall</code></td><td>The picture fills the whole window and the controls are hidden. Use this on the wall, in full screen.</td></tr>
+    <tr><td><code>?t=14:40</code></td><td>Pretends it is that time (24-hour clock).</td></tr>
+    <tr><td><code>?scene=3</code></td><td>Starts at that scene (1 to 6).</td></tr>
+    <tr><td><code>?hold</code></td><td>Stops each scene just before it ends, for screenshots.</td></tr>
+  </table></div>
+
+  <h2>How it’s made</h2>
+  <p>The piece is a single web page: one JavaScript module (<code>src/landscape.js</code>) drawing with WebGL 2
+    through three.js, bundled with Vite. Everything it needs, including the data and the typefaces, ships with it, so
+    it runs offline.</p>
+  <div class="flow"><span>Protein network</span><i>→</i><span>Map layout</span><i>→</i><span>Height map</span><i>→</i><span>Contour lines</span><i>→</i><span>Teams rise</span><i>→</i><span>Networks float</span><i>→</i><span>Words</span></div>
+  <ol>
+    <li><strong>Data.</strong> 9,830 human proteins and 85,576 physical interactions from STRING v12.0 (combined
+      score 700 or higher, the largest connected part). Teams from the Gene Ontology (release 2026-07-26): proteins
+      tied to a biological process by experiment or curation, including its more specific terms, kept only if they
+      are on the network.</li>
+    <li><strong>Map layout.</strong> When the piece starts, a force layout in two dimensions (springs with a short rest
+      length, plus sampled repulsion) runs for 140 steps and places proteins that work together near each other.
+      The result is fitted into a circle in the middle of the land.</li>
+    <li><strong>Height map.</strong> Every protein lays a soft disc of height where it sits into a 768 × 616 texture;
+      a team’s proteins lay much more, so a team gathered in one place becomes a mountain. Heights round off softly
+      (1 − e<sup>−kx</sup>), so mountains swell instead of spiking. The map is redrawn every frame, so the land
+      rises and sinks smoothly as proteins move.</li>
+    <li><strong>Contour lines.</strong> The land is a fine mesh lifted by the height map under fixed light. Lines
+      follow every 1/60 of the height, every fifth one stronger, about a pixel wide at any size; where they would
+      crowd at a grazing angle they fade out. Low land carries a faint survey grid. Beyond the proteins the land lies
+      flat, reaches past every edge of the wall and fades into the same blue far away.</li>
+    <li><strong>Teams rise.</strong> Each scene says which teams gather where. Each protein eases toward its place at
+      its own pace and drifts gently around it; labels follow the measured summits, read back from the height map
+      four times a second.</li>
+    <li><strong>Networks float.</strong> Above each mountain, its team’s links form a slowly turning ball. A protein’s
+      longitude on the ball is its direction from the team’s center on the map and its latitude its distance, so
+      neighbors on the map stay neighbors on the ball. Longer links bundle together; in the last scene, links between
+      two teams arch over the valley as one bridge.</li>
+    <li><strong>Rendering.</strong> Everything is drawn into a high-range buffer and tone-mapped (1 − e<sup>−x</sup>),
+      so dense, glowing areas build softly toward white instead of clipping. Words and leader lines are HTML and SVG
+      over the picture.</li>
+  </ol>
+
+  <h3>Adapting to the screen</h3>
+  <p>The picture fills its screen edge to edge, whatever the shape, with no frame or letterbox. The land has no
+    border, so a wider screen simply shows more of it at the sides, while the height of the view stays the same and
+    the mountains keep room for their networks above them. It renders at the screen’s own pixel density, up to as
+    many pixels as the Exchange wall has (3840 × 3024). Every text size follows the screen’s height.</p>
+
+  <h3>Files</h3>
+  <div class="table"><table>
+    <tr><td><code>index.html</code></td><td>The piece: stage, labels, notes, key and controls.</td></tr>
+    <tr><td><code>about.html</code></td><td>This page.</td></tr>
+    <tr><td><code>src/landscape.js</code></td><td>Everything else, in sections: clock, data, map layout, renderer, sizing, typewriter, arranging the land, the six scenes, floating networks, dial, notes, controls, start and the frame loop.</td></tr>
+    <tr><td><code>src/style.css</code>, <code>src/landscape.css</code></td><td>Layout and styling of the stage and the words on it.</td></tr>
+    <tr><td><code>src/fonts.css</code></td><td>The two typefaces, bundled: Bricolage Grotesque and IBM Plex Mono.</td></tr>
+    <tr><td><code>public/data/</code></td><td>The protein network, the teams and the full protein names.</td></tr>
+    <tr><td><code>scripts/fetch-data.mjs</code></td><td>Rebuilds the data from STRING and the Gene Ontology.</td></tr>
+    <tr><td><code>scripts/capture.mjs</code></td><td>Saves stills of every scene at 3840 × 3024.</td></tr>
+  </table></div>
+
+  <h3>Run it on your own computer</h3>
+  <p>You need <a href="https://nodejs.org/">Node.js</a> 20 or newer and Git.</p>
+<pre><code>git clone https://github.com/chris-huetter/BRAIN-TerraCircadia.git
+cd BRAIN-TerraCircadia
+npm ci
+npm run dev</code></pre>
+  <p>Then open <code>http://localhost:5173/</code>. The protein data is already included, so nothing else needs to be
+    downloaded. For stills at the wall’s size:</p>
+<pre><code>npx playwright install chromium   # once
+npm run capture                   # stills at 3840 × 3024 into ./captures</code></pre>
+
+  <h3>Install it on the museum wall</h3>
+  <p>The piece is built for the existing playback PC (Windows, RTX 3090). No hardware changes are needed; it sends one
+    full-screen signal at 3840 × 3024 through the existing switcher.</p>
+  <ol>
+    <li>Build the piece once: <code>npm ci</code>, then <code>npm run build</code>. The finished piece is in the
+      <code>dist</code> folder.</li>
+    <li>Serve that folder on the PC itself, for example with <code>npx vite preview --port 4173</code>.</li>
+    <li>Open it full screen in Chrome’s kiosk mode:
+<pre><code>"C:\Program Files\Google\Chrome\Application\chrome.exe" ^
+  --kiosk --start-fullscreen "http://localhost:4173/?wall"</code></pre></li>
+    <li>Set the PC’s clock to Boston time (Eastern Time); the piece follows it.</li>
+    <li>To start at boot, put both commands in a Windows Task Scheduler task that runs at log-on.</li>
+  </ol>
+  <p class="muted">We will agree the final setup (start-up, automatic restart, and a pre-rendered video loop as a
+    fallback) with the museum’s AV team.</p>
+
+  <h2>Notes on the science</h2>
+  <p>The landscape shows only what the data shows: which proteins physically touch, with high confidence (STRING),
+    and which proteins curators have tied to a process by experiment or careful review (Gene Ontology). Each team is
+    one or more Gene Ontology processes, named in plain words:</p>
+  <div class="table"><table>
+    <tr><th>Team</th><th>Gene Ontology process</th></tr>
+    <tr><td><span class="sw" style="background:#ffd166"></span>Body clock</td><td>circadian rhythm (GO:0007623)</td></tr>
+    <tr><td><span class="sw" style="background:#ffb48a"></span>Moving</td><td>locomotory behavior (GO:0007626)</td></tr>
+    <tr><td><span class="sw" style="background:#ee9ef0"></span>Learning</td><td>learning (GO:0007612)</td></tr>
+    <tr><td><span class="sw" style="background:#bb9cff"></span>Remembering</td><td>memory (GO:0007613)</td></tr>
+    <tr><td><span class="sw" style="background:#5aa8ff"></span>Being social</td><td>social behavior (GO:0035176)</td></tr>
+    <tr><td><span class="sw" style="background:#7fdcf0"></span>Rewiring</td><td>regulation of synaptic plasticity (GO:0048167), long-term synaptic potentiation (GO:0060291), synapse assembly (GO:0007416), synapse pruning (GO:0098883)</td></tr>
+  </table></div>
+  <p>The loop is simplified from the textbook model of the clock: in the cell, the RORs and the REV-ERBs (NR1D1 and
+    NR1D2) act mainly on BMAL1 in a second, smaller loop, and the real cycle involves many more proteins and steps.
+    The map is an artistic interpretation, not a clinical tool. The story is about what brains do: the screen names
+    no diseases, and protein names that contain a disease word are left out of the data on purpose.</p>
+  <p>Further reading:</p>
+  <ul class="refs">
+    <li>Szklarczyk, D., et al. (2023). The STRING database in 2023: protein–protein association networks and functional enrichment analyses for any sequenced genome of interest. <em>Nucleic Acids Research</em>, 51(D1), D638–D646.</li>
+    <li>Gene Ontology Consortium (2023). The Gene Ontology knowledgebase in 2023. <em>Genetics</em>, 224(1), iyad031.</li>
+    <li>Barabási, A.-L., Gulbahce, N., &amp; Loscalzo, J. (2011). Network medicine: a network-based approach to human disease. <em>Nature Reviews Genetics</em>, 12(1), 56–68.</li>
+    <li>Takahashi, J. S. (2017). Transcriptional architecture of the mammalian circadian clock. <em>Nature Reviews Genetics</em>, 18(3), 164–179.</li>
+    <li>Diekelmann, S., &amp; Born, J. (2010). The memory function of sleep. <em>Nature Reviews Neuroscience</em>, 11(2), 114–126.</li>
+    <li>Bliss, T. V. P., &amp; Lømo, T. (1973). Long-lasting potentiation of synaptic transmission in the dentate area of the anaesthetized rabbit following stimulation of the perforant path. <em>Journal of Physiology</em>, 232(2), 331–356.</li>
+  </ul>
+
+  <h2>Data and credits</h2>
+  <ul>
+    <li><strong>Protein network:</strong> <a href="https://string-db.org/">STRING</a> v12.0, physical interactions,
+      score 700 or higher. Szklarczyk et al., <em>Nucleic Acids Research</em> 2023. License: CC BY 4.0.</li>
+    <li><strong>Protein teams (abilities, body clock, rewiring):</strong> <a href="https://geneontology.org/">Gene
+      Ontology</a>, release 2026-07-26, biological processes with experimental and curated evidence. License: CC BY 4.0.</li>
+    <li><strong>Full protein names:</strong> STRING v12.0 protein descriptions. License: CC BY 4.0.</li>
+  </ul>
+  <p>Both sources are credited on the wall in the last scene. To rebuild the bundled data from the original sources,
+    run <code>npm run fetch-data</code>.</p>
+
+  <footer>
+    <p>Terra Circadia · a protein landscape that keeps time. Concept and development: Chris Huetter, 2026.</p>
+    <p>Made for the MIT Museum BRAIN digital content open call. <a href="./index.html">Enter the piece</a></p>
+  </footer>
+</main>
+</body>
+</html>

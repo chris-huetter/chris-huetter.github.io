@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body class="artwork">
   <main id="stage" aria-label="Neuroflorescence: a live animation of a brain made of light that keeps growing, learning, forgetting and repairing itself">
@@ -25,9 +25,10 @@
 
   <noscript><p class="noscript">This artwork needs JavaScript. <a href="about.html">Read about it here.</a></p></noscript>
 
-  <script src="js/life.js"></script>
-  <script src="js/brain.js"></script>
-  <script src="js/shaders.js"></script>
-  <script src="js/main.js"></script>
+  <!-- raise ?v= with every published update, so browsers fetch the new files -->
+  <script src="js/life.js?v=2"></script>
+  <script src="js/brain.js?v=2"></script>
+  <script src="js/shaders.js?v=2"></script>
+  <script src="js/main.js?v=2"></script>
 </body>
 </html>

@@ -14,7 +14,6 @@
      ?life=600      length of a lifetime in seconds (default 1440)
      ?particles=512 particle grid size (512 → 262 144 particles)
      ?sim=1920      width of the simulation buffer
-     ?field=1       prototype: the brain spills out in plumes into the screen around it
    Keys:  F fullscreen · L label · Space pause
    ========================================================================== */
 
@@ -33,8 +32,6 @@
     life: parseFloat(q.get('life')) || LIFE.duration,
     grid: parseInt(q.get('particles'), 10) || (small ? 256 : 512),
     simMax: parseInt(q.get('sim'), 10) || (small ? 1024 : 1920),
-    field: q.get('field') === '1',
-    fieldBody: 1.5,        // with ?field=1, how much the brain's tissue is lifted against its surroundings
     decay: 0.962,          // trail persistence per frame at 60 fps
     bump: 12,              // strength of the relief lighting
     bloom: 0.55,
@@ -233,7 +230,7 @@
     set(P_PART, 'uDt', dt); set(P_PART, 'uClock', clock); set(P_PART, 'uStoryT', T);
     set(P_PART, 'uAttract', P.attract); set(P_PART, 'uInit', needInit ? 1 : 0);
     set(P_PART, 'uBurst', U.bur); set(P_PART, 'uLesion', U.lesion); set(P_PART, 'uLesionK', U.lesionK);
-    set(P_PART, 'uGrow', growTex); set(P_PART, 'uField', CFG.field ? 1 : 0);
+    set(P_PART, 'uGrow', growTex);
     quad();
     pi = 1 - pi; needInit = false;
 
@@ -245,7 +242,6 @@
     set(P_ADV, 'uDt', dt); set(P_ADV, 'uDecay', Math.pow(CFG.decay, dt * 60 / Math.max(CFG.speed, 1)));
     set(P_ADV, 'uPrune', P.prune); set(P_ADV, 'uTexel', [1 / simW, 1 / simH]);
     set(P_ADV, 'uLesion', U.lesion); set(P_ADV, 'uLesionK', U.lesionK); set(P_ADV, 'uGrow', growTex);
-    set(P_ADV, 'uField', CFG.field ? 1 : 0);
     quad();
 
     // 4 particles on top, additive
@@ -256,7 +252,6 @@
     set(P_PTS, 'uPointSize', Math.max(1, simW / 1280));
     set(P_PTS, 'uReveal', Math.min(1.2, lifeT / 10)); set(P_PTS, 'uPrune', P.prune);
     set(P_PTS, 'uGain', 0.09 * (512 * 512 / NPART) * Math.pow(simW / 1920, 2) * (dt * 60 / CFG.speed));   // same brightness at any frame rate
-    set(P_PTS, 'uField', CFG.field ? 1 : 0); set(P_PTS, 'uBody', CFG.field ? CFG.fieldBody : 1);
     set(P_PTS, 'uPathCol', U.col); set(P_PTS, 'uPulse', U.pul);
     set(P_PTS, 'uLesion', U.lesion); set(P_PTS, 'uLesionK', U.lesionK); set(P_PTS, 'uGrow', growTex);
     gl.drawArrays(gl.POINTS, 0, NPART);

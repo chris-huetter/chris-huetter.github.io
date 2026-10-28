@@ -20,6 +20,8 @@ const GLSL_COMMON = `
 
 float hash12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
 vec2 hash22(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * vec3(.1031, .1030, .0973)); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.xx + p3.yz) * p3.zy); }
+/* half of the particles are wanderers: they may leave the brain and spill out into its surroundings */
+float wanderer(vec2 id){ return step(hash12(id * 3.7 + 1.3), .5); }
 
 vec3 mod289(vec3 x){ return x - floor(x * (1. / 289.)) * 289.; }
 vec4 mod289(vec4 x){ return x - floor(x * (1. / 289.)) * 289.; }
@@ -171,7 +173,7 @@ const FS_PARTICLES = `#version 300 es
 precision highp float;
 ${GLSL_COMMON}
 uniform sampler2D uPos, uFlow;
-uniform float uDt, uClock, uStoryT, uAttract, uInit, uField;
+uniform float uDt, uClock, uStoryT, uAttract, uInit;
 uniform vec4 uBurst[8];
 uniform vec4 uLesion;
 uniform float uLesionK;
@@ -222,10 +224,10 @@ void main(){
       float gy = texture(uFlow, uv - vec2(0., e)).z - texture(uFlow, uv + vec2(0., e)).z;
       target += vec2(gx, gy) / (2. * e) * uAttract * .003;
     }
-    float wander = uField * step(hash12(id * 3.7 + 1.3), .4);   // ?field=1: some particles may leave the brain
-    if (wander > .5) {  // ... and stream out into its surroundings, in slow plumes
+    float wander = wanderer(id);
+    if (wander > .5) {  // wanderers stream out of the brain in slow plumes
       float plume = smoothstep(-.3, .6, snoise(vec3(pos * 2.5, uClock * .06)));
-      target += normalize(pos - vec2(.5 * A, .44) + 1e-4) * plume * smoothstep(-.2, 0., bd) * .22;
+      target += normalize(pos - vec2(.5 * A, .44) + 1e-4) * plume * smoothstep(-.2, 0., bd) * .28;
     }
     vel = mix(vel, target, 1. - exp(-uDt * 2.2));
 
@@ -253,7 +255,7 @@ const FS_ADVECT = `#version 300 es
 precision highp float;
 ${GLSL_COMMON}
 uniform sampler2D uPrev, uFlow;
-uniform float uDt, uDecay, uPrune, uField;
+uniform float uDt, uDecay, uPrune;
 uniform vec2 uTexel;
 uniform vec4 uLesion;
 uniform float uLesionK;
@@ -269,7 +271,7 @@ void main(){
   float dec = uDecay * mix(1., mix(.978, 1., smoothstep(.03, .3, F.z)), uPrune);
   vec2 p = vec2(vUv.x * A, 1. - vUv.y);
   if (uLesion.z > 0. && length(p - uLesion.xy) < uLesion.z) dec *= mix(1., .9, uLesionK);
-  if (brain(p) > .01) dec *= mix(.965, .985, uField);   // ?field=1: longer streaks outside the brain
+  if (brain(p) > .01) dec *= .985;
   o = vec4(c * dec, 1.);
 }`;
 
@@ -278,7 +280,7 @@ const VS_POINTS = `#version 300 es
 precision highp float;
 ${GLSL_COMMON}
 uniform sampler2D uPos, uFlow;
-uniform float uClock, uStoryT, uPointSize, uReveal, uPrune, uGain, uField, uBody;
+uniform float uClock, uStoryT, uPointSize, uReveal, uPrune, uGain;
 uniform vec3 uPathCol[NP];
 uniform vec3 uPulse[NP];
 uniform vec4 uLesion;
@@ -304,9 +306,8 @@ void main(){
   vec3 c = tissue(hue * .75 + seed * .25);
   // gyri: folds of the cortex show as brighter ridges
   float g = 1. - abs(snoise(vec3(pos * vec2(6.5, 7.5), 3.7)));
-  // outside the brain a particle almost vanishes; with ?field=1 a wanderer stays, darker the further it drifts
-  float wander = uField * step(hash12(id * 3.7 + 1.3), .4);
-  float spill = mix(.05, .8 * exp(-max(bd, 0.) / .3), wander);
+  // outside the brain a particle almost vanishes, but a wanderer stays, darker the further it drifts
+  float spill = mix(.05, .8 * exp(-max(bd, 0.) / .35), wanderer(id));
   float a = .42 * mix(spill, 1., inside) * (.3 + 1.0 * g * g);
 
   float prox = F.z;
@@ -316,7 +317,7 @@ void main(){
   c = mix(c, uPathCol[pid], pk * .9);
   a *= mix(1., .5 + 1.6 * pk, uPrune);
   a *= 1. + pk * (kind < .35 ? 1.2 : .4);
-  a *= mix(uBody, 1., pk);                 // with ?field=1 the tissue is lifted against the world around it
+  a *= mix(1.5, 1., pk);                   // the tissue is lifted against its surroundings
 
   // signals travelling along the pathway light up the fibres
   vec3 pu = uPulse[pid];

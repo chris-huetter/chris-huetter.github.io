@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neuroflorescence</title>
+  <meta name="description" content="An ambient, generative artwork about neuroplasticity: a brain of light that keeps growing, learning, forgetting and repairing itself, never the same twice.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="artwork">
+  <main id="stage" aria-label="Neuroflorescence: a live animation of a brain made of light that keeps growing, learning, forgetting and repairing itself">
+    <canvas id="art"></canvas>
+    <canvas id="overlay" aria-hidden="true"></canvas>
+    <p id="nogl" class="noscript" hidden>This artwork needs a browser with WebGL 2 (for example a current Chrome, Edge, Firefox or Safari). <a href="about.html">Read about it here.</a></p>
+  </main>
+
+  <nav class="ui" aria-label="Controls">
+    <a href="about.html">About</a>
+    <button id="fs" type="button" title="Fullscreen (F)">Fullscreen</button>
+  </nav>
+
+  <noscript><p class="noscript">This artwork needs JavaScript. <a href="about.html">Read about it here.</a></p></noscript>
+
+  <script src="js/life.js"></script>
+  <script src="js/brain.js"></script>
+  <script src="js/shaders.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
